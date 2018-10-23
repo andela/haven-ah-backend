@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/andela/haven-ah-backend.svg?branch=develop)](https://travis-ci.org/andela/haven-ah-backend)
+[![Build Status](https://travis-ci.org/andela/haven-ah-backend.svg?branch=develop)](https://travis-ci.org/andela/haven-ah-backend) [![HoundCI Badge](https://img.shields.io/badge/reviewed%20By%20-houndCI-blue.svg)](https://houndci.com/)
 
 
 # Authors Haven 
