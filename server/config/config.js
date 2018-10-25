@@ -22,7 +22,7 @@ const config = {
   },
   production: {
     use_env_variable: 'DATABASE_URL',
-    port: process.env.PORT,
+    PORT: process.env.PORT,
   },
 };
 
