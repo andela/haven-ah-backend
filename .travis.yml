@@ -1,3 +1,11 @@
 language: node_js
 node_js:
   - "stable"
+cache:
+  directories:
+    - "node_modules"
+services:
+  - postgresql
+
+before_script:
+  - psql -c "create database haven;" -U postgres
