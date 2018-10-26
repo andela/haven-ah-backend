@@ -24,15 +24,15 @@ class User {
       password,
     } = request.body;
 
-    const user = await userRepo.getUserByEmail(email);
+    const user = await userRepo.getUserByCredentials(email, username);
     if (user) {
       return badHttpResponse(
         response,
         409,
-        'This account already exists. Consider sign in.'
+        'This account already exists. Consider sign in.',
+        'We found another user with the same email and/or username'
       );
     }
-
     const newUser = await userRepo.createUser({
       firstName,
       lastName,
@@ -46,7 +46,30 @@ class User {
       response,
       201,
       `Hello ${newUser.username}, Welcome to Author's Haven.`,
-      token
+      { token }
+    );
+  }
+
+  /**
+   * Get all non-admin users.
+   * @param {object} request
+   * @param {object} response
+   * @returns {object} The JSON response to the user.
+   */
+  static async listAll(request, response) {
+    const allUsers = await userRepo.getAllUsers();
+    if (allUsers.length <= 0) {
+      return goodHttpResponse(
+        response,
+        200,
+        'Users not found'
+      );
+    }
+    return goodHttpResponse(
+      response,
+      200,
+      'Users found',
+      allUsers
     );
   }
 

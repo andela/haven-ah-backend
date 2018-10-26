@@ -13,13 +13,13 @@ describe('Get user by email function', () => {
   });
 
   it('should return null if user does not exist', async () => {
-    const user = await userRepo.getUserByEmail(joe.email);
+    const user = await userRepo.getUserByCredentials(joe.email);
     expect(user).to.be.deep.equals(null);
   });
 
   it('should return user if user exists', async () => {
-    const existingUser = await userRepo.getUserByEmail(priscilla.email);
-
+    const result = await userRepo.getUserByCredentials(priscilla.email, priscilla.username);
+    const existingUser = result[0].dataValues;
     expect(existingUser).to.be.an('object');
     expect(existingUser.email).to.be.deep.equals(newUser.email);
     expect(existingUser.firstName).to.be.deep.equals(newUser.firstName);
@@ -38,5 +38,16 @@ describe('Create user function', () => {
     expect(newUser.username).to.be.deep.equals(joe.username);
     expect(newUser.firstName).to.be.deep.equals(joe.firstName);
     expect(newUser.role).to.be.deep.equals('user');
+  });
+});
+
+describe('Get all users', () => {
+  it('should get all users with role as user', async () => {
+    const allUsers = await userRepo.getAllUsers();
+    const firstUser = allUsers[0];
+    expect(allUsers).to.be.an('array');
+    expect(firstUser).to.have.property('username');
+    expect(firstUser).to.have.property('firstName');
+    expect(firstUser).to.have.property('id');
   });
 });
