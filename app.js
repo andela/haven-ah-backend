@@ -4,6 +4,8 @@ import logger from 'morgan';
 import dotenv from 'dotenv';
 import config from './server/config/config';
 
+import router from './server/routes/users';
+
 dotenv.config();
 
 // Set up express app
@@ -15,6 +17,8 @@ app.use(logger('dev'));
 // Parse the body of incoming requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use('/api/v1', router);
 
 app.get('*', (request, response) => {
   const welcome = '<h1>Welcome to Authors Haven API Version 1.0</h1> ';
