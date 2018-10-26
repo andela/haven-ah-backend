@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/andela/haven-ah-backend.svg?branch=develop)](https://travis-ci.org/andela/haven-ah-backend) [![HoundCI Badge](https://img.shields.io/badge/reviewed%20By%20-houndCI-blue.svg)](https://houndci.com/)
-
+[![Build Status](https://travis-ci.org/andela/haven-ah-backend.svg?branch=develop)](https://travis-ci.org/andela/haven-ah-backend) [![HoundCI Badge](https://img.shields.io/badge/reviewed%20By%20-houndCI-blue.svg)](https://houndci.com/) [![Coverage Status](https://coveralls.io/repos/github/andela/haven-ah-backend/badge.svg?branch=develop)](https://coveralls.io/github/andela/haven-ah-backend?branch=develop)
 
 # Authors Haven 
 A Social platform for the creative at heart. :green_heart:

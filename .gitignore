@@ -36,6 +36,7 @@ node_modules
 
 # environment variables
 .env
+.nyc_output
 
 # dist directory for build
 dist/

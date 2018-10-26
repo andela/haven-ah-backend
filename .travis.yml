@@ -7,5 +7,10 @@ cache:
 services:
   - postgresql
 
+script: npm test
+
 before_script:
   - psql -c "create database haven;" -U postgres
+
+after_success:
+  - npm run coveralls
