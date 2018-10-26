@@ -18,12 +18,14 @@ const config = {
     database: process.env.DB_TEST,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
+    PORT: 5000,
     dialect: 'postgres',
   },
   production: {
     use_env_variable: 'DATABASE_URL',
     PORT: process.env.PORT,
   },
+  secret: process.env.DB_PASSWORD,
 };
 
 export default config;

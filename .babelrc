@@ -4,6 +4,7 @@
         "stage-2"
     ],
     "plugins": [
+<<<<<<< HEAD
         "add-module-exports"
     ],
     "env": {
@@ -12,3 +13,9 @@
         }
     }
 }
+=======
+        "add-module-exports",
+        "babel-plugin-transform-runtime"
+    ]
+}
+>>>>>>> feat(signup): create signup functionality

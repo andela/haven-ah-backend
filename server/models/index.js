@@ -12,9 +12,9 @@ const db = {};
 const sequelize = config.use_env_variable
   ? new Sequelize(process.env[config.use_env_variable], configObj)
   : new Sequelize(
-    config.database,
-    config.username,
-    config.password,
+    configObj.database,
+    configObj.username,
+    configObj.password,
     configObj,
   );
 
