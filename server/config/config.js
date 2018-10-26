@@ -11,6 +11,7 @@ const config = {
     port: process.env.DB_PORT,
     PORT: 5000,
     dialect: 'postgres',
+    secret: process.env.JWT_SECRET
   },
   test: {
     username: process.env.DB_USERNAME,
@@ -20,12 +21,13 @@ const config = {
     port: process.env.DB_PORT,
     PORT: 5000,
     dialect: 'postgres',
+    secret: process.env.JWT_SECRET
   },
   production: {
-    use_env_variable: 'DATABASE_URL',
+    use_env_variable: process.env.DATABASE_URL,
     PORT: process.env.PORT,
+    secret: process.env.JWT_SECRET,
   },
-  secret: process.env.DB_PASSWORD,
 };
 
 export default config;

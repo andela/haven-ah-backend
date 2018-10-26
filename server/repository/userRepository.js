@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import Model from '../models';
 
 const { User } = Model;
@@ -8,7 +9,6 @@ const { User } = Model;
 class UserRepository {
   /**
    * Function to create a user entity in the database
-
    * @param {object} user User object
    * @returns {object} User object
    */
@@ -28,7 +28,7 @@ class UserRepository {
       where: { email },
       attributes: {
         include: ['id', 'firstName'],
-        exclude: ['createdAt', 'updatedAt', 'deletedAt', 'isDeleted']
+        exclude: ['createdAt', 'updatedAt', 'deletedAt', 'isDeleted', 'password']
       }
     });
     if (!user) return null;

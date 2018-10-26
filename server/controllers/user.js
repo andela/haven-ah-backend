@@ -1,6 +1,7 @@
 import userRepo from '../repository/userRepository';
 import generateToken from '../utilities/jwtGenerator';
 import passwordUtil from '../utilities/passwordHasher';
+import { goodHttpResponse, badHttpResponse } from '../utilities/httpResponse';
 
 
 const { hash } = passwordUtil;
@@ -25,30 +26,28 @@ class User {
 
     const user = await userRepo.getUserByEmail(email);
     if (user) {
-      return response.status(409).json({
-        status: 409,
-        message: `User with this email, "${email}" already exists`,
-      });
+      return badHttpResponse(
+        response,
+        409,
+        'This account already exists. Consider sign in.'
+      );
     }
-
-    const passwordHash = hash(password);
 
     const newUser = await userRepo.createUser({
       firstName,
       lastName,
       email,
       username,
-      password: passwordHash,
+      password: hash(password),
     });
 
     const token = generateToken(newUser.id);
-    return response.status(201).json({
-      status: 201,
-      message: `Hello ${newUser.username}, Welcome to Author's Haven.`,
-      data: {
-        token,
-      }
-    });
+    return goodHttpResponse(
+      response,
+      201,
+      `Hello ${newUser.username}, Welcome to Author's Haven.`,
+      token
+    );
   }
 }
 

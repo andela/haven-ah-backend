@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import User from '../controllers/user';
+import inputValidator from '../middlewares/validations';
 
 const router = new Router();
 
-router.post('/api/v1/user/signup', User.signup);
+router.post('/users/signup', inputValidator, User.signup);
 
 export default router;

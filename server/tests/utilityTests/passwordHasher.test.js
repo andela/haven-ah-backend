@@ -4,10 +4,9 @@ import password from '../../utilities/passwordHasher';
 const { expect } = chai;
 const { hash, compare } = password;
 
-describe('Pasword hashing utility', () => {
+describe('Password hashing utility', () => {
   it('should return true on comparing the hashed password against the supplied password', () => {
-    const passwordHash = hash('password');
-    const isSame = compare('password', passwordHash);
+    const isSame = compare('password', hash('password'));
     expect(isSame).to.be.deep.eql(true);
   });
 });
