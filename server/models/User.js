@@ -1,6 +1,14 @@
 /* eslint no-unused-vars:0 */
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -51,21 +59,17 @@ export default (sequelize, DataTypes) => {
     },
     createdAt: {
       type: DataTypes.DATE,
-      field: 'created_at',
     },
     updatedAt: {
       type: DataTypes.DATE,
-      field: 'updated_at',
-      name: 'updatedAt',
     },
     deletedAt: {
       type: DataTypes.DATE,
-      field: 'deleted_at',
     },
   });
 
   User.associate = (models) => {
-  // associations can be defined here
+    // associations can be defined here
   };
   return User;
 };

@@ -1,5 +1,5 @@
 import { equal } from 'assert';
-import utilities from '../utilities/user';
+import utilities from '../../utilities/userInput';
 
 const { validateUsername, validateEmail, validatePassword } = utilities;
 

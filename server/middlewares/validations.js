@@ -1,19 +1,20 @@
-import utilities from '../utilities/user';
+import utilities from '../utilities/userInput';
+import { badHttpResponse } from '../utilities/httpResponse';
 
 const { checkMissingFields } = utilities;
 
-export default (req, res, next) => {
-  const { isValid, problem } = checkMissingFields(req.body, [
+const inputValidator = (request, response, next) => {
+  const { isValid, problem } = checkMissingFields(request.body, [
     'username',
     'email',
-    'password'
+    'password',
+    'firstName',
+    'lastName',
   ]);
   if (isValid === false) {
-    return res.status(400).send({
-      status: 400,
-      message: 'Invalid input',
-      error: problem,
-    });
+    return badHttpResponse(response, 400, 'Invalid input', problem);
   }
   next();
 };
+
+export default inputValidator;

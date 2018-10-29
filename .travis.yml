@@ -10,6 +10,7 @@ services:
 script: npm test
 
 before_script:
+  - npm i -g sequelize-cli
   - psql -c "create database haven;" -U postgres
 
 after_success:
