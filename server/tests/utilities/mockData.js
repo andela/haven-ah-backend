@@ -27,6 +27,22 @@ const data = {
     password: 'password',
     email: 'sull@gmail.com',
   },
+  noPassword: {
+    email: 'uche@andela.com',
+    password: '',
+  },
+  noEmail: {
+    email: '',
+    password: 'thepassword',
+  },
+  wrongPassword: {
+    email: 'sull@gmail.com',
+    password: 'wrongpassword',
+  },
+  wrongEmail: {
+    email: 'wrongemail@gg.com',
+    password: '1234567890',
+  },
   admin: {
     firstName: 'Admin',
     lastName: 'Doe',

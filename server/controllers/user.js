@@ -4,7 +4,7 @@ import passwordUtil from '../utilities/passwordHasher';
 import { goodHttpResponse, badHttpResponse } from '../utilities/httpResponse';
 
 
-const { hash } = passwordUtil;
+const { hash, compare } = passwordUtil;
 /**
  * User Controller class
  */
@@ -47,6 +47,42 @@ class User {
       201,
       `Hello ${newUser.username}, Welcome to Author's Haven.`,
       token
+    );
+  }
+
+  /**
+   * Login a User
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} User Object
+   */
+  static async signin(request, response) {
+    const {
+      email,
+      password,
+    } = request.body;
+    const findUser = await userRepo.getUserByEmail(email);
+    if (findUser) {
+      const validatePassword = await compare(password, findUser.password);
+      if (validatePassword === false) {
+        return badHttpResponse(
+          response,
+          401,
+          'incorrect password, please try again'
+        );
+      }
+      const token = generateToken(findUser.id);
+      return goodHttpResponse(
+        response,
+        200,
+        `Hello ${findUser.username}, Welcome Back!`,
+        { token }
+      );
+    }
+    return badHttpResponse(
+      response,
+      404,
+      'This account does not exist. Consider signing up.'
     );
   }
 }

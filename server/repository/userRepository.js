@@ -1,4 +1,3 @@
-import '@babel/polyfill';
 import Model from '../models';
 
 const { User } = Model;
@@ -28,7 +27,7 @@ class UserRepository {
       where: { email },
       attributes: {
         include: ['id', 'firstName'],
-        exclude: ['createdAt', 'updatedAt', 'deletedAt', 'isDeleted', 'password']
+        exclude: ['createdAt', 'updatedAt', 'deletedAt', 'isDeleted']
       }
     });
     if (!user) return null;
