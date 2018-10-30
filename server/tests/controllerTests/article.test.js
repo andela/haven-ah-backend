@@ -14,7 +14,7 @@ describe('POST api/v1/users/signup', () => {
     const response = await chai.request(app)
       .post('/api/v1/users/signup')
       .send(jigsaw);
-    jwtoken = response.body.data;
+    jwtoken = response.body.data.token;
   });
 });
 
