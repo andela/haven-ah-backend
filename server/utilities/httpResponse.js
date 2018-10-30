@@ -12,6 +12,7 @@ export const goodHttpResponse = (response, statusCode, message, data) => {
   const responseBody = {
     status: statusCode,
     message,
+    data
   };
   if (data) {
     responseBody.data = data;
