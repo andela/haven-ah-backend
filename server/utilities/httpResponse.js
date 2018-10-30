@@ -8,14 +8,13 @@
  * @example goodHttpResponse(response, 200, 'user Theo found', {id: 1, username: 'theo.io'});
  */
 
-export const goodHttpResponse = (response, statusCode, message, output) => {
+export const goodHttpResponse = (response, statusCode, message, data) => {
   const responseBody = {
     status: statusCode,
     message,
   };
-
-  if (output) {
-    responseBody.data = { output };
+  if (data) {
+    responseBody.data = data;
   }
   return response.status(statusCode).json(responseBody);
 };

@@ -18,10 +18,10 @@ class UserRepository {
   }
 
   /**
- * Finds a user by email
- * @param {string} email Email to search by
- * @returns {object | null} User object or null if user is not found
- */
+   * Finds a user by email
+   * @param {string} email Email to search by
+   * @returns {object | null} User object or null if user is not found
+   */
   static async getUserByEmail(email) {
     const user = await User.findOne({
       where: { email },
@@ -32,6 +32,60 @@ class UserRepository {
     });
     if (!user) return null;
     return user;
+  }
+
+  /**
+   * Finds a user by email
+   * @param {string} email Email to search by
+   * @param {string} username username
+   * @returns {object | null} User object or null if user is not found
+   */
+  static async getUserByCredentials(email, username) {
+    const user = await User.findAll({
+      where: { email, username },
+      attributes: {
+        include: ['id', 'firstName'],
+        exclude: ['createdAt', 'updatedAt', 'deletedAt', 'isDeleted']
+      }
+    });
+    return user.length <= 0 ? null : user;
+  }
+
+  /**
+   * This method finds all non-admin users in the database
+   *@returns {object | null} the results from DB
+  */
+  static async getAllUsers() {
+    const allUsers = await User.findAll({
+      where: {
+        role: 'user',
+      },
+      attributes: {
+        include: [
+          'id',
+          'firstName',
+          'lastName',
+          'facebook',
+          'google',
+          'twitter',
+          'bio',
+          'imageUrl',
+          'createdAt',
+          'updatedAt',
+        ],
+        exclude: [
+          'email',
+          'updatedAt',
+          'deletedAt',
+          'isDeleted',
+          'password',
+          'emailConfirmation',
+          'resetToken',
+          'role',
+        ],
+      },
+    });
+    return allUsers || null;
   }
 }
 

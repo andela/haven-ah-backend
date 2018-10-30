@@ -1,4 +1,5 @@
 /* eslint arrow-body-style: 0 */
+/* eslint class-methods-use-this:0  */
 import bcrypt from 'bcryptjs';
 
 /**
