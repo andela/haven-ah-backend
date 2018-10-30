@@ -4,6 +4,6 @@ import isAuthenticated from '../middlewares/checkAuth';
 
 const router = new Router();
 
-router.post('/', isAuthenticated, Article.createArticle);
+router.post('/articles', isAuthenticated, Article.createArticle);
 
 export default router;

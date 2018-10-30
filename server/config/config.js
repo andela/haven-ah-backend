@@ -24,7 +24,7 @@ const config = {
     secret: process.env.JWT_SECRET
   },
   production: {
-    use_env_variable: process.env.DATABASE_URL,
+    use_env_variable: 'DATABASE_URL',
     PORT: process.env.PORT,
     secret: process.env.JWT_SECRET,
   },

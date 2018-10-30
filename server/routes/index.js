@@ -1,7 +1,13 @@
+import { Router } from 'express';
+
 import userRouter from './users';
 import articleRouter from './article';
 
-export default (app) => {
-  app.use('/api/v1', userRouter);
-  app.use('/api/v1/articles', articleRouter);
-};
+const router = Router();
+
+router.use(
+  userRouter,
+  articleRouter
+);
+
+export default router;

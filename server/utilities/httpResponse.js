@@ -3,16 +3,15 @@
  * @param { object } response
  * @param { integer } statusCode
  * @param { string } message
- * @param { object } output
+ * @param { object } data
  * @returns {object} response
  * @example goodHttpResponse(response, 200, 'user Theo found', {id: 1, username: 'theo.io'});
  */
-
 export const goodHttpResponse = (response, statusCode, message, data) => {
   const responseBody = {
     status: statusCode,
     message,
-    data
+    data,
   };
   if (data) {
     responseBody.data = data;

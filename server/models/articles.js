@@ -1,7 +1,5 @@
 /* eslint no-unused-vars:0 */
-
-
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const Articles = sequelize.define('Articles', {
     slug: {
       type: DataTypes.STRING,
@@ -35,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     }
   }, {});
+
   Articles.associate = (models) => {
     Articles.belongsTo(models.User, {
       foreignKey: 'userid',

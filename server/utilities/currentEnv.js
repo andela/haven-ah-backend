@@ -2,6 +2,11 @@
  * Gets the current environment.
  * @returns {string} environment
  */
-const getCurrentEnv = () => process.env.NODE_ENV || 'development';
+export const getCurrentEnv = () => process.env.NODE_ENV || 'development';
 
-export default getCurrentEnv;
+/**
+ * Gets the app url based on the current environment
+ */
+export const getUrl = getCurrentEnv() === 'production'
+  ? 'https://haven-ah-backend.herokuapp.com/api/v1'
+  : 'http://localhost:5000/api/v1';
