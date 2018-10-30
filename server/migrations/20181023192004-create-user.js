@@ -42,7 +42,7 @@ export default {
     },
     isConfirmed: {
       type: Sequelize.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
     },
     resetToken: {
       type: Sequelize.STRING,

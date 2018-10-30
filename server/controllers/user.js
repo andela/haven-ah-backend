@@ -5,6 +5,7 @@ import { goodHttpResponse, badHttpResponse } from '../utilities/httpResponse';
 import emailer from '../services/emailService';
 import confirmEmail from '../emailTemplates/confirmationEmail';
 import { getUrl } from '../utilities/currentEnv';
+import resetTemplate from '../emailTemplates/passwordResetTemplate';
 
 
 const { hash, compare } = passwordUtil;
@@ -115,6 +116,72 @@ class User {
       404,
       'This account does not exist. Consider signing up.'
     );
+  }
+
+  /**
+   *
+   * @param {object} request
+   * @param {object} response
+   *
+   * @returns {object} mail output
+   */
+  static async resetPassword(request, response) {
+    const user = await userRepo.getUserByEmail(request.body.email);
+    if (!user) {
+      return badHttpResponse(
+        response,
+        404,
+        'This account does not exist.'
+      );
+    }
+    const token = await generateToken(request.body.email);
+    await userRepo.updateToken(request.body.email, token);
+    const htmlBody = resetTemplate(token);
+    const mailOptions = emailer.setMailOptions(
+      request.body.email,
+      'Password Reset Request',
+      htmlBody
+    );
+    const mailInformation = await emailer.sendEmail(mailOptions);
+    if (mailInformation.accepted.length > 0) {
+      goodHttpResponse(response, 200, 'Mail delivered', { token, ...mailInformation });
+    } else {
+      badHttpResponse(response, 500, 'Error sending mail', mailInformation);
+    }
+  }
+
+  /**
+   *
+   * @param {Object} request
+   * @param {Object} response
+   * @returns {Object} new password
+   */
+  static async updatePassword(request, response) {
+    const mailId = request.userid;
+    const password = hash(request.body.password);
+    const user = await userRepo.updatePassword(mailId, password);
+    if (user) {
+      goodHttpResponse(response, 200, 'Password updated');
+    } else {
+      badHttpResponse(response, 404, 'User was not found');
+    }
+  }
+
+  /**
+   * This functions validates the
+   * user token for expiration
+   * @param {object} request
+   * @param {object} response
+   * @returns {object} user credentials
+   */
+  static async confirmPassword(request, response) {
+    const mailId = request.userId;
+    const user = await userRepo.getUserByEmail(mailId);
+    if (user) {
+      goodHttpResponse(response, 200, 'Proceed to update password', user);
+    } else {
+      badHttpResponse(response, 404, 'Your token has expired.');
+    }
   }
 
   /**

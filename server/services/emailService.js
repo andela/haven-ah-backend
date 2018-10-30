@@ -15,16 +15,13 @@ const transporter = nodemailer.createTransport({
 });
 
 const emailer = {
-  setMailOptions: (email, subject, html) => {
-    return {
-      from: process.env.HAVEN_EMAIL,
-      to: email,
-      subject,
-      html,
-    };
-  },
-
-  sendEmail: mailOptions => transporter.sendMail(mailOptions),
+  setMailOptions: (email, subject, html) => ({
+    from: process.env.HAVEN_EMAIL,
+    to: email,
+    subject,
+    html,
+  }),
+  sendEmail: mailOptions => transporter.sendMail(mailOptions)
 };
 
 export default emailer;
