@@ -30,6 +30,7 @@ describe('POST api/v1/users/signup', () => {
       .post('/api/v1/users/signup')
       .send(theo);
 
+
     expect(response.status).to.be.equal(409);
     expect(response.body.message).to.be.deep
       .equals('This account already exists. Consider sign in.');

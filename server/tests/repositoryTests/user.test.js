@@ -5,6 +5,10 @@ import data from '../utilities/mockData';
 const { expect } = chai;
 const { priscilla, joe } = data;
 
+after(async () => {
+  await userRepo.deleteUser(priscilla);
+  await userRepo.deleteUser(joe);
+});
 
 describe('Get user by email function', () => {
   let newUser;

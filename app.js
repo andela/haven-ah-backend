@@ -5,8 +5,9 @@ import dotenv from 'dotenv';
 import config from './server/config/config';
 import { goodHttpResponse } from './server/utilities/httpResponse';
 
-import router from './server/routes/users';
 import cleanStrings from './server/middlewares/cleanStrings';
+
+import router from './server/routes';
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cleanStrings);
 
-app.use('/api/v1', router);
+router(app);
 
 app.get('*', (request, response) => {
   const welcome = 'Welcome to Authors Haven API Version 1.0';
