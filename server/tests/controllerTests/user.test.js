@@ -10,7 +10,8 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 const {
-  theo, sull, noPassword, noEmail, wrongPassword, wrongEmail, dan
+  theo, sull, dan, noPassword, noEmail, wrongPassword, wrongEmail, goodUserUpdate, badUserUpdate,
+  badBioUpdate, badImageUpdate1, badImageUpdate2, noImageUpdate, usernameUpdate,
 } = data;
 
 const route = '/api/v1/users/signup';
@@ -205,5 +206,125 @@ describe('Send an email to user:', () => {
     expect(response.body.status).to.be.equal(200);
     expect(response.body.message).to.be.deep
       .equals('Password updated');
+  });
+});
+
+describe('GET api/v1/users/moses', () => {
+  it('should return an error if user is not signed in', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/users/moses');
+
+    expect(response.status).to.be.equal(403);
+    expect(response.body.message).to.be.deep
+      .equals('You need to sign in first');
+  });
+
+  it('should return error for user that do not exist', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/users/uwabuwa')
+      .set('x-access-token', token);
+
+    expect(response.status).to.be.equal(404);
+    expect(response.body.message).to.be.deep
+      .equals('User not found');
+  });
+
+  it('should return the user', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/users/i_amtheo')
+      .set('x-access-token', token);
+
+    expect(response.status).to.be.equal(200);
+    expect(response.body.message).to.be.deep
+      .equals('User found');
+  });
+});
+
+describe('UPDATE api/v1/users/:username', () => {
+  it('should return an error if user is not signed in', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/i_amsull')
+      .send(goodUserUpdate);
+
+    expect(response.status).to.be.equal(403);
+    expect(response.body.message).to.be.deep
+      .equals('You need to sign in first');
+  });
+
+  it('should update user and return data', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/i_amtheo')
+      .set('x-access-token', token)
+      .send(badUserUpdate);
+
+    expect(response.status).to.be.equal(501);
+    expect(response.body.message).to.be.deep
+      .equals('Email change is not supported currently.');
+  });
+
+  it('should not update user if bio is bad', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/i_amtheo')
+      .set('x-access-token', token)
+      .send(badBioUpdate);
+
+    expect(response.status).to.be.equal(400);
+    expect(response.body.message).to.be.deep
+      .equals('Your bio must be 200 characters or less');
+  });
+
+  it('should not update user if image being uploaded has bad url', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/i_amtheo')
+      .set('x-access-token', token)
+      .send(badImageUpdate1);
+
+    expect(response.status).to.be.equal(400);
+    expect(response.body.message).to.be.deep
+      .equals('Please choose a valid image.');
+  });
+
+  it('should not update user if image being uploaded has bad image url', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/i_amtheo')
+      .set('x-access-token', token)
+      .send(badImageUpdate2);
+
+    expect(response.status).to.be.equal(400);
+    expect(response.body.message).to.be.deep
+      .equals('Please ensure that the image is valid');
+  });
+
+  it('should return an error if username already exists', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/i_amtheo')
+      .set('x-access-token', token)
+      .send(usernameUpdate);
+
+    expect(response.status).to.be.equal(409);
+    expect(response.body.message).to.be.deep
+      .equals('We found another user with the same username');
+  });
+
+  it('should update user if image is not in the data', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/i_amtheo')
+      .set('x-access-token', token)
+      .send(noImageUpdate);
+
+    expect(response.status).to.be.equal(200);
+    expect(response.body.message).to.be.deep
+      .equals('Account updated');
+  });
+
+  it('should update user and return data', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/i_amtheo')
+      .set('x-access-token', token)
+      .send(goodUserUpdate);
+
+    expect(response.status).to.be.equal(200);
+    expect(response.body.message).to.be.deep
+      .equals('Account updated');
   });
 });

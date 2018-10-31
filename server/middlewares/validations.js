@@ -1,7 +1,9 @@
 import utilities from '../utilities/userInput';
 import { badHttpResponse } from '../utilities/httpResponse';
+import checkStringLen from '../utilities/checkStringLength';
+import userRepo from '../repository/userRepository';
 
-const { checkMissingFields } = utilities;
+const { checkMissingFields, validateUrl } = utilities;
 
 /**
  * @class inputValidator
@@ -47,6 +49,54 @@ class inputValidator {
       return badHttpResponse(response, 400, 'Invalid input', problem);
     }
     next();
+  }
+
+  /**
+   * @description signinValidator
+   * @param {object} request http request object
+   * @param {object} response http response object
+   * @param {object} next callback function
+   * @returns {object} http response object
+   */
+  static async editProfile(request, response, next) {
+    const { email, username, password } = request.body;
+    if (username) {
+      const user = await userRepo.getUserbyUsername(username);
+      if (user) {
+        return badHttpResponse(
+          response,
+          409,
+          'We found another user with the same username',
+        );
+      }
+    }
+    if (email || password) {
+      return badHttpResponse(
+        response,
+        501,
+        'Email change is not supported currently.',
+      );
+    }
+    if (request.body.image) {
+      if (!validateUrl(request.body.image)) {
+        return badHttpResponse(
+          response,
+          400,
+          'Please choose a valid image.',
+        );
+      }
+    }
+    if (!request.body.bio) {
+      return next();
+    }
+    if (checkStringLen(request.body.bio, 200)) {
+      return next();
+    }
+    return badHttpResponse(
+      response,
+      400,
+      'Your bio must be 200 characters or less',
+    );
   }
 }
 

@@ -7,7 +7,6 @@ import confirmEmail from '../emailTemplates/confirmationEmail';
 import { getUrl } from '../utilities/currentEnv';
 import resetTemplate from '../emailTemplates/passwordResetTemplate';
 
-
 const { hash, compare } = passwordUtil;
 /**
  * User Controller class
@@ -217,6 +216,87 @@ class User {
       'Your email has been confirmed',
       { token },
     );
+  }
+
+  /**
+   * This method gets a user profile
+   * @param {object} request
+   * @param {object} response
+   * @returns {object} the user data
+   */
+  static async profile(request, response) {
+    const data = await userRepo.getUserbyUsername(request.params.username);
+    if (data === null) {
+      return badHttpResponse(
+        response,
+        404,
+        'User not found',
+        'No data to show'
+      );
+    }
+    const {
+      id, firstName, lastName, facebook, google, twitter, bio, imageUrl, createdAt, updatedAt,
+    } = data;
+
+    const responseData = request.isAuthorized ? data : {
+      id, firstName, lastName, facebook, google, twitter, bio, imageUrl, createdAt, updatedAt,
+    };
+    return goodHttpResponse(
+      response,
+      200,
+      'User found',
+      responseData,
+    );
+  }
+
+  /**
+   * This method updates the user profile in the DB
+   * @param {object} request
+   * @param {object} response
+   * @returns {object} the response message to user
+   */
+  static async editProfile(request, response) {
+    if (!request.isAuthorized) {
+      return badHttpResponse(
+        response,
+        401,
+        'You are not permitted to complete this action',
+      );
+    }
+    if (request.body.images) {
+      const imageUrl = request.body.images[0];
+      request.body.imageUrl = imageUrl;
+    }
+    const updated = await userRepo.updateUser(request.body, request.params.username);
+    try {
+      const {
+        id, username, firstName, lastName, email, isConfirmed, facebook,
+        google, twitter, bio, imageUrl, createdAt, updatedAt,
+      } = updated;
+
+      return goodHttpResponse(
+        response,
+        200,
+        'Account updated',
+        {
+          id,
+          username,
+          firstName,
+          lastName,
+          email,
+          isConfirmed,
+          facebook,
+          google,
+          twitter,
+          bio,
+          imageUrl,
+          createdAt,
+          updatedAt,
+        },
+      );
+    } catch (error) {
+      return badHttpResponse(response, 500, 'There was an internal error', error);
+    }
   }
 }
 
