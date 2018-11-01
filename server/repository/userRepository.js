@@ -13,11 +13,8 @@ class UserRepository {
    */
   static async createUser(user) {
     user.role = 'user';
-    try {
-      return await User.create(user);
-    } catch (error) {
-      return error;
-    }
+    const newUser = await User.create(user);
+    return newUser;
   }
 
   /**
@@ -48,45 +45,7 @@ class UserRepository {
   }
 
   /**
- * This method finds all non-admin users in the database
- *@returns {object | null} the results from DB
- */
-  static async getAllUsers() {
-    const allUsers = await User.findAll({
-      where: {
-        role: 'user',
-      },
-      attributes: {
-        include: [
-          'id',
-          'firstName',
-          'lastName',
-          'facebook',
-          'google',
-          'twitter',
-          'bio',
-          'imageUrl',
-          'createdAt',
-          'updatedAt',
-        ],
-        exclude: [
-          'email',
-          'updatedAt',
-          'deletedAt',
-          'isDeleted',
-          'password',
-          'emailConfirmation',
-          'resetToken',
-          'role',
-        ],
-      },
-    });
-    if (!allUsers) return null;
-    return allUsers;
-  }
-
-  /**
-   *
+   * Removes a user from the databasse
    * @param {object} user
    * @returns {Object | null} User object or null
    */
@@ -118,20 +77,15 @@ class UserRepository {
   }
 
   /**
-   * Finds a user by email
-   * @param {string} email Email to search by
-   * @param {string} username username
-   * @returns {object | null} User object or null if user is not found
-   */
-  static async getUserByCredentials(email, username) {
-    const user = await User.findAll({
-      where: { email, username },
-      attributes: {
-        include: ['id', 'firstName'],
-        exclude: ['createdAt', 'updatedAt', 'deletedAt', 'isDeleted']
-      }
-    });
-    return user.length <= 0 ? null : user;
+ * Gets a user by the id
+ * @param {string} userId Id to search by
+ * @returns {object | null} User object or null if user is not found
+ */
+  static async getUserById(userId) {
+    const user = await User.findByPk(userId);
+
+    if (!user) return null;
+    return user;
   }
 
   /**
@@ -169,6 +123,28 @@ class UserRepository {
       },
     });
     return allUsers || null;
+  }
+
+  /**
+   * Change confirmEmail field to true
+   * @param {integer} userId User Id
+   * @returns {object} i dont know yet
+   */
+  static async confirmUserEmail(userId) {
+    const user = await this.getUserById(userId);
+    if (!user) {
+      return null;
+    }
+
+    if (user.isConfirmed) {
+      return new Error('This account has been confirmed already.');
+    }
+
+    const response = await User.update(
+      { isConfirmed: true },
+      { where: { id: user.id } }
+    );
+    return response;
   }
 }
 

@@ -7,9 +7,8 @@ import swaggerDocument from './swagger';
 import config from './server/config/config';
 import { goodHttpResponse } from './server/utilities/httpResponse';
 
+import router from './server/routes/index';
 import cleanStrings from './server/middlewares/cleanStrings';
-
-import router from './server/routes';
 
 dotenv.config();
 
@@ -24,8 +23,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cleanStrings);
 
-router(app);
 app.use('/docs', swagger.serve, swagger.setup(swaggerDocument));
+app.use('/api/v1', router);
+
 app.get('*', (request, response) => {
   const welcome = 'Welcome to Authors Haven API Version 1.0';
   return goodHttpResponse(response, 200, welcome);

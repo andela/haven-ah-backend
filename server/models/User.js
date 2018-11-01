@@ -41,9 +41,10 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.ENUM('user', 'admin'),
       allowNull: false,
     },
-    emailConfirmation: {
-      type: DataTypes.STRING,
-      allowNull: true,
+    isConfirmed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     },
     resetToken: {
       type: DataTypes.STRING,

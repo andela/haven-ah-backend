@@ -40,9 +40,9 @@ export default {
       type: Sequelize.ENUM('user', 'admin'),
       allowNull: false,
     },
-    emailConfirmation: {
-      type: Sequelize.STRING,
-      allowNull: true,
+    isConfirmed: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
     },
     resetToken: {
       type: Sequelize.STRING,

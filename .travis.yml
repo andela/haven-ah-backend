@@ -14,4 +14,4 @@ before_script:
   - psql -c "create database haven;" -U postgres
 
 after_success:
-  - npm run coveralls
+  - npm run cover
