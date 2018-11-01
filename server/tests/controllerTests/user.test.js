@@ -146,7 +146,6 @@ describe('Send an email to user:', () => {
       .send({
         email: 'theo@gmail.com'
       });
-    console.log(response.body);
 
     expect(response.body.status).to.be.equal(200);
     expect(response.body.message).to.be.deep

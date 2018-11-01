@@ -4,7 +4,7 @@ import data from '../utilities/mockData';
 
 const { expect } = chai;
 const {
-  priscilla, joe, moses, michael, goodUserUpdate,
+  priscilla, joe, michael, goodUserUpdate,
 } = data;
 
 after(async () => {
