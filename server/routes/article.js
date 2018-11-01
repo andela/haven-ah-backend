@@ -6,4 +6,6 @@ const router = new Router();
 
 router.post('/articles', isAuthenticated, Article.createArticle);
 
+router.get('/articles', Article.getArticles);
+
 export default router;

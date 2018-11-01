@@ -31,3 +31,12 @@ describe('Post a new article:', () => {
       .equals('Article Created');
   });
 });
+
+describe('Get all articles', () => {
+  it('should return all articles in the database', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles?limit=20&page=1');
+    expect(response.body.status).to.be.equal(200);
+    expect(response.body.message).to.be.deep.equals('all articles');
+  });
+});

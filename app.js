@@ -35,6 +35,7 @@ const port = config[env].PORT;
 
 // Start server
 app.listen(port, () => {
+  // eslint-disable-next-line
   console.log(`Express server listening on ${port}`);
 });
 
