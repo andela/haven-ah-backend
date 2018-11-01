@@ -1,6 +1,8 @@
 import slug from 'slug';
 import articleRepo from '../repository/articleRepository';
 import { goodHttpResponse, badHttpResponse, paginatedHttpResponse } from '../utilities/httpResponse';
+import tagRepo from '../repository/tagRepository';
+
 /**
  * Article Controller class
  */
@@ -27,9 +29,24 @@ class Article {
         userid: request.userId,
         description,
         readtime,
-        images: images.split(','),
+        images: images ? images.split(',') : [],
       });
-      return goodHttpResponse(response, 201, 'Article Created', newArticle);
+      if (request.body.tags) {
+        const combinedTags = request.body.tags.toLowerCase();
+        const tagPromises = await tagRepo.processTags(
+          combinedTags,
+          newArticle.id
+        );
+        await Promise.all(tagPromises)
+          .then(() => goodHttpResponse(
+            response,
+            201,
+            'Article Created and Tags associated',
+            { newArticle, combinedTags }
+          ));
+      } else {
+        return goodHttpResponse(response, 201, 'Article Created', newArticle);
+      }
     } catch (error) {
       return badHttpResponse(response, 500, 'There was an internal error', error);
     }

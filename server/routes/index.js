@@ -7,7 +7,7 @@ const router = Router();
 
 router.use(
   userRouter,
-  articleRouter
+  articleRouter,
 );
 
 export default router;
