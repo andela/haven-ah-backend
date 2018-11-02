@@ -18,6 +18,38 @@ class UserRepository {
   }
 
   /**
+   * Updates a user password resetToken
+   * @param {string} email
+   * @param {string} resetToken
+   * @returns {object} user
+   */
+  static async updateToken(email, resetToken) {
+    const user = await User.update({
+      resetToken
+    },
+    {
+      where: { email }
+    });
+    return user;
+  }
+
+  /**
+   * Function to update a user password
+   * @param {string} email
+   * @param {string} password
+   * @returns {object} user
+   */
+  static async updatePassword(email, password) {
+    const user = await User.update({
+      password
+    },
+    {
+      where: { email }
+    });
+    return user;
+  }
+
+  /**
  * Finds a user by email
  * @param {string} email Email to search by
  * @param {string} username username

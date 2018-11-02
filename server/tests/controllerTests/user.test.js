@@ -4,7 +4,7 @@ import chaiHttp from 'chai-http';
 import app from '../../../app';
 import data from '../utilities/mockData';
 import userRepo from '../../repository/userRepository';
-import createToken from '../../utilities/jwtGenerator';
+import generateToken from '../../utilities/jwtGenerator';
 
 const { expect } = chai;
 chai.use(chaiHttp);
@@ -23,12 +23,14 @@ let newUser = '';
 let token = '';
 let testUser = '';
 let danToken = '';
+let theoToken = '';
 
 before(async () => {
   testUser = await userRepo.createUser(dan);
   newUser = await userRepo.createUser(theo);
-  token = createToken(newUser.id);
-  danToken = createToken(testUser.id);
+  token = generateToken(newUser.id);
+  danToken = generateToken(testUser.id);
+  theoToken = await generateToken('theo@gmail.com');
 });
 
 describe('POST api/v1/users/signup', () => {
@@ -164,5 +166,44 @@ describe('GET api/v1/users', () => {
     expect(response.status).to.be.equal(200);
     expect(response.body.message).to.be.deep
       .equals('Users found');
+  });
+});
+
+describe('Send an email to user:', () => {
+  it('should send an email to user', async () => {
+    const response = await chai.request(app)
+      .post('/api/v1/users/resetpassword')
+      .send({
+        email: 'theo@gmail.com'
+      });
+
+    expect(response.body.status).to.be.equal(200);
+    expect(response.body.message).to.be.deep
+      .equals('Mail delivered');
+  });
+
+  it('should reject unauthorized password reset', async () => {
+    const response = await chai.request(app)
+      .post('/api/v1/users/updatepassword')
+      .send({
+        email: 'theo@gmail.com',
+      });
+
+    expect(response.body.status).to.be.equal(403);
+    expect(response.body.message).to.be.deep
+      .equals('You need to sign in first');
+  });
+
+  it('should update password', async () => {
+    const response = await chai.request(app)
+      .post('/api/v1/users/updatepassword')
+      .set('x-access-token', theoToken)
+      .send({
+        password: 'newpassword',
+      });
+
+    expect(response.body.status).to.be.equal(200);
+    expect(response.body.message).to.be.deep
+      .equals('Password updated');
   });
 });
