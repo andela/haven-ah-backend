@@ -7,6 +7,7 @@
  * @returns {object} response
  * @example goodHttpResponse(response, 200, 'user Theo found', {id: 1, username: 'theo.io'});
  */
+
 export const goodHttpResponse = (response, statusCode, message, data) => {
   const responseBody = {
     status: statusCode,
@@ -38,5 +39,23 @@ export const badHttpResponse = (response, statusCode, message, problem) => {
   if (problem) {
     responseBody.error = { problem };
   }
+  return response.status(statusCode).json(responseBody);
+};
+
+/**
+ * Paginated HTTP response template
+ * @param { object } response
+ * @param { integer } statusCode
+ * @param { string } message
+ * @param { string } data
+ * @returns { object } response
+ * @example paginatedHttpResponse(response, 404, 'article not found');
+ */
+export const paginatedHttpResponse = (response, statusCode, message, data) => {
+  const responseBody = {
+    status: statusCode,
+    message,
+    data,
+  };
   return response.status(statusCode).json(responseBody);
 };

@@ -1,4 +1,5 @@
 import Model from '../models';
+import getPaginationMeta from '../utilities/getPaginationMeta';
 
 const { Articles } = Model;
 
@@ -36,6 +37,23 @@ class ArticleRepository {
       return null;
     }
     await articleRecord.destroy();
+  }
+
+  /**
+   * Function to get all article in the database
+   * @param { integer } limit
+   * @param { integer } page
+   * @returns { object }
+   ** otherwise it throws an error
+   */
+  static async getArticles(limit = 10, page = 1) {
+    const offset = limit * (page - 1);
+    const articleRecords = await Articles.findAndCountAll({
+      limit,
+      offset
+    });
+    articleRecords.meta = getPaginationMeta(limit, page, articleRecords.count);
+    return articleRecords;
   }
 }
 
