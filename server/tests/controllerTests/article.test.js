@@ -8,7 +8,9 @@ import userRepo from '../../repository/userRepository';
 const { expect } = chai;
 chai.use(chaiHttp);
 
-const { jigArticle, jigsaw } = data;
+const {
+  jigArticle, jigsaw,
+} = data;
 let jwtoken;
 let newUser;
 

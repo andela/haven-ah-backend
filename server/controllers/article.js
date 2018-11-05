@@ -48,7 +48,7 @@ class Article {
         return goodHttpResponse(response, 201, 'Article Created', newArticle);
       }
     } catch (error) {
-      return badHttpResponse(response, 500, 'There was an internal error', error);
+      return badHttpResponse(response, 500, 'There was an internal server error');
     }
   }
 
@@ -69,7 +69,7 @@ class Article {
       }
       return paginatedHttpResponse(response, 200, 'all articles', articles);
     } catch (error) {
-      return badHttpResponse(response, 500, 'There was an internal server error', error);
+      return badHttpResponse(response, 500, 'There was an internal server error');
     }
   }
 }

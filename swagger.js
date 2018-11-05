@@ -290,6 +290,115 @@ export default {
         }
       }
     },
+    '/users/:username': {
+      put: {
+        description: 'Update user profile',
+        parameters: [{
+          name: 'x-access-token',
+          in: 'header',
+          required: false,
+          style: 'simple',
+          explode: false,
+          schema: {
+            type: 'string'
+          },
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNDM5MTY0LCJleHAiOjE1NDIwNDM5NjR9.Sf7SOMjpeR7jNEmiOd1Opmsj7k62nUUYMXmJQAuh118'
+        }],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/body'
+              }
+            }
+          }
+        },
+        responses: {
+          200: {
+            description: 'updates the users',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          },
+          401: {
+            description: 'Not permitted to complete action',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          },
+          409: {
+            description: 'When the usernames supplied are conflicting',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          },
+          501: {
+            description: 'Unsupported request',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          }
+        }
+      },
+      get: {
+        description: 'Gets user by their username',
+        parameters: [{
+          name: 'x-access-token',
+          in: 'header',
+          required: false,
+          style: 'simple',
+          explode: false,
+          schema: {
+            type: 'string'
+          },
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNDM5MTY0LCJleHAiOjE1NDIwNDM5NjR9.Sf7SOMjpeR7jNEmiOd1Opmsj7k62nUUYMXmJQAuh118'
+        }],
+        responses: {
+          200: {
+            description: 'Gets user successfully',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          },
+          403: {
+            description: 'Unauthorised request',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          }
+        }
+      }
+    },
     '/articles': {
       post: {
         tags: ['Article'],
@@ -428,6 +537,69 @@ export default {
         }
       }
     },
+    '/articles/:slug/comments': {
+      post: {
+        tags: ['Article'],
+        summary: 'Create comment',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'body',
+            in: 'formData',
+            description: 'The content of the comment',
+            required: true,
+            type: 'string'
+          },
+          {
+            name: 'highlightedtext',
+            in: 'formData',
+            description: 'the highlighted text in the article',
+            required: false,
+            type: 'string'
+          },
+        ],
+        description: 'Returns created comment on success.',
+        responses: {
+          201: {
+            description: 'Comment created'
+          },
+          404: {
+            description: 'We could not find this article'
+          },
+          500: {
+            description: 'There was an internal error'
+          }
+        }
+      }
+    },
+    '/articles/:slug/comments/:parentId': {
+      post: {
+        tags: ['Article'],
+        summary: 'Create reply',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'body',
+            in: 'formData',
+            description: 'The content of the reply',
+            required: true,
+            type: 'string'
+          },
+        ],
+        description: 'Returns created comment on success.',
+        responses: {
+          201: {
+            description: 'Reply created'
+          },
+          404: {
+            description: 'We could not find the parent comment with id: '
+          },
+          500: {
+            description: 'There was an internal error'
+          }
+        }
+      }
+    },
     '/api/v1/auth/facebook': {
       get: {
         description: 'Auto generated using Swagger Inspector',
@@ -476,12 +648,67 @@ export default {
           404: {
             description:
               'article not found'
-          },
-          500: {
-            description: 'There was an internal error'
           }
         }
       }
     },
+  },
+  components: {
+    schemas: {
+      body_1: {
+        type: 'object',
+        properties: {
+          firstName: {
+            type: 'string'
+          },
+          lastName: {
+            type: 'string'
+          },
+          twitter: { },
+          facebook: {
+            type: 'string'
+          },
+          bio: {
+            type: 'string'
+          },
+          isConfirmed: {
+            type: 'boolean'
+          },
+          google: { }
+        }
+      },
+      body: {
+        type: 'object',
+        properties: {
+          firstName: {
+            type: 'string'
+          },
+          lastName: {
+            type: 'string'
+          },
+          twitter: { },
+          facebook: {
+            type: 'string'
+          },
+          bio: {
+            type: 'string'
+          },
+          isConfirmed: {
+            type: 'boolean'
+          },
+          google: { },
+          id: {
+            type: 'integer',
+            format: 'int32'
+          },
+          email: {
+            type: 'string'
+          },
+          username: {
+            type: 'string'
+          }
+        }
+      }
+    }
   }
 };
