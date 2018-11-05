@@ -1,7 +1,25 @@
 import Model from '../models';
 
+
+const { Op } = Model.Sequelize;
 const { User } = Model;
 
+const attributes = [
+  'id',
+  'username',
+  'firstName',
+  'lastName',
+  'email',
+  'isConfirmed',
+  'facebook',
+  'google',
+  'twitter',
+  'bio',
+  'imageUrl',
+  'createdAt',
+  'updatedAt',
+  'role'
+];
 /**
  * User repository class
  */
@@ -50,29 +68,44 @@ class UserRepository {
   }
 
   /**
- * Finds a user by email and username
- * @param {string} email Email to search by
- * @param {string} username username
- * @returns {object | null} User object or null if user is not found
- */
-  static async getUserByCredentials(email, username) {
-    const user = await User.findAll({
-      where: { email, username },
-      attributes: {
-        include: [
-          'id',
-          'firstName'
-        ],
-        exclude: [
-          'createdAt',
-          'updatedAt',
-          'deletedAt',
-          'isDeleted',
-          'password'
-        ],
-      }
+* Finds a user by parameter
+* @param {string} param Parameter to search by
+* @param {string} value Parameter value
+* @returns {object | null} User object or null if user is not found
+*/
+  static async getUserByParam(param, value) {
+    if (param === 'email') {
+      attributes.push('password');
+    }
+
+    const user = await User.findOne({
+      where: { [param]: value },
+      attributes
     });
-    if (user.length <= 0) return null;
+
+    if (!user) {
+      return null;
+    }
+    return user;
+  }
+
+  /**
+  * Finds a user by email or username
+  * @param { string } email Email to search by
+  * @param { string } username Username to search by
+  * @returns { object | null } User object or null if user is not found
+  */
+  static async getUserByCredentials(email, username) {
+    const user = await User.findOne({
+      where: {
+        [Op.or]: { email, username }
+      },
+      attributes
+    });
+
+    if (!user) {
+      return null;
+    }
     return user;
   }
 
@@ -85,108 +118,23 @@ class UserRepository {
       where: {
         role: 'user',
       },
-      attributes: {
-        include: [
-          'id',
-          'firstName',
-          'lastName',
-          'facebook',
-          'google',
-          'twitter',
-          'bio',
-          'imageUrl',
-          'createdAt',
-          'updatedAt',
-        ],
-        exclude: [
-          'email',
-          'updatedAt',
-          'deletedAt',
-          'isDeleted',
-          'password',
-          'emailConfirmation',
-          'resetToken',
-          'role',
-        ],
-      },
+      attributes
     });
+
     if (!allUsers) return null;
     return allUsers;
   }
 
   /**
-   * Removes a user from the databasse
+   * Removes a user from the database
    * @param {object} user
    * @returns {Object | null} User object or null
    */
   static async deleteUser(user) {
-    const userEntity = await User.find({
-      where: {
-        username: user.username,
-      }
-    });
+    const userEntity = await this.getUserByParam('username', user.username);
+
     if (!userEntity) return null;
     await userEntity.destroy();
-  }
-
-  /**
- * Gets a user by the email
- * @param {string} email Email to search by
- * @returns {object | null} User object or null if user is not found
- */
-  static async getUserByEmail(email) {
-    const user = await User.findOne({
-      where: { email },
-      attributes: {
-        include: ['id', 'firstName'],
-        exclude: ['createdAt', 'updatedAt', 'deletedAt', 'isDeleted']
-      }
-    });
-    if (!user) return null;
-    return user;
-  }
-
-  /**
- * Gets a user by the id
- * @param {string} userId Id to search by
- * @returns {object | null} User object or null if user is not found
- */
-  static async getUserById(userId) {
-    const user = await User.findByPk(userId);
-
-    if (!user) return null;
-    return user;
-  }
-
-  /**
-   * This method finds a user by their username
-   * Finds a user using the userId
-   * @param {number} username userId
-   * @returns {object | null} the details of the user.
-   */
-  static async getUserbyUsername(username) {
-    const oneUser = await User.findOne({
-      where: {
-        username,
-      },
-      attributes: [
-        'id',
-        'username',
-        'firstName',
-        'lastName',
-        'email',
-        'isConfirmed',
-        'facebook',
-        'google',
-        'twitter',
-        'bio',
-        'imageUrl',
-        'createdAt',
-        'updatedAt',
-      ],
-    });
-    if (!oneUser) return null;
-    return oneUser;
   }
 
   /**
@@ -211,7 +159,7 @@ class UserRepository {
    * @returns {object} i dont know yet
    */
   static async confirmUserEmail(userId) {
-    const user = await this.getUserById(userId);
+    const user = await this.getUserByParam('id', userId);
     if (!user) {
       return null;
     }

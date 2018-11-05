@@ -6,6 +6,7 @@ import emailer from '../services/emailService';
 import confirmEmail from '../emailTemplates/confirmationEmail';
 import { getUrl } from '../utilities/currentEnv';
 import resetTemplate from '../emailTemplates/passwordResetTemplate';
+import followerRepo from '../repository/followUserRepository';
 
 const { hash, compare } = passwordUtil;
 /**
@@ -36,6 +37,7 @@ class User {
         'We found another user with the same email and/or username',
       );
     }
+
     const newUser = await userRepo.createUser({
       firstName,
       lastName,
@@ -92,7 +94,7 @@ class User {
       email,
       password,
     } = request.body;
-    const findUser = await userRepo.getUserByEmail(email);
+    const findUser = await userRepo.getUserByParam('email', email);
     if (findUser) {
       const validatePassword = await compare(password, findUser.password);
       if (validatePassword === false) {
@@ -125,7 +127,7 @@ class User {
    * @returns {object} mail output
    */
   static async resetPassword(request, response) {
-    const user = await userRepo.getUserByEmail(request.body.email);
+    const user = await userRepo.getUserByParam('email', request.body.email);
     if (!user) {
       return badHttpResponse(
         response,
@@ -175,7 +177,7 @@ class User {
    */
   static async confirmPassword(request, response) {
     const mailId = request.userId;
-    const user = await userRepo.getUserByEmail(mailId);
+    const user = await userRepo.getUserByParam('email', mailId);
     if (user) {
       goodHttpResponse(response, 200, 'Proceed to update password', user);
     } else {
@@ -225,7 +227,7 @@ class User {
    * @returns {object} the user data
    */
   static async profile(request, response) {
-    const data = await userRepo.getUserbyUsername(request.params.username);
+    const data = await userRepo.getUserByParam('username', request.params.username);
     if (data === null) {
       return badHttpResponse(
         response,
@@ -297,6 +299,93 @@ class User {
     } catch (error) {
       return badHttpResponse(response, 500, 'There was an internal error', error);
     }
+  }
+
+  /**
+   * Follow a new user
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Error if operation was unsuccessful or success response
+   * if operation was successful
+   */
+  static async follow(request, response) {
+    const { username } = request.params;
+    const followerId = request.userId;
+
+    const user = await userRepo.getUserByParam('username', username);
+    if (!user) {
+      return badHttpResponse(
+        response,
+        404,
+        `User with the username ${username} does not exist.`
+      );
+    }
+
+    if (user.id === followerId) {
+      return badHttpResponse(
+        response,
+        400,
+        'Sorry, you can not follow yourself. You can only follow other users.'
+      );
+    }
+    const follower = await userRepo.getUserByParam('id', followerId);
+
+    const newFollowing = await followerRepo.followUser(user, follower);
+    if (newFollowing instanceof Error) {
+      return badHttpResponse(response, 400, newFollowing.message);
+    }
+
+    return goodHttpResponse(
+      response,
+      201,
+      'You have followed this user.'
+    );
+  }
+
+  /**
+   * Unfollower a user
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Error if operation was unsuccessful or success response
+   * if operation was successful
+   */
+  static async unfollow(request, response) {
+    const { username } = request.params;
+    const followerId = request.userId;
+
+    const user = await userRepo.getUserByParam('username', username);
+    if (!user) {
+      return badHttpResponse(
+        response,
+        404,
+        `User with the username ${username} does not exist.`
+      );
+    }
+
+    if (user.id === followerId) {
+      return badHttpResponse(
+        response,
+        400,
+        'Sorry, you can not unfollow yourself.'
+      );
+    }
+
+    const follower = await userRepo.getUserByParam('id', followerId);
+    const newUnfollowing = await followerRepo.unfollowUser(user, follower);
+
+    if (newUnfollowing instanceof Error) {
+      return badHttpResponse(
+        response,
+        400,
+        newUnfollowing.message,
+      );
+    }
+
+    return goodHttpResponse(
+      response,
+      200,
+      'You have unfollowed this user.',
+    );
   }
 }
 
