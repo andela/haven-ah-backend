@@ -1,4 +1,3 @@
-/* eslint prefer-destructuring: 0 */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../../../app';
@@ -56,37 +55,6 @@ describe('POST api/v1/users/signup', () => {
   });
 });
 
-describe('GET api/v1/auth/confirm', () => {
-  it('should return error if user is not found', async () => {
-    await userRepo.deleteUser(dan);
-    const response = await chai.request(app)
-      .get(`/api/v1/auth/confirm/${danToken}`);
-
-    expect(response).to.have.status(404);
-    expect(response.body.message).to.be.deep
-      .equals('This user was not found');
-  });
-
-  it('should confirm user', async () => {
-    const response = await chai.request(app)
-      .get(`/api/v1/auth/confirm/${token}`);
-
-    expect(response).to.have.status(200);
-    expect(response.body).to.have.keys('status', 'message', 'data');
-    expect(response.body.data).to.have.key('token');
-    expect(response.body.message).to.be.deep.equals('Your email has been confirmed');
-  });
-
-  it('should return error if user email is already confirmed', async () => {
-    const response = await chai.request(app)
-      .get(`/api/v1/auth/confirm/${token}`);
-
-    expect(response).to.have.status(400);
-    expect(response.body.message).to.be.deep
-      .equals('This account has been confirmed already.');
-  });
-});
-
 describe('POST api/users/signin', () => {
   it('should signin user with correct details', async () => {
     const response = await chai.request(app)
@@ -105,7 +73,8 @@ describe('POST api/users/signin', () => {
     expect(response.status).to.equal(400);
     expect(response.body).to.be.an('object');
     expect(response.body.message).to.be.deep.equals('Invalid input');
-    expect(response.body.error.problem.passwordLength).to.be.deep.equals('The password length should be atleast 8 characters. ');
+    expect(response.body.error.problem.passwordLength).to.be.deep
+      .equals('The password length should be atleast 8 characters. ');
   });
 
   it('should not sign in user without email address', async () => {
@@ -326,5 +295,148 @@ describe('UPDATE api/v1/users/:username', () => {
     expect(response.status).to.be.equal(200);
     expect(response.body.message).to.be.deep
       .equals('Account updated');
+  });
+});
+
+describe('POST api/v1/profiles/:username/follow', () => {
+  it('should return error if username is in the wrong format', async () => {
+    const response = await chai.request(app)
+      .post('/api/v1/profiles/90a/follow')
+      .set({
+        'x-access-token': token,
+      });
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('Bad Request');
+  });
+
+  it('should return error if user is not found', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/profiles/${sull.firstName}/follow`)
+      .set({
+        'x-access-token': token,
+      });
+
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals(`User with the username ${sull.firstName} does not exist.`);
+  });
+
+  it('should return error when a user tries to follow their own self', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/profiles/${theo.username}/follow`)
+      .set({
+        'x-access-token': token,
+      });
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('Sorry, you can not follow yourself. You can only follow other users.');
+  });
+
+  it('should follow a user', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/profiles/${dan.username}/follow`)
+      .set({
+        'x-access-token': token,
+      });
+
+    expect(response).to.have.status(201);
+    expect(response.body.message).to.be.deep
+      .equals('You have followed this user.');
+  });
+
+  it('should return error if user has been previously followed', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/profiles/${dan.username}/follow`)
+      .set({
+        'x-access-token': token,
+      });
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('Sorry. You already follow this user');
+  });
+});
+
+describe('DELETE api/v1/profiles/:username/follow', () => {
+  it('should return error if user is not found', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/profiles/${sull.firstName}/follow`)
+      .set({
+        'x-access-token': token,
+      });
+
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals(`User with the username ${sull.firstName} does not exist.`);
+  });
+
+  it('should return error when a user tries to unfollow their own self', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/profiles/${theo.username}/follow`)
+      .set({
+        'x-access-token': token,
+      });
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('Sorry, you can not unfollow yourself.');
+  });
+
+  it('should return error if user is not a follower', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/profiles/${sull.username}/follow`)
+      .set({
+        'x-access-token': token,
+      });
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('Sorry. You currently don\'t follow this user.');
+  });
+
+  it('should unfollower user', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/profiles/${dan.username}/follow`)
+      .set({
+        'x-access-token': token,
+      });
+
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('You have unfollowed this user.');
+  });
+});
+
+describe('GET api/v1/auth/confirm', () => {
+  it('should return error if user is not found', async () => {
+    await userRepo.deleteUser(dan);
+    const response = await chai.request(app)
+      .get(`/api/v1/auth/confirm/${danToken}`);
+
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('This user was not found');
+  });
+
+  it('should confirm user', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/auth/confirm/${token}`);
+
+    expect(response).to.have.status(200);
+    expect(response.body).to.have.keys('status', 'message', 'data');
+    expect(response.body.data).to.have.key('token');
+    expect(response.body.message).to.be.deep.equals('Your email has been confirmed');
+  });
+
+  it('should return error if user email is already confirmed', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/auth/confirm/${token}`);
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('This account has been confirmed already.');
   });
 });

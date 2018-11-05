@@ -328,11 +328,76 @@ export default {
         description: 'Returns an authentication token on success.',
         responses: {
           201: {
-            description:
-                          'Article Created!'
+            description: 'Article Created!'
           },
           500: {
             description: 'There was an internal error'
+          }
+        }
+      }
+    },
+    '/profiles/:username/follow': {
+      post: {
+        tags: ['Profiles'],
+        summary: 'Follow a user',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: true,
+            type: 'string'
+          },
+          {
+            name: 'username',
+            in: 'path',
+            description: 'Username of user to follow',
+            required: true,
+            type: 'string'
+          }
+        ],
+        responses: {
+          201: {
+            description: 'Successful operation.'
+          },
+          400: {
+            description: 'Error following this user'
+          },
+          404: {
+            description: 'User not found'
+          }
+        }
+      },
+      delete: {
+        tags: ['Profiles'],
+        summary: 'Unfollow a user',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: true,
+            type: 'string'
+          },
+          {
+            name: 'username',
+            in: 'path',
+            description: 'Username of user to follow',
+            required: true,
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'Successful operation.'
+          },
+          400: {
+            description: 'Error unfollowing this user'
+          },
+          404: {
+            description: 'User not found'
           }
         }
       }

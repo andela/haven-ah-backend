@@ -61,7 +61,7 @@ class inputValidator {
   static async editProfile(request, response, next) {
     const { email, username, password } = request.body;
     if (username) {
-      const user = await userRepo.getUserbyUsername(username);
+      const user = await userRepo.getUserByParam('username', username);
       if (user) {
         return badHttpResponse(
           response,

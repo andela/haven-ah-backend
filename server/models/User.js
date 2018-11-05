@@ -74,6 +74,18 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'userid',
       as: 'article'
     });
+
+    User.belongsToMany(models.User, {
+      as: 'Followers',
+      through: 'Follower',
+      foreignKey: 'userId'
+    });
+
+    User.belongsToMany(models.User, {
+      as: 'Followings',
+      through: 'Follower',
+      foreignKey: 'followerId'
+    });
   };
   return User;
 };

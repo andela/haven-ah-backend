@@ -1,0 +1,33 @@
+{    
+  "check-coverage": true,
+  "per-file": true,
+  "lines": 30,
+  "statements": 30,
+  "functions": 30,
+  "branches": 0,
+  "reporter": [
+    "lcov",
+    "text-lcov"
+  ],
+  "require": [
+    "babel-register"
+  ],
+
+  "sourceMap": false,
+  "instrument": false,
+  "cache": true,
+  "report-dir": "./coverage",
+
+  "include": [
+    "server/"
+  ],
+  "exclude": [
+    "**/node_modules/**",
+    "**/models/**",
+    "**/migrations/**",
+    "**/seeders/**",
+    "**/tests/**",
+    "**/config/**",
+    "**/coverage/**"
+  ]
+}

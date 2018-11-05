@@ -9,7 +9,7 @@ import userRepo from '../repository/userRepository';
  * @returns {function} callback function
  */
 const authorization = async (request, response, next) => {
-  const data = await userRepo.getUserbyUsername(request.params.username);
+  const data = await userRepo.getUserByParam('username', request.params.username);
   const id = data ? data.id : null;
   request.isAuthorized = id === request.userId; // BOOLEAN
   return next();

@@ -21,7 +21,7 @@ const emailer = {
     subject,
     html,
   }),
-  sendEmail: mailOptions => transporter.sendMail(mailOptions)
+  sendEmail: mailOptions => transporter.sendMail(mailOptions),
 };
 
 export default emailer;
