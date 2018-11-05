@@ -17,8 +17,8 @@
     "pretest": "cross-env NODE_ENV=test  npm run db-migrate",
     "test": "NODE_ENV=test mocha --timeout 25000 --require babel-register server/tests/**/*.test.js --exit",
     "posttest": "cross-env NODE_ENV=test npm run db-migrate:undo",
-    "db-seed": "sequelize db:seed:all",
     "db-migrate": "sequelize db:migrate",
+    "db-seed": "sequelize db:seed:all",
     "db-migrate:undo": "sequelize db:migrate:undo:all"
   },
   "author": "Andela Simulations Programme",
