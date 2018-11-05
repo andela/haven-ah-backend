@@ -20,6 +20,20 @@ const data = {
     password: 'password',
     email: 'dan@gmail.com'
   },
+  moses: {
+    firstName: 'Moses',
+    lastName: 'Moses',
+    username: 'i_amMoses',
+    password: 'password',
+    email: 'moses@gmail.com',
+  },
+  michael: {
+    firstName: 'Michael',
+    lastName: 'Moses',
+    username: 'i_amMichael',
+    password: 'password',
+    email: 'michael@gmail.com',
+  },
   theo: {
     firstName: 'Theo',
     lastName: 'IO',
@@ -102,7 +116,62 @@ const data = {
       https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895,
       https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895
     `,
-  }
+  },
+  goodUserUpdate: {
+    firstName: 'Mike',
+    lastName: 'Mos',
+    facebook: 'www.facebook.com',
+    google: 'www.google.com',
+    twitter: 'www.google.com',
+    bio: 'This is me. I am unique.',
+    image: 'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg',
+  },
+
+  usernameUpdate: {
+    username: 'i_amsull',
+    lastName: 'Mos',
+    facebook: 'www.facebook.com',
+    google: 'www.google.com',
+    twitter: 'www.google.com',
+    bio: 'This is me. I am unique.',
+    image: 'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg',
+  },
+
+  noImageUpdate: {
+    firstName: 'Mike',
+    lastName: 'Mos',
+    facebook: 'www.facebook.com',
+    google: 'www.google.com',
+    twitter: 'www.google.com',
+    bio: 'This is me. I am unique.'
+  },
+
+  badUserUpdate: {
+    email: 'Hullabaloo@email.com',
+    facebook: 'www.facebook.com',
+    google: 'www.google.com',
+    twitter: 'www.google.com',
+    bio: 'This is me. I am unique.',
+    image: 'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg',
+  },
+
+  badImageUpdate1: {
+    image: '/Users/theodoreokafor/documents/projects/haven-ah-backend/server/tests/utilities/octocat.txt',
+  },
+
+  badImageUpdate2: {
+    image: 'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion123.jpg',
+  },
+
+  badBioUpdate: {
+    facebook: 'www.facebook.com',
+    google: 'www.google.com',
+    twitter: 'www.google.com',
+    bio: `This is me. I am unique. sjdnms sdnsm j,samns djsads dsa,mds sanjsdfdsnkjdsfa
+      shsndfhd fjdfnm,fd dfndf dfmna fdskfbnm.FKLBD FADFNAKDF ANBjkbkjfd jdajd kfjdfbd fjdf djdfd
+      djbfdf djbdfafbdfnbnafbdnfbfbdbfnfa nfdbabfd fdfbanbdf dnsbafnbdf dnbnad f dfnbdsn fdnbfd fn`,
+    imageUrl: 'www.cloudinary.com/sjdhsjds',
+  },
 };
 
 export default data;

@@ -3,7 +3,6 @@ import config from '../config/config';
 import { badHttpResponse } from '../utilities/httpResponse';
 import { getCurrentEnv } from '../utilities/currentEnv';
 
-
 /**
  * Middleware gaurding authenticated routes
  * @param {object} request Request Object

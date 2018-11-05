@@ -35,6 +35,18 @@ const validatePassword = (password) => {
 };
 
 /**
+ * Validation for a password
+ * @param {string} url
+ * @returns {boolean} result
+ * @example validateUrl('jiggy.jpg')
+ * Insight from (jfriend00, StackOverflow.com/questions/9714525/javascript-image-url-verify)
+ */
+const validateUrl = (url) => {
+  const urlPattern = /\.(jpeg|jpg|gif|png)$/;
+  return urlPattern.test(url);
+};
+
+/**
  * This function valids a request object
  * @param {*} requestObject
  * @param {(string)} requiredFieldObject
@@ -92,5 +104,6 @@ export default {
   validateUsername,
   validateEmail,
   validatePassword,
+  validateUrl,
   checkMissingFields,
 };

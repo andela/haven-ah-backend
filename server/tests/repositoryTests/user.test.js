@@ -3,7 +3,9 @@ import userRepo from '../../repository/userRepository';
 import data from '../utilities/mockData';
 
 const { expect } = chai;
-const { priscilla, joe } = data;
+const {
+  priscilla, joe, moses, michael, goodUserUpdate,
+} = data;
 
 after(async () => {
   await userRepo.deleteUser(priscilla);
@@ -114,5 +116,39 @@ describe('Confirm email function', () => {
 
     const error = await userRepo.confirmUserEmail(user.id);
     expect(error.message).to.be.deep.equals('This account has been confirmed already.');
+  });
+});
+
+describe('Get user by username function', () => {
+  before(async () => {
+    newUser = await userRepo.createUser(moses);
+  });
+
+  it('should return null if user does not exist', async () => {
+    const user = await userRepo.getUserByCredentials(moses.email);
+    expect(user).to.be.deep.equals(null);
+  });
+
+  it('should return user if user exists', async () => {
+    const result = await userRepo.getUserbyUsername(moses.username);
+    const existingUser = result.dataValues;
+    expect(existingUser).to.be.an('object');
+    expect(existingUser.email).to.be.deep.equals(newUser.email);
+    expect(existingUser.firstName).to.be.deep.equals(newUser.firstName);
+    expect(existingUser.lastName).to.be.deep.equals(newUser.lastName);
+    expect(existingUser.username).to.be.deep.equals(newUser.username);
+  });
+});
+
+describe('Update user by username', () => {
+  before(async () => {
+    newUser = await userRepo.createUser(michael);
+  });
+
+  it('should return true after update', async () => {
+    const result = await userRepo.updateUser(goodUserUpdate, newUser.username);
+    expect(result).to.be.an('object');
+    expect(result.firstName).to.be.deep.equals(goodUserUpdate.firstName);
+    expect(result.lastName).to.be.deep.equals(goodUserUpdate.lastName);
   });
 });

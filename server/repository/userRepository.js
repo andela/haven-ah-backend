@@ -50,7 +50,7 @@ class UserRepository {
   }
 
   /**
- * Finds a user by email
+ * Finds a user by email and username
  * @param {string} email Email to search by
  * @param {string} username username
  * @returns {object | null} User object or null if user is not found
@@ -74,6 +74,44 @@ class UserRepository {
     });
     if (user.length <= 0) return null;
     return user;
+  }
+
+  /**
+   * This method finds all non-admin users in the database
+   *@returns {object | null} the results from DB
+  */
+  static async getAllUsers() {
+    const allUsers = await User.findAll({
+      where: {
+        role: 'user',
+      },
+      attributes: {
+        include: [
+          'id',
+          'firstName',
+          'lastName',
+          'facebook',
+          'google',
+          'twitter',
+          'bio',
+          'imageUrl',
+          'createdAt',
+          'updatedAt',
+        ],
+        exclude: [
+          'email',
+          'updatedAt',
+          'deletedAt',
+          'isDeleted',
+          'password',
+          'emailConfirmation',
+          'resetToken',
+          'role',
+        ],
+      },
+    });
+    if (!allUsers) return null;
+    return allUsers;
   }
 
   /**
@@ -121,40 +159,50 @@ class UserRepository {
   }
 
   /**
-   * This method finds all non-admin users in the database
-   *@returns {object | null} the results from DB
-  */
-  static async getAllUsers() {
-    const allUsers = await User.findAll({
+   * This method finds a user by their username
+   * Finds a user using the userId
+   * @param {number} username userId
+   * @returns {object | null} the details of the user.
+   */
+  static async getUserbyUsername(username) {
+    const oneUser = await User.findOne({
       where: {
-        role: 'user',
+        username,
       },
-      attributes: {
-        include: [
-          'id',
-          'firstName',
-          'lastName',
-          'facebook',
-          'google',
-          'twitter',
-          'bio',
-          'imageUrl',
-          'createdAt',
-          'updatedAt',
-        ],
-        exclude: [
-          'email',
-          'updatedAt',
-          'deletedAt',
-          'isDeleted',
-          'password',
-          'emailConfirmation',
-          'resetToken',
-          'role',
-        ],
+      attributes: [
+        'id',
+        'username',
+        'firstName',
+        'lastName',
+        'email',
+        'isConfirmed',
+        'facebook',
+        'google',
+        'twitter',
+        'bio',
+        'imageUrl',
+        'createdAt',
+        'updatedAt',
+      ],
+    });
+    if (!oneUser) return null;
+    return oneUser;
+  }
+
+  /**
+   * Updates the user profile
+   * @param { object } newData
+   * @param { string } username
+   * @returns { boolean } true for successful update.
+   */
+  static async updateUser(newData, username) {
+    const updated = await User.update(newData, {
+      returning: true,
+      where: {
+        username,
       },
     });
-    return allUsers || null;
+    return updated[1][0].dataValues;
   }
 
   /**
@@ -172,11 +220,11 @@ class UserRepository {
       return new Error('This account has been confirmed already.');
     }
 
-    const response = await User.update(
+    await User.update(
       { isConfirmed: true },
       { where: { id: user.id } }
     );
-    return response;
+    return user;
   }
 }
 
