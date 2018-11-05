@@ -43,7 +43,7 @@ class ArticleRepository {
    * Function to get all article in the database
    * @param { integer } limit
    * @param { integer } page
-   * @returns { object }
+   * @returns { object | null }
    ** otherwise it throws an error
    */
   static async getArticles(limit = 10, page = 1) {
@@ -54,6 +54,24 @@ class ArticleRepository {
     });
     articleRecords.meta = getPaginationMeta(limit, page, articleRecords.count);
     return articleRecords;
+  }
+
+  /**
+   * Function to get a single article
+   * @param { string } slug
+   * @returns { object }
+   ** otherwise it throws an error
+   */
+  static async getArticleBySlug(slug) {
+    const singleArticle = await Articles.findOne({
+      where: {
+        slug
+      }
+    });
+    if (!singleArticle) {
+      return null;
+    }
+    return singleArticle;
   }
 }
 
