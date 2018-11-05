@@ -5,7 +5,7 @@ dotenv.config();
 
 const { hash } = passwordUtil;
 
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     const hashedPassword = await hash(process.env.ADMIN_PASSWORD);
     return queryInterface.bulkInsert('Users', [{
@@ -15,6 +15,7 @@ module.exports = {
       email: process.env.ADMIN_EMAIL,
       password: hashedPassword,
       role: 'admin',
+      isConfirmed: 'true',
       createdAt: new Date(),
       updatedAt: new Date(),
     }], {});
