@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import swagger from 'swagger-ui-express';
 import swaggerDocument from './swagger';
 import config from './server/config/config';
-import { goodHttpResponse } from './server/utilities/httpResponse';
+import { goodHttpResponse, badHttpResponse } from './server/utilities/httpResponse';
 
 import router from './server/routes/index';
 import cleanStrings from './server/middlewares/cleanStrings';
@@ -28,9 +28,13 @@ app.use('/docs', swagger.serve, swagger.setup(swaggerDocument));
 
 app.use('/api/v1', router);
 
-app.get('*', (request, response) => {
+app.get('/', (request, response) => {
   const welcome = 'Welcome to Authors Haven API Version 1.0';
   return goodHttpResponse(response, 200, welcome);
+});
+app.get('*', (request, response) => {
+  const error = 'I am pretty sure this is not what you are looking for. Please enter a valid route';
+  return badHttpResponse(response, 404, error);
 });
 
 const env = process.env.NODE_ENV || 'development';

@@ -402,5 +402,41 @@ export default {
         }
       }
     },
+    '/api/v1/auth/google': {
+      get: {
+        description: 'Auto generated using Swagger Inspector',
+        responses: {
+          200: {
+            description: 'Auto generated using Swagger Inspector',
+            content: {
+              'text/html; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          }
+        }
+      }
+    },
+    '/api/v1/auth/facebook': {
+      get: {
+        description: 'Auto generated using Swagger Inspector',
+        responses: {
+          200: {
+            description: 'Auto generated using Swagger Inspector',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 };
