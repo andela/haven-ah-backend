@@ -293,7 +293,7 @@ export default {
     '/articles': {
       post: {
         tags: ['Article'],
-        summary: 'Create article',
+        summary: 'Create article and associate tags',
         consumes: ['application/x-www-form-urlencoded'],
         parameters: [
           {
@@ -323,12 +323,20 @@ export default {
             description: 'image added to article',
             required: false,
             type: 'string'
+          },
+          {
+            name: 'tags',
+            in: 'formData',
+            description: 'tags for the article',
+            required: false,
+            type: 'string'
           }
         ],
         description: 'Returns an authentication token on success.',
         responses: {
           201: {
-            description: 'Article Created!'
+            description:
+                          'Article Created and Tags associated'
           },
           500: {
             description: 'There was an internal error'

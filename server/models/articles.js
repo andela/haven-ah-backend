@@ -1,4 +1,3 @@
-/* eslint no-unused-vars:0 */
 export default (sequelize, DataTypes) => {
   const Articles = sequelize.define('Articles', {
     slug: {
@@ -35,8 +34,17 @@ export default (sequelize, DataTypes) => {
   }, {});
 
   Articles.associate = (models) => {
+    Articles.hasMany(models.ArticleTag, {
+      foreignKey: 'articleId',
+      as: 'articleTag'
+    });
     Articles.belongsTo(models.User, {
       foreignKey: 'userid',
+    });
+    Articles.belongsToMany(models.Tags, {
+      as: 'Tags',
+      through: 'ArticleTag',
+      foreignKey: 'id'
     });
   };
   return Articles;

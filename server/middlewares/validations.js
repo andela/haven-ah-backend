@@ -2,6 +2,7 @@ import utilities from '../utilities/userInput';
 import { badHttpResponse } from '../utilities/httpResponse';
 import checkStringLen from '../utilities/checkStringLength';
 import userRepo from '../repository/userRepository';
+import articleValidator from '../utilities/articleInput';
 
 const { checkMissingFields, validateUrl } = utilities;
 
@@ -97,6 +98,25 @@ class inputValidator {
       400,
       'Your bio must be 200 characters or less',
     );
+  }
+
+  /**
+   * @description articleValidator
+   * @param {object} request http request object
+   * @param {object} response http response object
+   * @param {object} next callback function
+   * @returns {object} http response object
+   */
+  static async articleValidator(request, response, next) {
+    const { isValid, problem } = articleValidator(request.body, [
+      'title',
+      'description',
+      'body'
+    ]);
+    if (!isValid) {
+      return badHttpResponse(response, 400, 'Incomplete fields', problem);
+    }
+    next();
   }
 }
 

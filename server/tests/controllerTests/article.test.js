@@ -30,6 +30,22 @@ describe('Post a new article:', () => {
     expect(response.body.message).to.be.deep
       .equals('Article Created');
   });
+
+  it('should post a new article, new tags and create associations', async () => {
+    const response = await chai.request(app)
+      .post('/api/v1/articles')
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send({
+        ...jigArticle,
+        tags: 'philosophy metaphysics vanity'
+      });
+
+    expect(response).to.have.status(201);
+    expect(response.body.message).to.be.deep
+      .equals('Article Created and Tags associated');
+  });
 });
 
 describe('Get all articles', () => {
