@@ -174,3 +174,16 @@ describe('Update user by username', () => {
     expect(result.lastName).to.be.deep.equals(goodUserUpdate.lastName);
   });
 });
+
+describe('find or create', () => {
+  it('should find a user by email or create one', async () => {
+    const user = await userRepo.findOrCreate(priscilla.email, priscilla.firstName,
+      priscilla.lastName, priscilla.username);
+    expect(user).to.be.an('object');
+    expect(user.email).to.be.deep.equals(priscilla.email);
+    expect(user.firstName).to.be.deep.equals(priscilla.firstName);
+    expect(user.lastName).to.be.deep.equals(priscilla.lastName);
+    expect(user.username).to.be.deep.equals(priscilla.username);
+    expect(user.role).to.be.deep.equals('user');
+  });
+});

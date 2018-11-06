@@ -154,6 +154,33 @@ class UserRepository {
   }
 
   /**
+ * finds a user by email, if user exists return the user, if not create one
+ * @param {string} email user Email to search by
+ * @param {string} lastName user lastName to insert in database
+ * @param {string} firstName user firstName to insert in database
+ * @param {string} imageUrl imageUrl to insert in database
+ * @param {string} token  jwt token for user access
+ * @returns {object} The JSON response to the user.
+ */
+  static async findOrCreate(email, lastName, firstName, imageUrl) {
+    const user = await User.findOrCreate({
+      where: {
+        email
+      },
+      defaults: {
+        firstName,
+        lastName,
+        email,
+        imageUrl
+      }
+    })
+      .spread(user => user.get({
+        plain: true
+      }));
+    return user;
+  }
+
+  /**
    * Change confirmEmail field to true
    * @param {integer} userId User Id
    * @returns {object} i dont know yet

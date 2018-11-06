@@ -9,7 +9,7 @@ export default {
     },
     username: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: Sequelize.STRING,
@@ -18,7 +18,7 @@ export default {
     },
     password: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     facebook: {
       type: Sequelize.STRING,
@@ -38,7 +38,7 @@ export default {
     },
     role: {
       type: Sequelize.ENUM('user', 'admin'),
-      allowNull: false,
+      allowNull: true,
     },
     isConfirmed: {
       type: Sequelize.BOOLEAN,

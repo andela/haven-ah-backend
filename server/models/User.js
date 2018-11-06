@@ -3,15 +3,15 @@ export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     facebook: {
       type: DataTypes.STRING,
@@ -39,7 +39,7 @@ export default (sequelize, DataTypes) => {
     },
     role: {
       type: DataTypes.ENUM('user', 'admin'),
-      allowNull: false,
+      allowNull: true,
     },
     isConfirmed: {
       type: DataTypes.BOOLEAN,
