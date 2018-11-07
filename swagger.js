@@ -683,7 +683,55 @@ export default {
               'article not found'
           }
         }
-      }
+      },
+      '/articles/:slug/complaints': {
+        post: {
+          tags: ['Complaints'],
+          summary: 'Report an article',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'x-access-token',
+              in: 'header',
+              description: 'Authorization token',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'slug',
+              in: 'path',
+              description: 'Slug of article to report',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'complaintType',
+              in: 'body',
+              description: 'Report type',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'complaintBody',
+              in: 'body',
+              description: 'Report body',
+              required: true,
+              type: 'string'
+            },
+          ],
+          responses: {
+            201: {
+              description: 'Successful operation.'
+            },
+            400: {
+              description: 'Invalid Inputs.'
+            },
+            404: {
+              description: 'Article not found'
+            }
+          }
+        },
+      },
     },
   },
   components: {

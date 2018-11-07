@@ -1,7 +1,7 @@
 import Model from '../models';
 import getPaginationMeta from '../utilities/getPaginationMeta';
 
-const { Articles } = Model;
+const { Articles, Complaint } = Model;
 
 /**
  * Article repository class
@@ -14,11 +14,8 @@ class ArticleRepository {
    ** otherwise it throws an error
    */
   static async createArticle(article) {
-    try {
-      return await Articles.create(article);
-    } catch (error) {
-      return error;
-    }
+    const newArticle = await Articles.create(article);
+    return newArticle;
   }
 
   /**
@@ -28,11 +25,7 @@ class ArticleRepository {
    * @returns {Object | null} User object or null
    */
   static async deleteArticle(article) {
-    const articleRecord = await Articles.find({
-      where: {
-        slug: article.slug,
-      }
-    });
+    const articleRecord = await this.getArticleBySlug(article.slug);
     if (!articleRecord) {
       return null;
     }
@@ -57,21 +50,42 @@ class ArticleRepository {
   }
 
   /**
-   * Function to get a single article
-   * @param { string } slug
-   * @returns { object }
-   ** otherwise it throws an error
-   */
+  * Finds an article by slug supplied
+  * @param {string} slug Slug value
+  * @returns {object | null} Article object or null if article is not found
+  */
   static async getArticleBySlug(slug) {
-    const singleArticle = await Articles.findOne({
-      where: {
-        slug
-      }
+    const article = await Articles.findOne({
+      where: { slug }
     });
-    if (!singleArticle) {
+
+    if (!article) {
       return null;
     }
-    return singleArticle;
+    return article;
+  }
+
+  /**
+ * Function to get all article in the database
+ * @param { integer } complaint Complaint object to create
+ * @returns { object } New complaint
+ */
+  static async createArticleComplaint(complaint) {
+    const {
+      id,
+      articleId,
+      userId,
+      complaintBody,
+      complaintType,
+    } = await Complaint.create(complaint);
+
+    return {
+      id,
+      articleId,
+      userId,
+      complaintBody,
+      complaintType,
+    };
   }
 }
 

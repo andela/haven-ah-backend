@@ -72,7 +72,8 @@ export default (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.hasMany(models.Articles, {
       foreignKey: 'userid',
-      as: 'article'
+      as: 'article',
+      onDelete: 'CASCADE',
     });
 
     User.belongsToMany(models.User, {
@@ -85,6 +86,12 @@ export default (sequelize, DataTypes) => {
       as: 'Followings',
       through: 'Follower',
       foreignKey: 'followerId'
+    });
+
+    User.hasMany(models.Complaint, {
+      as: 'Complaints',
+      foreignKey: 'userId',
+      onDelete: 'CASCADE',
     });
   };
   return User;

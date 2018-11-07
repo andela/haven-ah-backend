@@ -6,6 +6,7 @@ export default (socialMediaName) => {
  * @returns {function} authenticate
  */
   const authenticate = () => passport.authenticate(socialMediaName, { scope: ['email'] });
+
   /**
  * Redirects the url to the home page .
  * @returns {function} callback

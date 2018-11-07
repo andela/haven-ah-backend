@@ -270,35 +270,32 @@ class User {
       request.body.imageUrl = imageUrl;
     }
     const updated = await userRepo.updateUser(request.body, request.params.username);
-    try {
-      const {
-        id, username, firstName, lastName, email, isConfirmed, facebook,
-        google, twitter, bio, imageUrl, createdAt, updatedAt,
-      } = updated;
 
-      return goodHttpResponse(
-        response,
-        200,
-        'Account updated',
-        {
-          id,
-          username,
-          firstName,
-          lastName,
-          email,
-          isConfirmed,
-          facebook,
-          google,
-          twitter,
-          bio,
-          imageUrl,
-          createdAt,
-          updatedAt,
-        },
-      );
-    } catch (error) {
-      return badHttpResponse(response, 500, 'There was an internal error', error);
-    }
+    const {
+      id, username, firstName, lastName, email, isConfirmed, facebook,
+      google, twitter, bio, imageUrl, createdAt, updatedAt,
+    } = updated;
+
+    return goodHttpResponse(
+      response,
+      200,
+      'Account updated',
+      {
+        id,
+        username,
+        firstName,
+        lastName,
+        email,
+        isConfirmed,
+        facebook,
+        google,
+        twitter,
+        bio,
+        imageUrl,
+        createdAt,
+        updatedAt,
+      },
+    );
   }
 
   /**

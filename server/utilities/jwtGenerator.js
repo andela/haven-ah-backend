@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
+import { getCurrentEnv } from './currentEnv';
 
-const env = process.env.NODE_ENV || 'development';
+const env = getCurrentEnv();
 /**
  * Generates token for user authentiation and authorization
  * @param {id} id User Id
