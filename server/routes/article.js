@@ -6,6 +6,7 @@ import isAuthenticated from '../middlewares/checkAuth';
 import validator from '../middlewares/paramChecker';
 import tryCatchWrapper from '../utilities/tryCatchWrapper';
 import checkIfArticleExists from '../middlewares/checkIfArticleExists';
+import isAuthorized from '../middlewares/authorization';
 
 const router = new Router();
 
@@ -23,8 +24,13 @@ router.post(
   tryCatchWrapper(Article.rateArticle)
 );
 
-router.post('/articles', isAuthenticated, tryCatchWrapper(Article.createArticle));
-router.get('/articles', Article.getArticles);
+router.post('/articles',
+  isAuthenticated,
+  tryCatchWrapper(Article.createArticle));
+
+router.get('/articles',
+  tryCatchWrapper(Article.getArticles));
+
 router.post('/articles/:slug/comments',
   isAuthenticated,
   inputValidator.validateComment,
@@ -41,5 +47,13 @@ router.post('/articles/:slug/complaints',
   validator.validateComplaint,
   checkIfArticleExists,
   tryCatchWrapper(Article.postComplaint));
+
+router.put(
+  '/articles/:slug/comments/:id',
+  isAuthenticated,
+  inputValidator.validateCommentUpdate,
+  isAuthorized.comment,
+  tryCatchWrapper(Comment.updateComment),
+);
 
 export default router;

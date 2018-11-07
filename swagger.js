@@ -633,6 +633,34 @@ export default {
         }
       }
     },
+    '/articles/:slug/comments/:id': {
+      post: {
+        tags: ['Article'],
+        summary: 'Update comment',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'body',
+            in: 'formData',
+            description: 'The content of the comment',
+            required: true,
+            type: 'string'
+          },
+        ],
+        description: 'Returns updated comment on success.',
+        responses: {
+          200: {
+            description: 'Comment updated'
+          },
+          404: {
+            description: 'We could not find this comment'
+          },
+          500: {
+            description: 'There was an internal error'
+          }
+        }
+      }
+    },
     '/api/v1/auth/facebook': {
       get: {
         description: 'Auto generated using Swagger Inspector',
@@ -680,7 +708,7 @@ export default {
           },
           404: {
             description:
-              'article not found'
+              'article not found',
           }
         }
       },

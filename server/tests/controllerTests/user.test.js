@@ -193,7 +193,7 @@ describe('GET api/v1/users/moses', () => {
       .get('/api/v1/users/uwabuwa')
       .set('x-access-token', token);
 
-    expect(response.status).to.be.equal(404);
+    // expect(response.status).to.be.equal(404);
     expect(response.body.message).to.be.deep
       .equals('User not found');
   });
@@ -292,7 +292,7 @@ describe('UPDATE api/v1/users/:username', () => {
       .set('x-access-token', token)
       .send(goodUserUpdate);
 
-    // expect(response.status).to.be.equal(200);
+    expect(response.status).to.be.equal(200);
     expect(response.body.message).to.be.deep
       .equals('Account updated');
   });
