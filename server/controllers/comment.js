@@ -2,6 +2,7 @@ import commentRepo from '../repository/commentRepository';
 import { goodHttpResponse, badHttpResponse } from '../utilities/httpResponse';
 import articleRepo from '../repository/articleRepository';
 import notificationRepo from '../repository/notificationRepository';
+import addReplies from '../utilities/addReplies';
 
 /**
  * Comment Controller class
@@ -89,7 +90,8 @@ class Comment {
     return goodHttpResponse(response, 200, 'Comment updated', updatedComment);
   }
 
-  /** Create a new comment
+  /**
+   * Get comment with the comment History
    * @param {object} request Request Object
    * @param {object} response Response Object
    * @returns {object} Comment Object
@@ -104,6 +106,7 @@ class Comment {
     }
 
     const { slug, id } = request.params;
+
     const article = await articleRepo.getArticleBySlug(slug);
     if (article === null) {
       return badHttpResponse(response, 404, 'We could not find this article');
@@ -116,6 +119,31 @@ class Comment {
     }
 
     return goodHttpResponse(response, 200, 'Comment and edit history found', comment);
+  }
+
+  /**
+   * Get comments with the replies
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Comment Object
+   */
+  static async getComments(request, response) {
+    const limit = parseInt(request.query.limit, 10) || 30;
+    const page = parseInt(request.query.page, 10) || 1;
+
+    const rawComments = await commentRepo.getCommentsOnArticle(request.article.id, limit, page);
+    const maxParentId = Math.max(...rawComments.map(element => element.parentId));
+    const data = [];
+    for (let i = maxParentId; i >= 0; i -= 1) {
+      const comment = addReplies(rawComments, i);
+      data.push(comment);
+    }
+    const comments = data[data.length - 1];
+    if (comments) {
+      comments.push(rawComments.meta);
+      return goodHttpResponse(response, 200, 'Comments found', comments);
+    }
+    return badHttpResponse(response, 200, 'No comments on this article yet');
   }
 }
 

@@ -5,7 +5,7 @@ import userRepo from '../../repository/userRepository';
 
 const { expect } = chai;
 const { goodComment, commentHistData, xtremeCassey } = data;
-let history, comment;
+let history, comment, comments;
 
 describe('Create comment', () => {
   before(async () => {
@@ -29,5 +29,17 @@ describe('Update comment', () => {
   it('should post an old comment to the database', async () => {
     expect(history.commentId).to.be.eql(commentHistData.commentId);
     expect(history.oldComment).to.be.eql(commentHistData.oldComment);
+  });
+});
+
+describe('Get comments for article', () => {
+  before(async () => {
+    comments = await commentRepo.getCommentsOnArticle(1);
+  });
+
+  it('should post an old comment to the database', async () => {
+    expect(comments).to.be.an('array');
+    expect(comments[0]).to.be.an('object');
+    expect(comments[0]).to.haveOwnProperty('parentId');
   });
 });

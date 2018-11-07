@@ -234,6 +234,14 @@ const data = {
       'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
     ]
   },
+  sampleArticle1: {
+    title: 'Looking ahead hoohah',
+    body: 'Just a sample article with no heading.',
+    description: 'Sample description',
+    images: [
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+    ]
+  },
   wizArt: {
     title: 'Vanity upon vanity',
     slug: 'Vanity-upon-vanity-2018112844989',
@@ -478,7 +486,53 @@ const data = {
         content: 'A user reacted on an article you currently follow'
       }
     }
-  }
+  },
+  rawComments1: [
+    {
+      id: 1,
+      body: 'Doo wops and hooligan',
+      parentId: null,
+      userId: 1,
+      articleId: 1,
+    },
+    {
+      id: 2,
+      body: 'Doo wops and hooligan',
+      parentId: null,
+      userId: 1,
+      articleId: 1,
+    },
+    {
+      id: 3,
+      body: 'Doo wops and hooligan',
+      parentId: null,
+      userId: 1,
+      articleId: 1,
+    }
+  ],
+  rawComments2: [
+    {
+      id: 1,
+      body: 'Doo wops and hooligan',
+      parentId: null,
+      userId: 1,
+      articleId: 1,
+    },
+    {
+      id: 2,
+      body: 'Doo wops and hooligan',
+      parentId: 1,
+      userId: 1,
+      articleId: 1,
+    },
+    {
+      id: 3,
+      body: 'Doo wops and hooligan',
+      parentId: null,
+      userId: 1,
+      articleId: 1,
+    }
+  ]
 };
 
 export default data;

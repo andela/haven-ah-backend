@@ -735,7 +735,24 @@ export default {
             description: 'There was an internal error'
           }
         }
-      }
+      },
+      get: {
+        tags: ['Article'],
+        summary: 'Get all comments for an article',
+        consumes: ['application/x-www-form-urlencoded'],
+        description: 'Returns all the comments and their replies for an article',
+        responses: {
+          200: {
+            description: 'Comments found'
+          },
+          404: {
+            description: 'We could not find this article'
+          },
+          500: {
+            description: 'There was an internal error'
+          }
+        }
+      },
     },
     '/articles/:slug/comments/:parentId': {
       post: {

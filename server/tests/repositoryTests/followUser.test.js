@@ -8,7 +8,7 @@ import app from '../../../app';
 import notificationRepo from '../../repository/notificationRepository';
 
 const {
- theo, sull, priscilla, dummyNotifications
+  theo, sull, priscilla, dummyNotifications
 } = data;
 chai.use(chaiHttp);
 const { expect } = chai;

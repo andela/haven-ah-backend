@@ -100,7 +100,7 @@ class Article {
     const page = parseInt(request.query.page, 10) || 1;
 
     const articles = await articleRepo.getArticles(limit, page);
-    if (articles.count === 0) {
+    if (!articles || articles.rows.length <= 0) {
       return goodHttpResponse(response, 200, 'no articles found');
     }
     return paginatedHttpResponse(response, 200, 'all articles', articles);

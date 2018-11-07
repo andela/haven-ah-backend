@@ -1,4 +1,5 @@
 import Model from '../models';
+import getPaginationMeta from '../utilities/getPaginationMeta';
 
 const { Comment, CommentHistory } = Model;
 
@@ -30,9 +31,6 @@ class CommentRepository {
       },
       include: ['Replies'],
     });
-    if (!commentRecord) {
-      return null;
-    }
     return commentRecord;
   }
 
@@ -88,6 +86,41 @@ class CommentRepository {
       ],
     });
     return commentRecord;
+  }
+
+  /**
+   * Function to get comments on an article
+   * @param {object} articleId number
+   * @param { integer } limit
+   * @param { integer } page
+   * @returns {object} comments object
+   * otherwise it throws an error
+   */
+  static async getCommentsOnArticle(articleId, limit = 30, page = 1) {
+    const offset = limit * (page - 1);
+    const data = await Comment.findAndCountAll({
+      where: {
+        articleId,
+      },
+    });
+    const { count } = data;
+    const commentRecords = await Comment.findAll({
+      where: {
+        articleId,
+      },
+      limit,
+      offset,
+      include: [{
+        association: 'User',
+        attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl']
+      }],
+      attributes: {
+        exclude: ['userId']
+      }
+    });
+    const comments = commentRecords.map(comment => comment.dataValues);
+    comments.meta = getPaginationMeta(limit, page, count);
+    return comments;
   }
 }
 
