@@ -332,7 +332,7 @@ export default {
             type: 'string'
           }
         ],
-        description: 'Returns an authentication token on success.',
+        description: 'Returns an article.',
         responses: {
           201: {
             description:
@@ -445,6 +445,43 @@ export default {
           }
         }
       }
-    }
+    },
+    '/articles/:slug/bookmarks': {
+      post: {
+        tags: ['Bookmark'],
+        summary: 'Bookmark an article',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'userId',
+            in: 'formData',
+            description: 'The user id',
+            required: true,
+            type: 'integer'
+          },
+          {
+            name: 'articleId',
+            in: 'formData',
+            description: 'The article id',
+            required: true,
+            type: 'integer'
+          },
+        ],
+        description: 'Returns success message.',
+        responses: {
+          201: {
+            description:
+              'article successfully bookmarked'
+          },
+          404: {
+            description:
+              'article not found'
+          },
+          500: {
+            description: 'There was an internal error'
+          }
+        }
+      }
+    },
   }
 };
