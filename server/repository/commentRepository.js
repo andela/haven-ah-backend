@@ -63,6 +63,32 @@ class CommentRepository {
     });
     return updated[1][0].dataValues;
   }
+
+  /**
+   * Function to get a comment with the edit history from the database
+   * @param {object} id number
+   * @returns {object} comment object
+   * otherwise it throws an error
+   */
+  static async getCommentWithHistory(id) {
+    const commentRecord = await Comment.findOne({
+      where: {
+        id,
+      },
+      include: [{
+        model: CommentHistory,
+        as: 'editHistory',
+      }],
+      order: [
+        [
+          {
+            model: CommentHistory, as: 'editHistory'
+          }, 'createdAt', 'DESC'
+        ],
+      ],
+    });
+    return commentRecord;
+  }
 }
 
 export default CommentRepository;

@@ -41,7 +41,7 @@ export default (sequelize, DataTypes) => {
     });
     Comment.hasMany(models.CommentHistory, {
       as: 'editHistory',
-      foreignKey: 'id',
+      foreignKey: 'commentId',
       useJunctionTable: false,
     });
   };

@@ -720,7 +720,7 @@ export default {
       }
     },
     '/articles/:slug/comments/:id': {
-      post: {
+      put: {
         tags: ['Article'],
         summary: 'Update comment',
         consumes: ['application/x-www-form-urlencoded'],
@@ -732,11 +732,46 @@ export default {
             required: true,
             type: 'string'
           },
+          {
+            name: 'id',
+            in: 'path',
+            description: 'ID of comment to update',
+            required: true,
+            type: 'integer',
+            format: 'int64'
+          }
         ],
         description: 'Returns updated comment on success.',
         responses: {
           200: {
             description: 'Comment updated'
+          },
+          404: {
+            description: 'We could not find this comment'
+          },
+          500: {
+            description: 'There was an internal error'
+          }
+        }
+      },
+      get: {
+        tags: ['Article'],
+        summary: 'Get comment using id',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            description: 'ID of comment to return',
+            required: true,
+            type: 'integer',
+            format: 'int64'
+          }
+        ],
+        description: 'Returns updated comment on success.',
+        responses: {
+          200: {
+            description: 'Comment and edit history found'
           },
           404: {
             description: 'We could not find this comment'
