@@ -56,6 +56,10 @@ export default (sequelize, DataTypes) => {
       as: 'Complaints',
       foreignKey: 'articleId'
     });
+    Articles.hasMany(models.Reaction, {
+      foreignKey: 'articleId',
+      as: 'Reactions',
+    });
   };
   return Articles;
 };
