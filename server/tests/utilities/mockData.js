@@ -207,6 +207,71 @@ const data = {
       djbfdf djbdfafbdfnbnafbdnfbfbdbfnfa nfdbabfd fdfbanbdf dnsbafnbdf dnbnad f dfnbdsn fdnbfd fn`,
     imageUrl: 'www.cloudinary.com/sjdhsjds',
   },
+
+  xProdigy: {
+    firstName: 'Theo',
+    lastName: 'Prodigy',
+    username: 'xtreme',
+    password: 'password',
+    email: 'x@gmail.com',
+  },
+
+  badComment: {
+    highlightedText: `
+    On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and
+    demoralized by the charms of pleasure of the moment.`,
+    parentId: 1,
+  },
+
+  goodComment: {
+    body: `
+    On the other hand, we denounce with righteous indignation and
+    dislike men who are so beguiled and demoralized by the charms
+    of pleasure of the moment, so blinded by desire, that they cannot
+    foresee the pain and trouble that are bound to ensue; and equal
+    blame belongs to those who fail in their duty through weakness
+    of will, which is the same as saying through shrinking from toil
+    and pain.`,
+    highlightedText: `
+    On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and
+    demoralized by the charms of pleasure of the moment.`,
+  },
+
+  repoComment: {
+    body: `
+    On the other hand, we denounce with righteous indignation and
+    dislike men who are so beguiled and demoralized by the charms
+    of pleasure of the moment, so blinded by desire, that they cannot
+    foresee the pain and trouble that are bound to ensue; and equal
+    blame belongs to those who fail in their duty through weakness
+    of will, which is the same as saying through shrinking from toil
+    and pain.`,
+    articleId: 1,
+    userId: 1,
+    highlightedText: `
+    On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and
+    demoralized by the charms of pleasure of the moment.`,
+  },
+  anotherGoodComment: {
+    body: `
+    On the other hand, we denounce with righteous indignation and
+    dislike men who are so beguiled and demoralized by the charms
+    of pleasure of the moment, so blinded by desire, that they cannot
+    foresee the pain and trouble that are bound to ensue; and equal
+    blame belongs to those who fail in their duty through weakness
+    of will, which is the same as saying through shrinking from toil
+    and pain.`,
+  },
+  goodReply: {
+    body: `
+    On the other hand, we denounce with righteous indignation and
+    dislike men who are so beguiled and demoralized by the charms
+    of pleasure of the moment, so blinded by desire, that they cannot
+    foresee the pain and trouble that are bound to ensue; and equal
+    blame belongs to those who fail in their duty through weakness
+    of will, which is the same as saying through shrinking from toil
+    and pain.`,
+  }
 };
 
 export default data;

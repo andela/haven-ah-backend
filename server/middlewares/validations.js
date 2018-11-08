@@ -118,6 +118,59 @@ class inputValidator {
     }
     next();
   }
+
+  /**
+   * @description validateComment
+   * @param {object} request http request object
+   * @param {object} response http response object
+   * @param {object} next callback function
+   * @returns {object} http response object
+   */
+  static async validateComment(request, response, next) {
+    const { userId } = request;
+    const { body, highlightedText } = request.body;
+    if (!body) {
+      return badHttpResponse(response, 400, 'Comment must have a body');
+    }
+    if (highlightedText) {
+      const commentBody = {
+        body,
+        highlightedText,
+        userId,
+        isHighlighted: true,
+      };
+      request.body = commentBody;
+      return next();
+    }
+    const commentBody = {
+      body,
+      userId,
+    };
+    request.body = commentBody;
+    return next();
+  }
+
+  /**
+   * @description validateReply
+   * @param {object} request http request object
+   * @param {object} response http response object
+   * @param {object} next callback function
+   * @returns {object} http response object
+   */
+  static async validateReply(request, response, next) {
+    const { body } = request.body;
+    let { parentId } = request.params;
+    if (!body) {
+      return badHttpResponse(response, 400, 'Reply must have a body');
+    }
+
+    parentId = parseInt(parentId, 10);
+    if (isNaN(parentId)) {
+      return badHttpResponse(response, 400, 'Please use a valid parent commentId');
+    }
+    request.params.parentId = parentId;
+    return next();
+  }
 }
 
 export default inputValidator;
