@@ -152,6 +152,17 @@ const data = {
       'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
     ],
   },
+  sampleArticle: {
+    title: 'Looking ahead lol',
+    slug: 'Looking-ahead-lol-201811234490',
+    userid: 2,
+    readtime: 10,
+    body: 'Just a sample article with no heading.',
+    description: 'Sample description',
+    images: [
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+    ],
+  },
   goodUserUpdate: {
     firstName: 'Mike',
     lastName: 'Mos',
@@ -271,7 +282,23 @@ const data = {
     blame belongs to those who fail in their duty through weakness
     of will, which is the same as saying through shrinking from toil
     and pain.`,
-  }
+  },
+  complaint: {
+    userId: 2,
+    articleId: 1,
+    complaintType: 'Rules Violation',
+    complaintBody: 'I am a very unique complaint and I tend to be very very unreasonable',
+  },
+
+  invalidComplaint: {
+    complaintType: 'Rules',
+    complaintBody: 'I am an invalid complaint expected to throw a 500 error',
+  },
+
+  sampleComplaint: {
+    complaintType: 'Rules Violation',
+    complaintBody: 'I am a very unique complaint and I tend to be very very unreasonable',
+  },
 };
 
 export default data;

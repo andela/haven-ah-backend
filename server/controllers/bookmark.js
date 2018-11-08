@@ -1,6 +1,5 @@
-import articleRepo from '../repository/articleRepository';
 import bookmarkRepo from '../repository/bookmarkRepository';
-import { goodHttpResponse, badHttpResponse } from '../utilities/httpResponse';
+import { goodHttpResponse } from '../utilities/httpResponse';
 /**
  * Bookmark Controller class
  */
@@ -12,13 +11,9 @@ class Bookmark {
    * @returns {object} User Object
    */
   static async bookmarkArticle(request, response) {
-    const { slug } = request.params;
-    const { userId } = request;
-    const findArticle = await articleRepo.getArticleBySlug(slug);
-    if (!findArticle) {
-      return badHttpResponse(response, 404, 'article not found');
-    }
-    const bookmarked = await bookmarkRepo.createBookmark(userId, findArticle.id);
+    const { userId, article } = request;
+
+    const bookmarked = await bookmarkRepo.createBookmark(userId, article.id);
     return goodHttpResponse(response, 201, 'article successfully bookmarked', bookmarked);
   }
 }

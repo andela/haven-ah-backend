@@ -12,19 +12,16 @@ class Comment {
    * @returns {object} Comment Object
    */
   static async createComment(request, response) {
-    try {
-      const { slug } = request.params;
-      const article = await articleRepo.getArticleBySlug(slug);
-      if (article === null) {
-        return badHttpResponse(response, 404, 'We could not find this article');
-      }
+    const { slug } = request.params;
 
-      request.body.articleId = article.id;
-      const newComment = await commentRepo.createComment(request.body);
-      return goodHttpResponse(response, 201, 'Comment created', newComment);
-    } catch (error) {
-      return badHttpResponse(response, 500, 'There was an internal server error');
+    const article = await articleRepo.getArticleBySlug(slug);
+    if (article === null) {
+      return badHttpResponse(response, 404, 'We could not find this article');
     }
+
+    request.body.articleId = article.id;
+    const newComment = await commentRepo.createComment(request.body);
+    return goodHttpResponse(response, 201, 'Comment created', newComment);
   }
 
   /**
@@ -34,32 +31,24 @@ class Comment {
    * @returns {object} Comment Object
    */
   static async createReply(request, response) {
-    try {
-      const { slug, parentId } = request.params;
-      const { body } = request.body;
-      const { userId } = request;
+    const { parentId } = request.params;
+    const { body } = request.body;
+    const { userId, article } = request;
 
-      const article = await articleRepo.getArticleBySlug(slug);
-      if (article === null) {
-        return badHttpResponse(response, 404, 'We could not find this article');
-      }
-      const articleId = article.id;
-      const comment = await commentRepo.getComment(parentId);
-      if (!comment) {
-        return badHttpResponse(response, 404, `We could not find the parent comment with id: ${parentId}`);
-      }
-
-      const replyBody = {
-        body,
-        userId,
-        parentId,
-        articleId,
-      };
-      const newReply = await commentRepo.createComment(replyBody);
-      return goodHttpResponse(response, 201, 'Reply created', newReply);
-    } catch (error) {
-      return badHttpResponse(response, 500, 'There was an internal server error');
+    const articleId = article.id;
+    const comment = await commentRepo.getComment(parentId);
+    if (!comment) {
+      return badHttpResponse(response, 404, `We could not find the parent comment with id: ${parentId}`);
     }
+
+    const replyBody = {
+      body,
+      userId,
+      parentId,
+      articleId,
+    };
+    const newReply = await commentRepo.createComment(replyBody);
+    return goodHttpResponse(response, 201, 'Reply created', newReply);
   }
 }
 

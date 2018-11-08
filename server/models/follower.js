@@ -11,6 +11,5 @@ export default (sequelize, DataTypes) => {
     },
   }, {});
 
-
   return Follower;
 };

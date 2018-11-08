@@ -110,7 +110,7 @@ describe('Create reply', () => {
       .send(goodReply);
     expect(response).to.have.status(404);
     expect(response.body.message).to.be.deep
-      .equals('We could not find this article');
+      .equals('This article was not found.');
   });
   it('should not post a new reply if parent comment does not exist', async () => {
     const response = await chai.request(app)

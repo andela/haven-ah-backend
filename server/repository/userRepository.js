@@ -20,6 +20,7 @@ const attributes = [
   'updatedAt',
   'role'
 ];
+
 /**
  * User repository class
  */
@@ -68,11 +69,11 @@ class UserRepository {
   }
 
   /**
-* Finds a user by parameter
-* @param {string} param Parameter to search by
-* @param {string} value Parameter value
-* @returns {object | null} User object or null if user is not found
-*/
+  * Finds a user by parameter
+  * @param {string} param Parameter to search by
+  * @param {string} value Parameter value
+  * @returns {object | null} User object or null if user is not found
+  */
   static async getUserByParam(param, value) {
     if (param === 'email') {
       attributes.push('password');

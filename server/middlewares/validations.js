@@ -46,6 +46,7 @@ class inputValidator {
       'email',
       'password',
     ]);
+
     if (!isValid) {
       return badHttpResponse(response, 400, 'Invalid input', problem);
     }

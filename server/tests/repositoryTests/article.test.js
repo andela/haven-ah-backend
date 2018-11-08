@@ -4,10 +4,20 @@ import data from '../utilities/mockData';
 import userRepo from '../../repository/userRepository';
 
 const { expect } = chai;
+const { sampleArticle, complaint } = data;
+
+describe('Create an article', () => {
+  it('should return article created', async () => {
+    const article = await articleRepo.createArticle(sampleArticle);
+    expect(article).to.be.an('object');
+    expect(article.title).to.be.deep.equals('Looking ahead lol');
+    expect(article.slug).to.be.deep.equals('Looking-ahead-lol-201811234490');
+  });
+});
 
 const { sulliArt, sullibus } = data;
 let newUser;
-let article;
+let newArticle;
 
 describe('Get all articles', () => {
   it('should get all articles', async () => {
@@ -20,19 +30,30 @@ describe('delete article', () => {
   before(async () => {
     newUser = await userRepo.createUser(sullibus);
     sulliArt.userid = newUser.id;
-    article = await articleRepo.createArticle(sulliArt);
+    newArticle = await articleRepo.createArticle(sulliArt);
   });
   it('should delete article', async () => {
-    const articles = await articleRepo.deleteArticle(article);
+    const articles = await articleRepo.deleteArticle(newArticle);
     expect(articles).to.eql(undefined);
   });
 });
 
-describe('Get article by param', () => {
-  describe('Non existent record:', () => {
-    it('should return null', async () => {
-      const nonExistentArticle = await articleRepo.getArticleBySlug('non-existent-article-108888232');
-      expect(nonExistentArticle).to.equal(null);
-    });
+describe('Get single article', () => {
+  it('should return null if article is not found', async () => {
+    const article = await articleRepo.getArticleBySlug('some-weird-slug');
+    expect(article).to.be.deep.equal(null);
+  });
+
+  it('should return article if found', async () => {
+    const article = await articleRepo.getArticleBySlug('Looking-ahead-lol-201811234490');
+    expect(article.title).to.be.deep.equal('Looking ahead lol');
+    expect(article.slug).to.be.deep.equals('Looking-ahead-lol-201811234490');
+  });
+});
+
+describe('Create new complaint', () => {
+  it('should create new complaint', async () => {
+    const newComplaint = await articleRepo.createArticleComplaint(complaint);
+    expect(newComplaint.complaintType).to.be.deep.equal('Rules Violation');
   });
 });

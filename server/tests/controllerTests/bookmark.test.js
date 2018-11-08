@@ -32,7 +32,7 @@ describe('Create a bookmark:', () => {
     expect(response).to.have.status(400);
     expect(response.body.message).to.be.deep.equals('Bad Request');
     expect(response.body.error.problem.slug).to.be.deep
-      .equals('The slug parameter must be a string');
+      .equals('The slug parameter provided is not a valid slug');
   });
 
   it('should bookmark a new article in the database', async () => {
@@ -56,6 +56,6 @@ describe('Create a bookmark:', () => {
       .send();
     expect(response).to.have.status(404);
     expect(response.body.message).to.be.deep
-      .equals('article not found');
+      .equals('This article was not found.');
   });
 });
