@@ -1,13 +1,11 @@
 import chai from 'chai';
 import articleRepo from '../../repository/articleRepository';
 import data from '../utilities/mockData';
-import createToken from '../../utilities/jwtGenerator';
 import userRepo from '../../repository/userRepository';
 
 const { expect } = chai;
 
 const { sulliArt, sullibus } = data;
-let jwtoken;
 let newUser;
 let article;
 
@@ -21,12 +19,20 @@ describe('Get all articles', () => {
 describe('delete article', () => {
   before(async () => {
     newUser = await userRepo.createUser(sullibus);
-    jwtoken = createToken(newUser.id);
     sulliArt.userid = newUser.id;
     article = await articleRepo.createArticle(sulliArt);
   });
   it('should delete article', async () => {
     const articles = await articleRepo.deleteArticle(article);
     expect(articles).to.eql(undefined);
+  });
+});
+
+describe('Get article by param', () => {
+  describe('Non existent record:', () => {
+    it('should return null', async () => {
+      const nonExistentArticle = await articleRepo.getArticleBySlug('non-existent-article-108888232');
+      expect(nonExistentArticle).to.equal(null);
+    });
   });
 });

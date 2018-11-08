@@ -12,6 +12,12 @@ router.post(
   inputValidator.articleValidator,
   Article.createArticle
 );
+router.post(
+  '/articles/:slug/rating',
+  isAuthenticated,
+  inputValidator.ratingValidator,
+  Article.rateArticle
+);
 
 router.post('/articles', isAuthenticated, Article.createArticle);
 router.get('/articles', Article.getArticles);

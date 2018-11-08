@@ -171,6 +171,30 @@ class inputValidator {
     request.params.parentId = parentId;
     return next();
   }
+
+  /**
+   * @description ratingValidator
+   * @param {object} request http request object
+   * @param {object} response http response object
+   * @param {object} next callback function
+   * @returns {object} http response object
+   */
+  static async ratingValidator(request, response, next) {
+    const { isValid, problem } = articleValidator(request.body, [
+      'rating'
+    ]);
+    if (!isValid) {
+      return badHttpResponse(response, 400, 'Incomplete fields', problem);
+    }
+    if (request.body.rating < 1 || request.body.rating > 5) {
+      return badHttpResponse(
+        response,
+        400,
+        'Rating must be between 1 and 5'
+      );
+    }
+    next();
+  }
 }
 
 export default inputValidator;

@@ -453,6 +453,39 @@ export default {
         }
       }
     },
+    '/articles/:slug/rating': {
+      post: {
+        tags: ['Article'],
+        summary: 'Rate an article',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: true,
+            type: 'string'
+          },
+          {
+            name: 'rating',
+            in: 'formData',
+            description: 'The rating for an article',
+            required: true,
+            type: 'integer'
+          }
+        ],
+        description: 'Returns an authentication token on success.',
+        responses: {
+          201: {
+            description:
+                          'Article rated'
+          },
+          500: {
+            description: 'There was an internal error'
+          }
+        }
+      }
+    },
     '/profiles/:username/follow': {
       post: {
         tags: ['Profiles'],

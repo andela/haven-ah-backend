@@ -38,6 +38,9 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'articleId',
       as: 'articleTag'
     });
+    Articles.hasMany(models.Ratings, {
+      foreignKey: 'articleId'
+    });
     Articles.belongsTo(models.User, {
       foreignKey: 'userid',
     });
