@@ -2,6 +2,7 @@ import slug from 'slug';
 import articleRepo from '../repository/articleRepository';
 import { goodHttpResponse, badHttpResponse, paginatedHttpResponse } from '../utilities/httpResponse';
 import tagRepo from '../repository/tagRepository';
+import ratingRepo from '../repository/ratingRepository';
 
 /**
  * Article Controller class
@@ -70,6 +71,30 @@ class Article {
       return paginatedHttpResponse(response, 200, 'all articles', articles);
     } catch (error) {
       return badHttpResponse(response, 500, 'There was an internal server error');
+    }
+  }
+
+  /**
+   * Rate an article
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} rating
+   */
+  static async rateArticle(request, response) {
+    try {
+      const articleSlug = request.params.slug;
+      const article = await articleRepo.getArticleBySlug(articleSlug);
+      if (!article) {
+        return badHttpResponse(response, 404, 'The article was not found');
+      }
+      const rating = await ratingRepo.createRating({
+        userId: request.userId,
+        articleId: article.id,
+        rating: request.body.rating
+      });
+      return goodHttpResponse(response, 201, 'Article rated', rating);
+    } catch (error) {
+      return badHttpResponse(response, 500, 'There was an internal server error', error);
     }
   }
 }
