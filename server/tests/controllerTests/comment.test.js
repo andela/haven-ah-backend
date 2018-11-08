@@ -73,7 +73,7 @@ describe('Create comment', () => {
       .send(goodComment);
     expect(response).to.have.status(404);
     expect(response.body.message).to.be.deep
-      .equals('We could not find this article');
+      .equals('This article was not found.');
   });
 });
 

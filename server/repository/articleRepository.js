@@ -87,6 +87,29 @@ class ArticleRepository {
       complaintType,
     };
   }
+
+  /**
+   * Find an article by the slug and include user information
+   * @param {string} slug Article slug to search by
+   * @returns {object} Article or null if article is not found
+   */
+  static async getSingleArticle(slug) {
+    const article = await Articles.findOne({
+      where: { slug },
+      include: [{
+        association: 'Author',
+        attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio']
+      }],
+      attributes: {
+        exclude: ['userid']
+      }
+    });
+
+    if (!article) {
+      return null;
+    }
+    return article;
+  }
 }
 
 export default ArticleRepository;

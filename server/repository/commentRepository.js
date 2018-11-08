@@ -13,11 +13,8 @@ class CommentRepository {
    * otherwise it throws an error
    */
   static async createComment(comment) {
-    try {
-      return await Comment.create(comment);
-    } catch (error) {
-      return error;
-    }
+    const newComment = await Comment.create(comment);
+    return newComment;
   }
 
   /**
@@ -46,12 +43,8 @@ class CommentRepository {
    * otherwise it throws an error
    */
   static async createCommentHistory(comment) {
-    try {
-      const result = await CommentHistory.create(comment);
-      return result.dataValues;
-    } catch (error) {
-      return error;
-    }
+    const result = await CommentHistory.create(comment);
+    return result.dataValues;
   }
 
   /**

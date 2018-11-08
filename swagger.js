@@ -760,6 +760,44 @@ export default {
           }
         },
       },
+      '/articles/:slug': {
+        get: {
+          description: 'Gets an article by the slug',
+          parameters: [{
+            name: 'slug',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string'
+            },
+            example: 'just-a-sample-slug-10093849'
+          }],
+          responses: {
+            200: {
+              description: 'Gets Article successfully',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
+              }
+            },
+            404: {
+              description: 'Article not found',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
+              }
+            }
+          }
+        }
+      },
     },
   },
   components: {

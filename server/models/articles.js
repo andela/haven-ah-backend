@@ -44,6 +44,7 @@ export default (sequelize, DataTypes) => {
 
     Articles.belongsTo(models.User, {
       foreignKey: 'userid',
+      as: 'Author'
     });
 
     Articles.belongsToMany(models.Tags, {

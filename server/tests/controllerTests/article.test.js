@@ -31,6 +31,7 @@ describe('Post a new article:', () => {
       .send(jigArticle);
 
     jigSlug = response.body.data.slug;
+
     expect(response).to.have.status(201);
     expect(response.body.message).to.be.deep
       .equals('Article Created');
@@ -204,5 +205,26 @@ describe('POST /api/v1/articles/:slug/complaints', () => {
     expect(response).to.have.status(201);
     expect(response.body.message).to.be.deep
       .equals('You have logged a complaint on this article.');
+  });
+});
+
+describe('GET api/v1/articles/:slug', () => {
+  it('should return null if article does not exist', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/some-random-slug-1093848');
+
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep.equals('This article was not found');
+  });
+
+  it('should return article if found', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/articles/${jigSlug}`);
+
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('Article retrieved');
+    expect(response.body).to.have.keys('status', 'message', 'data');
+    expect(response.body.data.Author).to.have
+      .keys('id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio');
   });
 });
