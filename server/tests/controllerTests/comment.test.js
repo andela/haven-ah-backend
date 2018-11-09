@@ -146,3 +146,73 @@ describe('Create reply', () => {
       .equals('Please use a valid parent commentId');
   });
 });
+
+describe('Update comment', () => {
+  it('should update comment in the database', async () => {
+    const response = await chai.request(app)
+      .put(`/api/v1/articles/${newArticle.slug}/comments/1`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send(anotherGoodComment);
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Comment updated');
+  });
+  it('should not update comment if it does not have body', async () => {
+    const response = await chai.request(app)
+      .put(`/api/v1/articles/${newArticle.slug}/comments/1`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send(badComment);
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('Comment must have a body');
+  });
+  it('should not update if comment does not exist', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/articles/uche-bu-a-guy/comments/1000')
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send(goodComment);
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('We could not find this comment');
+  });
+  it('should not update if user is not authorized', async () => {
+    const badJwToken = createToken(20);
+    const response = await chai.request(app)
+      .put('/api/v1/articles/uche-bu-a-guy/comments/1')
+      .set({
+        'x-access-token': badJwToken,
+      })
+      .send(goodComment);
+    expect(response).to.have.status(401);
+    expect(response.body.message).to.be.deep
+      .equals('You are not permitted to complete this action');
+  });
+  it('should return error for invalid route parameter', async () => {
+    const response = await chai.request(app)
+      .put(`/api/v1/articles/${newArticle.slug}/comments/uber`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send(goodComment);
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('Please use a valid comment ID');
+  });
+  it('should not post a new comment if article does not exist', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/articles/uche-bu-a-guy/comments/1')
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send(goodComment);
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('We could not find this article');
+  });
+});

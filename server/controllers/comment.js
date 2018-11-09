@@ -50,6 +50,42 @@ class Comment {
     const newReply = await commentRepo.createComment(replyBody);
     return goodHttpResponse(response, 201, 'Reply created', newReply);
   }
+
+  /** Update a comment and create a new history entry
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Comment Object
+   */
+  static async updateComment(request, response) {
+    if (!request.isAuthorized) {
+      return badHttpResponse(
+        response,
+        401,
+        'You are not permitted to complete this action',
+      );
+    }
+
+    const { slug, id } = request.params;
+
+    const article = await articleRepo.getArticleBySlug(slug);
+    if (article === null) {
+      return badHttpResponse(response, 404, 'We could not find this article');
+    }
+    request.body.articleId = article.id;
+
+    const { oldComment } = request.body;
+    await commentRepo.createCommentHistory(
+      {
+        commentId: id,
+        oldComment,
+      },
+    );
+    const newBody = {
+      body: request.body.body,
+    };
+    const updatedComment = await commentRepo.updateComment(newBody, id);
+    return goodHttpResponse(response, 200, 'Comment updated', updatedComment);
+  }
 }
 
 export default Comment;

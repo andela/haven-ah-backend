@@ -164,7 +164,6 @@ class inputValidator {
     if (!body) {
       return badHttpResponse(response, 400, 'Reply must have a body');
     }
-
     parentId = parseInt(parentId, 10);
     if (isNaN(parentId)) {
       return badHttpResponse(response, 400, 'Please use a valid parent commentId');
@@ -195,6 +194,28 @@ class inputValidator {
       );
     }
     next();
+  }
+
+  /**
+   * @description validate Comment Update
+   * @param {object} request http request object
+   * @param {object} response http response object
+   * @param {object} next callback function
+   * @returns {object} http response object
+   */
+  static async validateCommentUpdate(request, response, next) {
+    const { body } = request.body;
+    let { id } = request.params;
+    if (!body) {
+      return badHttpResponse(response, 400, 'Comment must have a body');
+    }
+
+    id = parseInt(id, 10);
+    if (isNaN(id)) {
+      return badHttpResponse(response, 400, 'Please use a valid comment ID');
+    }
+    request.params.id = id;
+    return next();
   }
 }
 

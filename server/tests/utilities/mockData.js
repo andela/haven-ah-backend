@@ -92,6 +92,13 @@ const data = {
     password: 'weirdo',
     email: 'wizard@gmail.com',
   },
+  xtremeCassey: {
+    firstName: 'Sullivan',
+    lastName: 'wisdom',
+    username: 'extremeCase',
+    password: 'weirdo',
+    email: 'wizardry@gmail.com',
+  },
   jigsawArticle: {
     title: 'Vanity upon vanity',
     slug: 'Vanity-upon-vanity-201811234497',
@@ -299,6 +306,13 @@ const data = {
     complaintType: 'Rules Violation',
     complaintBody: 'I am a very unique complaint and I tend to be very very unreasonable',
   },
+  commentHistData: {
+    commentId: 1,
+    oldComment: `
+    On the other hand, we denounce with righteous indignation and
+    dislike men who are so beguiled and demoralized by the charms
+    of pleasure of the moment, so blinded by desire.`,
+  }
 };
 
 export default data;

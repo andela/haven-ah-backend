@@ -1,12 +1,12 @@
 import Model from '../models';
 
-const { Comment } = Model;
+const { Comment, CommentHistory } = Model;
 
 /**
  * Comment repository class
  */
 class CommentRepository {
-/**
+  /**
    * Function to create a comment in the database
    * @param {object} comment object
    * @returns {object} comment object
@@ -21,7 +21,7 @@ class CommentRepository {
   }
 
   /**
-   * Function to create a comment in the database
+   * Function to get a comment from the database
    * @param {object} id number
    * @returns {object} comment object
    * otherwise it throws an error
@@ -37,6 +37,38 @@ class CommentRepository {
       return null;
     }
     return commentRecord;
+  }
+
+  /**
+   * Method to create a comment History entry in the database
+   * @param {object} comment object
+   * @returns {object} comment object
+   * otherwise it throws an error
+   */
+  static async createCommentHistory(comment) {
+    try {
+      const result = await CommentHistory.create(comment);
+      return result.dataValues;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  /**
+   * Method to update a comment in the database
+   * @param {object} newData contains body
+   * @param {object} id number
+   * @returns {object} comment object
+   * otherwise it throws an error
+   */
+  static async updateComment(newData, id) {
+    const updated = await Comment.update(newData, {
+      returning: true,
+      where: {
+        id,
+      },
+    });
+    return updated[1][0].dataValues;
   }
 }
 

@@ -23,8 +23,8 @@ router.get('/users', isAuthenticated, tryCatchWrapper(User.listAll));
 router.post('/users/resetpassword', tryCatchWrapper(User.resetPassword));
 router.get('/users/resetpassword/:token', isAuthenticated, tryCatchWrapper(User.confirmPassword));
 router.post('/users/updatepassword', isAuthenticated, tryCatchWrapper(User.updatePassword));
-router.get('/users/:username', isAuthenticated, validator.validateUsername, isAuthorized, tryCatchWrapper(User.profile));
-router.put('/users/:username', isAuthenticated, validator.validateUsername, inputValidator.editProfile, isAuthorized,
+router.get('/users/:username', isAuthenticated, validator.validateUsername, isAuthorized.userProfile, tryCatchWrapper(User.profile));
+router.put('/users/:username', isAuthenticated, validator.validateUsername, inputValidator.editProfile, isAuthorized.userProfile,
   uploadImage, tryCatchWrapper(User.editProfile));
 
 router.post('/profiles/:username/follow', isAuthenticated, validator.validateUsername, tryCatchWrapper(User.follow));
