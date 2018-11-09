@@ -1,4 +1,5 @@
 import paramValidator from './paramsValidator';
+import { LIKE, DISLIKE, LOVE } from '../utilities/reactionConstant';
 
 const numberPattern = /^[0-9]+$/;
 
@@ -15,6 +16,11 @@ const usernamePattern = {
 const complaintEnum = {
   type: 'enum',
   pattern: ['Rules Violation', 'Abuse', 'Plagiarism', 'Others']
+};
+
+const reactionEnum = {
+  type: 'enum',
+  pattern: [LIKE, DISLIKE, LOVE]
 };
 
 const slugPattern = {
@@ -43,6 +49,14 @@ const validator = {
     body: {
       complaintType: complaintEnum,
       complaintBody: stringPattern
+    },
+  }),
+  validateReaction: paramValidator({
+    params: {
+      slug: slugPattern
+    },
+    body: {
+      reactionType: reactionEnum,
     },
   }),
 };

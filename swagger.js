@@ -40,7 +40,7 @@ export default {
         responses: {
           200: {
             description:
-               'Hello user, Welcome Back!'
+              'Hello user, Welcome Back!'
           },
           400: {
             description: 'incorrect password, please try again'
@@ -59,7 +59,7 @@ export default {
             name: 'firstname',
             in: 'formData',
             description:
-                'The firstname of the user account to be created',
+              'The firstname of the user account to be created',
             required: true,
             type: 'string'
           },
@@ -67,7 +67,7 @@ export default {
             name: 'lastname',
             in: 'formData',
             description:
-                'The lastname for the user account to be created',
+              'The lastname for the user account to be created',
             required: true,
             type: 'string'
           },
@@ -75,7 +75,7 @@ export default {
             name: 'email',
             in: 'formData',
             description:
-                'The email for the user account to be created',
+              'The email for the user account to be created',
             required: true,
             type: 'string'
           },
@@ -83,7 +83,7 @@ export default {
             name: 'username',
             in: 'formData',
             description:
-                'The username for the user account to be created',
+              'The username for the user account to be created',
             required: true,
             type: 'string'
           },
@@ -91,7 +91,7 @@ export default {
             name: 'image_url',
             in: 'formData',
             description:
-                'The image_url for the user account to be created',
+              'The image_url for the user account to be created',
             required: true,
             type: 'string'
           },
@@ -99,7 +99,7 @@ export default {
             name: 'password',
             in: 'formData',
             description:
-                'The password for the user account to be created',
+              'The password for the user account to be created',
             required: true,
             type: 'string'
           },
@@ -107,7 +107,7 @@ export default {
             name: 'oauth_type',
             in: 'formData',
             description:
-                'The oauth_type of the user account to be created',
+              'The oauth_type of the user account to be created',
             required: false,
             type: 'string'
           },
@@ -115,7 +115,7 @@ export default {
             name: 'oauth_id',
             in: 'formData',
             description:
-                'The oauth_id of the user account to be created',
+              'The oauth_id of the user account to be created',
             required: false,
             type: 'string'
           },
@@ -186,7 +186,7 @@ export default {
         responses: {
           200: {
             description:
-                            'Token Verification Successful, Please Change Password'
+              'Token Verification Successful, Please Change Password'
           },
           400: {
             description: 'Token Verification Failed'
@@ -321,7 +321,7 @@ export default {
                 schema: {
                   type: 'string'
                 },
-                examples: { }
+                examples: {}
               }
             }
           },
@@ -332,7 +332,7 @@ export default {
                 schema: {
                   type: 'string'
                 },
-                examples: { }
+                examples: {}
               }
             }
           },
@@ -343,7 +343,7 @@ export default {
                 schema: {
                   type: 'string'
                 },
-                examples: { }
+                examples: {}
               }
             }
           },
@@ -354,7 +354,7 @@ export default {
                 schema: {
                   type: 'string'
                 },
-                examples: { }
+                examples: {}
               }
             }
           }
@@ -381,7 +381,7 @@ export default {
                 schema: {
                   type: 'string'
                 },
-                examples: { }
+                examples: {}
               }
             }
           },
@@ -392,7 +392,7 @@ export default {
                 schema: {
                   type: 'string'
                 },
-                examples: { }
+                examples: {}
               }
             }
           }
@@ -445,7 +445,7 @@ export default {
         responses: {
           201: {
             description:
-                          'Article Created and Tags associated'
+              'Article Created and Tags associated'
           },
           500: {
             description: 'There was an internal error'
@@ -478,7 +478,7 @@ export default {
         responses: {
           201: {
             description:
-                          'Article rated'
+              'Article rated'
           },
           500: {
             description: 'There was an internal error'
@@ -563,7 +563,7 @@ export default {
                 schema: {
                   type: 'string'
                 },
-                examples: { }
+                examples: {}
               }
             }
           }
@@ -672,7 +672,7 @@ export default {
                 schema: {
                   type: 'string'
                 },
-                examples: { }
+                examples: {}
               }
             }
           }
@@ -773,7 +773,7 @@ export default {
           lastName: {
             type: 'string'
           },
-          twitter: { },
+          twitter: {},
           facebook: {
             type: 'string'
           },
@@ -783,7 +783,7 @@ export default {
           isConfirmed: {
             type: 'boolean'
           },
-          google: { }
+          google: {}
         }
       },
       body: {
@@ -795,7 +795,7 @@ export default {
           lastName: {
             type: 'string'
           },
-          twitter: { },
+          twitter: {},
           facebook: {
             type: 'string'
           },
@@ -805,7 +805,7 @@ export default {
           isConfirmed: {
             type: 'boolean'
           },
-          google: { },
+          google: {},
           id: {
             type: 'integer',
             format: 'int32'
@@ -819,5 +819,52 @@ export default {
         }
       }
     }
-  }
+  },
+  '/articles/:slug/reactions': {
+    post: {
+      tags: ['Reactions'],
+      summary: 'React to an article',
+      consumes: ['application/x-www-form-urlencoded'],
+      parameters: [
+        {
+          name: 'x-access-token',
+          in: 'header',
+          description: 'Authorization token',
+          required: true,
+          type: 'string'
+        },
+        {
+          name: 'slug',
+          in: 'path',
+          description: 'Slug of article to react to',
+          required: true,
+          type: 'string'
+        },
+        {
+          name: 'reactionType',
+          in: 'body',
+          description: 'Reaction type',
+          required: true,
+          type: 'string'
+        },
+      ],
+      responses: {
+        201: {
+          description: 'You liked an article.',
+        },
+        200: {
+          description: 'You disliked an article.',
+        },
+        400: {
+          description: 'Bad Request.'
+        },
+        404: {
+          description: 'Article not found.'
+        },
+        500: {
+          description: 'Invalid input.'
+        }
+      }
+    },
+  },
 };
