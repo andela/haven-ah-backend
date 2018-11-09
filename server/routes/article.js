@@ -8,6 +8,7 @@ import tryCatchWrapper from '../utilities/tryCatchWrapper';
 import checkIfArticleExists from '../middlewares/checkIfArticleExists';
 import isAuthorized from '../middlewares/authorization';
 
+
 const router = new Router();
 
 router.post(
@@ -34,6 +35,7 @@ router.get('/articles',
 router.post('/articles/:slug/comments',
   isAuthenticated,
   inputValidator.validateComment,
+  checkIfArticleExists,
   tryCatchWrapper(Comment.createComment));
 
 router.post('/articles/:slug/comments/:parentId',
@@ -55,5 +57,7 @@ router.put(
   isAuthorized.comment,
   tryCatchWrapper(Comment.updateComment),
 );
+
+router.get('/articles/:slug', validator.validateSlug, tryCatchWrapper(Article.getArticle));
 
 export default router;

@@ -51,6 +51,31 @@ class Article {
   }
 
   /**
+   * Get a single article
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Article object or error object if article is not found
+   */
+  static async getArticle(request, response) {
+    const articleSlug = request.params.slug;
+    const article = await articleRepo.getSingleArticle(articleSlug);
+
+    if (!article) {
+      return badHttpResponse(
+        response,
+        404,
+        'This article was not found',
+      );
+    }
+    return goodHttpResponse(
+      response,
+      200,
+      'Article retrieved',
+      article,
+    );
+  }
+
+  /**
    * Get all articles
    * @param {object} request Request Object
    * @param {object} response Response Object

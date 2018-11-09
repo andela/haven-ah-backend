@@ -51,6 +51,22 @@ describe('Get single article', () => {
   });
 });
 
+describe('Get single article function', () => {
+  it('should return null if article does not exist', async () => {
+    const nonExistentArticle = await articleRepo.getSingleArticle('this-is-a-slug-that-does-not-exist');
+    expect(nonExistentArticle).to.be.deep.equals(null);
+  });
+
+  it('should return the article if it exists', async () => {
+    const existingArticle = await articleRepo.getSingleArticle(newArticle.slug);
+    expect(existingArticle.slug).to.be.deep.equals(newArticle.slug);
+    expect(existingArticle).to.have.ownProperty('Author');
+    expect(existingArticle.Author.id).to.be.deep.equal(newUser.id);
+    expect(existingArticle.Author.dataValues).to.have
+      .keys('id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio');
+  });
+});
+
 describe('Create new complaint', () => {
   it('should create new complaint', async () => {
     const newComplaint = await articleRepo.createArticleComplaint(complaint);

@@ -12,12 +12,7 @@ class Comment {
    * @returns {object} Comment Object
    */
   static async createComment(request, response) {
-    const { slug } = request.params;
-
-    const article = await articleRepo.getArticleBySlug(slug);
-    if (article === null) {
-      return badHttpResponse(response, 404, 'We could not find this article');
-    }
+    const { article } = request;
 
     request.body.articleId = article.id;
     const newComment = await commentRepo.createComment(request.body);
