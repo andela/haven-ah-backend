@@ -186,7 +186,7 @@ const data = {
   },
   wizArt: {
     title: 'Vanity upon vanity',
-    slug: 'Vanity-upon-vanity-201811234497',
+    slug: 'Vanity-upon-vanity-2018112844989',
     userid: 2,
     readtime: 500,
     body: `
@@ -207,7 +207,7 @@ const data = {
   },
   wisdomArt: {
     title: 'Vanity upon vanity',
-    slug: 'Vanity-upon-vanity-201811234497',
+    slug: 'Vanity-upon-vanity-20181123797',
     userid: 2,
     readtime: 500,
     body: `
