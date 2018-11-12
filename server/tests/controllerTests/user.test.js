@@ -9,8 +9,9 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 const {
-  theo, sull, dan, noPassword, noEmail, wrongPassword, wrongEmail, goodUserUpdate, userUpdate, badUserUpdate,
-  badBioUpdate, badImageUpdate1, badImageUpdate2, noImageUpdate, usernameUpdate,
+  theo, diablo, sull, dan, noPassword, noEmail, wrongPassword,
+  wrongEmail, goodUserUpdate, userUpdate,
+  badUserUpdate, badBioUpdate, badImageUpdate1, badImageUpdate2, noImageUpdate, usernameUpdate,
 } = data;
 
 const route = '/api/v1/users/signup';
@@ -24,13 +25,19 @@ let token = '';
 let testUser = '';
 let danToken = '';
 let theoToken = '';
+let diabloUser = '';
+let diabloToken = '';
+let deleteToken = '';
 
 before(async () => {
   testUser = await userRepo.createUser(dan);
   newUser = await userRepo.createUser(theo);
+  diabloUser = await userRepo.createUser(diablo);
   token = generateToken(newUser.id);
   danToken = generateToken(testUser.id);
   theoToken = await generateToken('theo@gmail.com');
+  diabloToken = await generateToken(diabloUser.id);
+  deleteToken = generateToken('theodore@gmail.com');
 });
 
 describe('POST api/v1/users/signup', () => {
@@ -176,6 +183,24 @@ describe('Send an email to user:', () => {
     expect(response.body.message).to.be.deep
       .equals('Password updated');
   });
+
+  it('should return error if user does not exist', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/users/resetpassword/${deleteToken}`);
+
+    expect(response.body.status).to.be.equal(404);
+    expect(response.body.message).to.be.deep
+      .equals('Your token has expired.');
+  });
+
+  it('should update password', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/users/resetpassword/${theoToken}`);
+
+    expect(response.body.status).to.be.equal(200);
+    expect(response.body.message).to.be.deep
+      .equals('Proceed to update password');
+  });
 });
 
 describe('GET api/v1/users/moses', () => {
@@ -193,7 +218,7 @@ describe('GET api/v1/users/moses', () => {
       .get('/api/v1/users/uwabuwa')
       .set('x-access-token', token);
 
-    // expect(response.status).to.be.equal(404);
+    expect(response.status).to.be.equal(404);
     expect(response.body.message).to.be.deep
       .equals('User not found');
   });
@@ -479,5 +504,35 @@ describe('PUT api/v1/opt/notifications', () => {
       .equals('You successfully opted out of email notifications.');
     expect(response.body.data.allowNotifications).to.be.deep
       .equals(false);
+  });
+});
+
+describe('GET api/v1/users/articles/read', () => {
+  it('should return user\'s reading stats', async () => {
+    await chai.request(app)
+      .get('/api/v1/articles/Vanity-upon-vanity-201811234497')
+      .set({ 'x-access-token': token, });
+
+    const response = await chai.request(app)
+      .get('/api/v1/users/articles/read')
+      .set({ 'x-access-token': token, });
+
+    const { articles } = response.body.data;
+
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Read articles retrieved');
+    expect(articles).to.be.an('array');
+    expect(articles).to.have.lengthOf(1);
+    expect(articles[0].title).to.be.deep.equals('Vanity upon vanity');
+  });
+
+  it('should return error if user is not found', async () => {
+    await userRepo.deleteUser(diablo);
+    const response = await chai.request(app)
+      .get('/api/v1/users/articles/read')
+      .set({ 'x-access-token': diabloToken, });
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.equal('user not found');
   });
 });

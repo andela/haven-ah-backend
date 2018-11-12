@@ -1,4 +1,3 @@
-/* eslint no-unused-vars:0 */
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     firstName: {
@@ -93,10 +92,15 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'followerId'
     });
 
+    User.belongsToMany(models.Articles, {
+      as: 'ReadArticles',
+      foreignKey: 'userId',
+      through: 'ReadingStat',
+    });
+
     User.hasMany(models.Complaint, {
       as: 'Complaints',
       foreignKey: 'userId',
-      onDelete: 'CASCADE',
     });
   };
   return User;

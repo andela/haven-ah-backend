@@ -40,3 +40,5 @@ node_modules
 
 # dist directory for build
 dist/
+
+.vscode

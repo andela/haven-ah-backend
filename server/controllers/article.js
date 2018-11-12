@@ -67,8 +67,8 @@ class Article {
    */
   static async getArticle(request, response) {
     const articleSlug = request.params.slug;
+    const { userId } = request;
     const article = await articleRepo.getSingleArticle(articleSlug);
-
     if (!article) {
       return badHttpResponse(
         response,
@@ -76,6 +76,11 @@ class Article {
         'This article was not found',
       );
     }
+
+    if (userId && userId !== article.userid) {
+      await articleRepo.addReadingStat(userId, article.id);
+    }
+
     return goodHttpResponse(
       response,
       200,
@@ -95,7 +100,7 @@ class Article {
     const page = parseInt(request.query.page, 10) || 1;
 
     const articles = await articleRepo.getArticles(limit, page);
-    if (!articles) {
+    if (articles.count === 0) {
       return goodHttpResponse(response, 200, 'no articles found');
     }
     return paginatedHttpResponse(response, 200, 'all articles', articles);

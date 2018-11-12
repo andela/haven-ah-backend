@@ -17,6 +17,16 @@ let newUser;
 let jigSlug;
 let invalidUserToken;
 
+describe('Get all articles', () => {
+  it('should return all articles in the database', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles?limit=20&page=1');
+
+    expect(response.body.status).to.be.equal(200);
+    expect(response.body.message).to.be.deep.equals('no articles found');
+  });
+});
+
 describe('Post a new article:', () => {
   before(async () => {
     newUser = await userRepo.createUser(jigsaw);
@@ -73,6 +83,13 @@ describe('Get all articles', () => {
   it('should return all articles in the database', async () => {
     const response = await chai.request(app)
       .get('/api/v1/articles?limit=20&page=1');
+    expect(response.body.status).to.be.equal(200);
+    expect(response.body.message).to.be.deep.equals('all articles');
+  });
+
+  it('should return all articles in the database when offset and limit is not passed', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles');
     expect(response.body.status).to.be.equal(200);
     expect(response.body.message).to.be.deep.equals('all articles');
   });

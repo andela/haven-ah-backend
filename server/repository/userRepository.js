@@ -123,7 +123,6 @@ class UserRepository {
       attributes
     });
 
-    if (!allUsers) return null;
     return allUsers;
   }
 
@@ -176,7 +175,7 @@ class UserRepository {
         imageUrl
       }
     })
-      .spread(user => user.get({
+      .spread(foundUser => foundUser.get({
         plain: true
       }));
     return user;

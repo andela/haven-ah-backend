@@ -442,49 +442,6 @@ export default {
         }
       }
     },
-    '/api/v1/users/opt/notifications': {
-      put: {
-        description: 'Auto generated using Swagger Inspector',
-        parameters: [{
-          name: 'x-access-token',
-          in: 'header',
-          required: false,
-          style: 'simple',
-          explode: false,
-          schema: {
-            type: 'string'
-          },
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNzU2ODMxLCJleHAiOjE1NDIzNjE2MzF9.AmaQksHtt_MNimNhEe7BUFYlritbG10fCV9fb38bomM'
-        }],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/body'
-              },
-              examples: {
-                0: {
-                  value: '{\n    \n    "email": "akogwuuche@ymail.com",\n    "password": "presley0080"\n}'
-                }
-              }
-            }
-          }
-        },
-        responses: {
-          200: {
-            description: 'Auto generated using Swagger Inspector',
-            content: {
-              'application/json; charset=utf-8': {
-                schema: {
-                  type: 'string'
-                },
-                examples: { }
-              }
-            }
-          }
-        }
-      }
-    },
     '/articles': {
       post: {
         tags: ['Article'],
@@ -949,6 +906,77 @@ export default {
         }
       },
     },
+    '/articles/:slug/reactions': {
+      post: {
+        tags: ['Reactions'],
+        summary: 'React to an article',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: true,
+            type: 'string'
+          },
+          {
+            name: 'slug',
+            in: 'path',
+            description: 'Slug of article to react to',
+            required: true,
+            type: 'string'
+          },
+          {
+            name: 'reactionType',
+            in: 'body',
+            description: 'Reaction type',
+            required: true,
+            type: 'string'
+          },
+        ],
+        responses: {
+          201: {
+            description: 'You liked an article.',
+          },
+          200: {
+            description: 'You disliked an article.',
+          },
+          400: {
+            description: 'Bad Request.'
+          },
+          404: {
+            description: 'Article not found.'
+          },
+          500: {
+            description: 'Invalid input.'
+          }
+        }
+      },
+    },
+    '/users/articles/read': {
+      get: {
+        tags: ['Reading Stats'],
+        summary: 'user reading statistics',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: true,
+            type: 'string'
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Read articles retrieved',
+          },
+          404: {
+            description: 'user not found'
+          },
+        }
+      },
+    },
   },
   components: {
     schemas: {
@@ -1007,53 +1035,6 @@ export default {
         }
       }
     }
-  },
-  '/articles/:slug/reactions': {
-    post: {
-      tags: ['Reactions'],
-      summary: 'React to an article',
-      consumes: ['application/x-www-form-urlencoded'],
-      parameters: [
-        {
-          name: 'x-access-token',
-          in: 'header',
-          description: 'Authorization token',
-          required: true,
-          type: 'string'
-        },
-        {
-          name: 'slug',
-          in: 'path',
-          description: 'Slug of article to react to',
-          required: true,
-          type: 'string'
-        },
-        {
-          name: 'reactionType',
-          in: 'body',
-          description: 'Reaction type',
-          required: true,
-          type: 'string'
-        },
-      ],
-      responses: {
-        201: {
-          description: 'You liked an article.',
-        },
-        200: {
-          description: 'You disliked an article.',
-        },
-        400: {
-          description: 'Bad Request.'
-        },
-        404: {
-          description: 'Article not found.'
-        },
-        500: {
-          description: 'Invalid input.'
-        }
-      }
-    },
   },
   schemas: {
     body: {

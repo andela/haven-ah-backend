@@ -56,11 +56,10 @@ router.put(
   tryCatchWrapper(Comment.updateComment),
 );
 
-router.get(
-  '/articles/:slug',
+router.get('/articles/:slug',
   validator.validateSlug,
-  tryCatchWrapper(Article.getArticle)
-);
+  isAuthenticated,
+  tryCatchWrapper(Article.getArticle));
 
 router.get(
   '/articles/:slug/comments/:id',
