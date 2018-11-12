@@ -1,6 +1,6 @@
 import reactionRepo from '../repository/reactionRepository';
-import articleRepo from '../repository/articleRepository';
-import { goodHttpResponse, badHttpResponse, } from '../utilities/httpResponse';
+import notificationRepo from '../repository/notificationRepository';
+import { goodHttpResponse } from '../utilities/httpResponse';
 import { LIKE, DISLIKE, LOVE } from '../utilities/reactionConstant';
 
 /**
@@ -14,7 +14,6 @@ class Reaction {
    * @returns {object} User Object
    */
   static async postReaction(request, response) {
-    const { slug } = request.params;
     const { userId, article } = request;
     const { reactionType } = request.body;
 
@@ -54,8 +53,15 @@ class Reaction {
       );
     }
 
-    await reactionRepo.createReaction(article.id,
+    const newReaction = await reactionRepo.createReaction(article.id,
       request.userId, reactionType);
+    notificationRepo.createNotification({
+      type: 'NEW_REACTION_UPDATE',
+      userId: newReaction.userId,
+      articleId: newReaction.articleId,
+      content: 'A new reaction has been made by someone you follow.'
+    });
+
     return goodHttpResponse(
       response,
       201,

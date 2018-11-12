@@ -3,6 +3,7 @@ import articleRepo from '../repository/articleRepository';
 import { goodHttpResponse, badHttpResponse, paginatedHttpResponse } from '../utilities/httpResponse';
 import tagRepo from '../repository/tagRepository';
 import ratingRepo from '../repository/ratingRepository';
+import notificationRepo from '../repository/notificationRepository';
 
 /**
  * Article Controller class
@@ -32,6 +33,14 @@ class Article {
       readtime,
       images: images ? images.split(',') : [],
     });
+
+    notificationRepo.createNotification({
+      type: 'NEW_ARTICLE_UPDATE',
+      userId: newArticle.userid,
+      articleId: newArticle.id,
+      content: 'A new article has been posted by someone you follow.'
+    });
+
     if (request.body.tags) {
       const combinedTags = request.body.tags.toLowerCase();
       const tagPromises = await tagRepo.processTags(

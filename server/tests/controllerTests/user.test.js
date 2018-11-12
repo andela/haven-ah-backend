@@ -440,3 +440,33 @@ describe('GET api/v1/auth/confirm', () => {
       .equals('This account has been confirmed already.');
   });
 });
+
+describe('PUT api/v1/opt/notifications', () => {
+  it('should let user opt in to email notifications', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/opt/notifications')
+      .send(dan)
+      .set({
+        'x-access-token': token,
+      });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('You successfully opted in to email notifications.');
+    expect(response.body.data.allowNotifications).to.be.deep
+      .equals(true);
+  });
+
+  it('should confirm user', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/opt/notifications')
+      .send(dan)
+      .set({
+        'x-access-token': token,
+      });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('You successfully opted out of email notifications.');
+    expect(response.body.data.allowNotifications).to.be.deep
+      .equals(false);
+  });
+});

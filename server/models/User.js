@@ -46,6 +46,11 @@ export default (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false
     },
+    allowNotifications: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
     resetToken: {
       type: DataTypes.STRING,
       allowNull: true,

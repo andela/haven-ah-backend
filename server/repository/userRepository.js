@@ -11,6 +11,7 @@ const attributes = [
   'lastName',
   'email',
   'isConfirmed',
+  'allowNotifications',
   'facebook',
   'google',
   'twitter',

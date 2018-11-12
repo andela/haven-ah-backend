@@ -27,6 +27,8 @@ router.get('/users/:username', isAuthenticated, validator.validateUsername, isAu
 router.put('/users/:username', isAuthenticated, validator.validateUsername, inputValidator.editProfile, isAuthorized.userProfile,
   uploadImage, tryCatchWrapper(User.editProfile));
 
+router.put('/users/opt/notifications/', isAuthenticated, tryCatchWrapper(User.optNotification));
+
 router.post('/profiles/:username/follow', isAuthenticated, validator.validateUsername, tryCatchWrapper(User.follow));
 router.delete('/profiles/:username/follow', isAuthenticated, validator.validateUsername, tryCatchWrapper(User.unfollow));
 
