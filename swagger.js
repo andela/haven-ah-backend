@@ -399,6 +399,92 @@ export default {
         }
       }
     },
+    '/api/v1/users/opt/notifications': {
+      put: {
+        description: 'Auto generated using Swagger Inspector',
+        parameters: [{
+          name: 'x-access-token',
+          in: 'header',
+          required: false,
+          style: 'simple',
+          explode: false,
+          schema: {
+            type: 'string'
+          },
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNzU2ODMxLCJleHAiOjE1NDIzNjE2MzF9.AmaQksHtt_MNimNhEe7BUFYlritbG10fCV9fb38bomM'
+        }],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/body'
+              },
+              examples: {
+                0: {
+                  value: '{\n    \n    "email": "akogwuuche@ymail.com",\n    "password": "presley0080"\n}'
+                }
+              }
+            }
+          }
+        },
+        responses: {
+          200: {
+            description: 'Auto generated using Swagger Inspector',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          }
+        }
+      }
+    },
+    '/api/v1/users/opt/notifications': {
+      put: {
+        description: 'Auto generated using Swagger Inspector',
+        parameters: [{
+          name: 'x-access-token',
+          in: 'header',
+          required: false,
+          style: 'simple',
+          explode: false,
+          schema: {
+            type: 'string'
+          },
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNzU2ODMxLCJleHAiOjE1NDIzNjE2MzF9.AmaQksHtt_MNimNhEe7BUFYlritbG10fCV9fb38bomM'
+        }],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/body'
+              },
+              examples: {
+                0: {
+                  value: '{\n    \n    "email": "akogwuuche@ymail.com",\n    "password": "presley0080"\n}'
+                }
+              }
+            }
+          }
+        },
+        responses: {
+          200: {
+            description: 'Auto generated using Swagger Inspector',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          }
+        }
+      }
+    },
     '/articles': {
       post: {
         tags: ['Article'],
@@ -905,4 +991,17 @@ export default {
       }
     },
   },
+  schemas: {
+    body: {
+      type: 'object',
+      properties: {
+        password: {
+          type: 'string'
+        },
+        email: {
+          type: 'string'
+        }
+      }
+    }
+  }
 };

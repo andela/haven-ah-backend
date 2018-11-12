@@ -1,6 +1,7 @@
 import commentRepo from '../repository/commentRepository';
 import { goodHttpResponse, badHttpResponse } from '../utilities/httpResponse';
 import articleRepo from '../repository/articleRepository';
+import notificationRepo from '../repository/notificationRepository';
 
 /**
  * Comment Controller class
@@ -43,6 +44,12 @@ class Comment {
       articleId,
     };
     const newReply = await commentRepo.createComment(replyBody);
+    notificationRepo.createNotification({
+      type: 'NEW_COMMENT_UPDATE',
+      userId: newReply.userId,
+      articleId: newReply.articleId,
+      content: 'A new comment has been created.'
+    });
     return goodHttpResponse(response, 201, 'Reply created', newReply);
   }
 

@@ -384,6 +384,39 @@ class User {
       'You have unfollowed this user.',
     );
   }
+
+  /**
+   * This method allows  the user to opt in/out of notifications
+   * @param {object} request
+   * @param {object} response
+   * @returns {object} the response message to user
+   */
+  static async optNotification(request, response) {
+    const { userId } = request;
+    let updatedNotifications;
+    const foundUser = await userRepo.getUserByParam('id', userId);
+    if (foundUser.allowNotifications === false) {
+      updatedNotifications = await foundUser.update({
+        allowNotifications: true,
+      });
+      goodHttpResponse(
+        response,
+        200,
+        'You successfully opted in to email notifications.',
+        updatedNotifications
+      );
+    } else {
+      updatedNotifications = await foundUser.update({
+        allowNotifications: false,
+      });
+    }
+    return goodHttpResponse(
+      response,
+      200,
+      'You successfully opted out of email notifications.',
+      updatedNotifications
+    );
+  }
 }
 
 export default User;

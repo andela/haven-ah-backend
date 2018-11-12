@@ -36,6 +36,10 @@ describe('delete article', () => {
     const articles = await articleRepo.deleteArticle(newArticle);
     expect(articles).to.eql(undefined);
   });
+  it('should return null for non-existent articles', async () => {
+    const articles = await articleRepo.deleteArticle({ slug: 'fake-slug' });
+    expect(articles).to.eql(null);
+  });
 });
 
 describe('Get single article', () => {

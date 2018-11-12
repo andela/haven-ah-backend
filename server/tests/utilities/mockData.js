@@ -186,7 +186,7 @@ const data = {
   },
   wizArt: {
     title: 'Vanity upon vanity',
-    slug: 'Vanity-upon-vanity-201811234497',
+    slug: 'Vanity-upon-vanity-2018112844989',
     userid: 2,
     readtime: 500,
     body: `
@@ -207,7 +207,7 @@ const data = {
   },
   wisdomArt: {
     title: 'Vanity upon vanity',
-    slug: 'Vanity-upon-vanity-201811234497',
+    slug: 'Vanity-upon-vanity-20181123797',
     userid: 2,
     readtime: 500,
     body: `
@@ -368,6 +368,40 @@ const data = {
     On the other hand, we denounce with righteous indignation and
     dislike men who are so beguiled and demoralized by the charms
     of pleasure of the moment, so blinded by desire.`,
+  },
+  dummyNotifications: {
+    newComment: {
+      userId: 2,
+      articleId: 7,
+      type: 'NEW_COMMENT_UPDATE',
+      content: 'A new comment has been posted'
+    },
+    newArticle: {
+      userId: 2,
+      articleId: 7,
+      type: 'NEW_ARTICLE_UPDATE',
+      content: 'A new article has been posted'
+    },
+    newReaction: {
+      userId: 2,
+      articleId: 7,
+      type: 'NEW_REACTION_UPDATE',
+      content: 'A user reacted on an article you currently follow'
+    },
+    newInvalidPost: {
+      userId: 2,
+      articleId: 7,
+      type: 'INVALID_POST',
+      content: 'A user reacted on an article you currently follow'
+    },
+    wrongNotifyType: {
+      dataValues: {
+        userId: 2,
+        articleId: 7,
+        type: 'INVALID_TYPE',
+        content: 'A user reacted on an article you currently follow'
+      }
+    }
   }
 };
 

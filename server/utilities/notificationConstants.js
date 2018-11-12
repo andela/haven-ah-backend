@@ -1,0 +1,3 @@
+export const NEW_ARTICLE = 'NEW_ARTICLE_UPDATE';
+export const NEW_COMMENT = 'NEW_COMMENT_UPDATE';
+export const NEW_REACTION = 'NEW_REACTION_UPDATE';
