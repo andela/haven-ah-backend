@@ -88,6 +88,35 @@ class Comment {
     const updatedComment = await commentRepo.updateComment(newBody, id);
     return goodHttpResponse(response, 200, 'Comment updated', updatedComment);
   }
+
+  /** Create a new comment
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Comment Object
+   */
+  static async getCommentWithHistory(request, response) {
+    if (!request.isAuthorized) {
+      return badHttpResponse(
+        response,
+        401,
+        'You are not permitted to complete this action',
+      );
+    }
+
+    const { slug, id } = request.params;
+    const article = await articleRepo.getArticleBySlug(slug);
+    if (article === null) {
+      return badHttpResponse(response, 404, 'We could not find this article');
+    }
+
+    const comment = await commentRepo.getCommentWithHistory(id);
+    if (comment.editHistory.length <= 0) {
+      comment.dataValues.editHistory = 'No edit history to show';
+      return goodHttpResponse(response, 200, 'Comment found', comment);
+    }
+
+    return goodHttpResponse(response, 200, 'Comment and edit history found', comment);
+  }
 }
 
 export default Comment;

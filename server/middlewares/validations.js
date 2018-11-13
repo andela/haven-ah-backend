@@ -217,6 +217,24 @@ class inputValidator {
     request.params.id = id;
     return next();
   }
+
+  /**
+   * @description validate Comment ID
+   * @param {object} request http request object
+   * @param {object} response http response object
+   * @param {object} next callback function
+   * @returns {object} http response object
+   */
+  static async validateCommentParam(request, response, next) {
+    let { id } = request.params;
+
+    id = parseInt(id, 10);
+    if (isNaN(id)) {
+      return badHttpResponse(response, 400, 'Please use a valid comment ID');
+    }
+    request.params.id = id;
+    return next();
+  }
 }
 
 export default inputValidator;

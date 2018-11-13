@@ -58,6 +58,17 @@ router.put(
   tryCatchWrapper(Comment.updateComment),
 );
 
-router.get('/articles/:slug', validator.validateSlug, tryCatchWrapper(Article.getArticle));
+router.get(
+  '/articles/:slug',
+  validator.validateSlug,
+  tryCatchWrapper(Article.getArticle)
+);
 
+router.get(
+  '/articles/:slug/comments/:id',
+  isAuthenticated,
+  inputValidator.validateCommentParam,
+  isAuthorized.comment,
+  tryCatchWrapper(Comment.getCommentWithHistory),
+);
 export default router;

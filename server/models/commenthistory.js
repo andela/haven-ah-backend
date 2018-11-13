@@ -12,6 +12,7 @@ export default (sequelize, DataTypes) => {
   CommentHistory.associate = (models) => {
     CommentHistory.belongsTo(models.Comment, {
       foreignKey: 'commentId',
+      useJunctionTable: false,
     });
   };
   return CommentHistory;

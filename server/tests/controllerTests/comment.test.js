@@ -204,13 +204,82 @@ describe('Update comment', () => {
     expect(response.body.message).to.be.deep
       .equals('Please use a valid comment ID');
   });
-  it('should not post a new comment if article does not exist', async () => {
+  it('should not update comment if article does not exist', async () => {
     const response = await chai.request(app)
       .put('/api/v1/articles/uche-bu-a-guy/comments/1')
       .set({
         'x-access-token': jwtoken,
       })
       .send(goodComment);
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('We could not find this article');
+  });
+});
+
+describe('Get comment and edit comment history', () => {
+  it('should get comment from the database and the edit history', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/articles/${newArticle.slug}/comments/1`)
+      .set({
+        'x-access-token': jwtoken,
+      });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Comment and edit history found');
+    expect(response.body.data).to.have.property('editHistory');
+    expect(response.body.data.editHistory).to.be.an('array');
+  });
+  it('should get comment from the database and the edit history', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/articles/${newArticle.slug}/comments/2`)
+      .set({
+        'x-access-token': jwtoken,
+      });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Comment found');
+    expect(response.body.data).to.have.property('editHistory');
+    expect(response.body.data.editHistory).to.be.deep
+      .equals('No edit history to show');
+  });
+  it('should not get comment if comment does not exist', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/articles/${newArticle.slug}/comments/1000`)
+      .set({
+        'x-access-token': jwtoken,
+      });
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('We could not find this comment');
+  });
+  it('should return error for invalid route parameter', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/articles/${newArticle.slug}/comments/uber`)
+      .set({
+        'x-access-token': jwtoken,
+      });
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('Please use a valid comment ID');
+  });
+  it('should not show comment history if user is not authorized', async () => {
+    const badJwToken = createToken(20);
+    const response = await chai.request(app)
+      .get(`/api/v1/articles/${newArticle.slug}/comments/1`)
+      .set({
+        'x-access-token': badJwToken,
+      });
+    expect(response).to.have.status(401);
+    expect(response.body.message).to.be.deep
+      .equals('You are not permitted to complete this action');
+  });
+  it('should return error if article does not exist', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/uche-bu-a-guy/comments/1')
+      .set({
+        'x-access-token': jwtoken,
+      });
     expect(response).to.have.status(404);
     expect(response.body.message).to.be.deep
       .equals('We could not find this article');
