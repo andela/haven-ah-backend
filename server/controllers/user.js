@@ -450,35 +450,55 @@ class User {
   }
 
   /**
-   * Get all user followers
+ * Update a user's role
    * @param {object} request Request Object
    * @param {object} response Response Object
-   * @returns {object} Error if operation was unsuccessful or success response
-   * if operation was successful
+   * @returns {object} Success Response if operation is successful
+   * and error response if operation was not successful
    */
-  static async getUserFollowers(request, response) {
-    const { userId } = request;
-    const user = await userRepo.getUserByParam('id', userId);
+  static async updateUserRole(request, response) {
+    const { role, username } = request.body;
+    const actorRole = request.role;
+
+    if (role === 'superadmin' && actorRole !== 'superadmin') {
+      return badHttpResponse(
+        response,
+        403,
+        'Sorry, you do not have the rights to perform this operation.'
+      );
+    }
+    const user = await userRepo.getUserByParam('username', username);
     if (!user) {
       return badHttpResponse(
         response,
         404,
-        'User not found'
+        'The user you are trying to update does not exist'
       );
     }
-    const Userfollowers = await followerRepo.followers(user);
-    if (!Userfollowers.length) {
+
+    if (user.role === role) {
       return badHttpResponse(
         response,
-        404,
-        'Followers not found'
+        409,
+        `This user already has the ${role} role.`
       );
     }
+    const updated = await userRepo.updateUser({
+      role
+    }, username);
+    const { id, firstName, lastName } = updated;
+
+    const updatedUser = {
+      id,
+      name: `${firstName} ${lastName}`,
+      role: updated.role
+    };
+
     return goodHttpResponse(
       response,
       200,
-      'Followers retrieved',
-      Userfollowers
+      'Successfully updated user role',
+      { updatedUser }
     );
   }
 
