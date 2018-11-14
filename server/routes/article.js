@@ -71,4 +71,12 @@ router.get(
   isAuthorized.comment,
   tryCatchWrapper(Comment.getCommentWithHistory),
 );
+router.delete(
+  '/articles/:slug',
+  isAuthenticated,
+  validator.validateSlug,
+  checkIfArticleExists,
+  tryCatchWrapper(Article.deleteArticle)
+);
+
 export default router;

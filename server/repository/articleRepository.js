@@ -29,7 +29,9 @@ class ArticleRepository {
     if (!articleRecord) {
       return null;
     }
-    await articleRecord.destroy();
+    await articleRecord.update({
+      isDeleted: true
+    });
   }
 
   /**

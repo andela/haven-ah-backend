@@ -539,6 +539,35 @@ export default {
         }
       }
     },
+    '/articles/:slug': {
+      delete: {
+        tags: ['Article'],
+        summary: 'Delete an article',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: true,
+            type: 'string'
+          }
+        ],
+        description: 'Returns a succes message or an error.',
+        responses: {
+          201: {
+            description:
+              'Article deleted'
+          },
+          401: {
+            description: 'You cannot deleted this article'
+          },
+          500: {
+            description: 'There was an internal error'
+          }
+        }
+      }
+    },
     '/articles/:slug/rating': {
       post: {
         tags: ['Article'],

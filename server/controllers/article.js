@@ -150,6 +150,22 @@ class Article {
     });
     return goodHttpResponse(response, 201, 'Article rated', rating);
   }
+
+  /**
+   *
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} response
+   */
+  static async deleteArticle(request, response) {
+    const { article, userId } = request;
+    const { userid } = article.dataValues;
+    if (userid === userId || request.role === 'superadmin' || request.role === 'admin') {
+      await articleRepo.deleteArticle(article.dataValues);
+      return goodHttpResponse(response, 202, 'Article deleted');
+    }
+    return goodHttpResponse(response, 401, 'You cannot deleted this article');
+  }
 }
 
 export default Article;
