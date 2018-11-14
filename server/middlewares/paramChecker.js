@@ -20,7 +20,7 @@ const complaintEnum = {
 
 const reactionEnum = {
   type: 'enum',
-  pattern: [LIKE, DISLIKE, LOVE]
+  pattern: [LIKE, LOVE]
 };
 
 const slugPattern = {

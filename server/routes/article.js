@@ -2,6 +2,7 @@ import { Router } from 'express';
 import Article from '../controllers/article';
 import inputValidator from '../middlewares/validations';
 import Comment from '../controllers/comment';
+import Reactions from '../controllers/reaction';
 import isAuthenticated from '../middlewares/checkAuth';
 import isPermitted from '../middlewares/checkPermissions';
 import validator from '../middlewares/paramChecker';
@@ -75,5 +76,13 @@ router.delete(
   checkIfArticleExists,
   tryCatchWrapper(Article.deleteArticle)
 );
+router.post(
+  '/articles/:slug/comments/:id/reactions',
+  isAuthenticated,
+  validator.validateReaction,
+  checkIfArticleExists,
+  tryCatchWrapper(Reactions.likeComment),
+);
+router.get('/articles/:slug', validator.validateSlug, tryCatchWrapper(Article.getArticle));
 
 export default router;

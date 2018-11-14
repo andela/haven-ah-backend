@@ -61,7 +61,7 @@ describe('Article Reaction:', () => {
       .set({
         'x-access-token': jwtoken,
       })
-      .send('Likee');
+      .send({ reactionType: 'Likee' });
     expect(response).to.have.status(400);
     expect(response.body.message).to.be.deep.equals('Bad Request');
   });

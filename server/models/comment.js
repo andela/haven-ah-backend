@@ -44,6 +44,10 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'commentId',
       useJunctionTable: false,
     });
+    Comment.hasMany(models.Reaction, {
+      as: 'Reactions',
+      foreignKey: 'commentId'
+    });
   };
   return Comment;
 };

@@ -3,11 +3,15 @@ export default (sequelize, DataTypes) => {
     reactionType: {
       type: DataTypes.ENUM,
       allowNull: false,
-      values: ['Like', 'Dislike', 'Love']
+      values: ['Like', 'Love']
     },
     articleId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
+    },
+    commentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
     userId: {
       type: DataTypes.INTEGER,
@@ -24,6 +28,10 @@ export default (sequelize, DataTypes) => {
     Reaction.belongsTo(models.User, {
       foreignKey: 'userId',
       as: 'User'
+    });
+    Reaction.belongsTo(models.Comment, {
+      foreignKey: 'commentId',
+      as: 'Comment'
     });
   };
   return Reaction;
