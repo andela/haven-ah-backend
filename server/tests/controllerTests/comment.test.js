@@ -20,7 +20,7 @@ let newArticle;
 
 describe('Create comment', () => {
   before(async () => {
-    newUser = await userRepo.createUser(xProdigy);
+    newUser = await userRepo.createUser(xProdigy, 'user');
     jwtoken = createToken(newUser.id);
 
     jigArticle.userid = newUser.id;

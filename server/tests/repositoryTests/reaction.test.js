@@ -8,14 +8,11 @@ const { wiz, wizArt } = data;
 
 
 describe('user reaction', async () => {
-//   after(async () => {
-//     await userRepo.deleteUser(wiz);
-//     await articleRepo.deleteArticle(wizArt);
-//   });
   let newUser;
   let newArticle;
   before(async () => {
-    newUser = await userRepo.createUser(wiz);
+    newUser = await userRepo.createUser(wiz, 'user');
+    wizArt.userid = newUser.id;
     newArticle = await articleRepo.createArticle(wizArt);
   });
   it('should create a new reaction', async () => {

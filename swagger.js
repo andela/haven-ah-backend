@@ -984,6 +984,47 @@ export default {
           }
         }
       },
+      '/admin/users/roles': {
+        put: {
+          tags: ['Roles'],
+          summary: 'Update role',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'x-access-token',
+              in: 'header',
+              description: 'Authorization token',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'role',
+              in: 'formData',
+              description: 'The new role',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'username',
+              in: 'formData',
+              description: 'Username of user to be updated',
+              required: true,
+              type: 'string',
+            }
+          ],
+          responses: {
+            200: {
+              description: 'Role successfully updated.'
+            },
+            404: {
+              description: 'User not found.'
+            },
+            409: {
+              description: 'User already has the role.'
+            }
+          }
+        },
+      },
     },
     '/articles/:slug/reactions': {
       post: {

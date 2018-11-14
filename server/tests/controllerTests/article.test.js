@@ -28,7 +28,7 @@ describe('Get no article', () => {
 
 describe('Post a new article:', () => {
   before(async () => {
-    newUser = await userRepo.createUser(jigsaw);
+    newUser = await userRepo.createUser(jigsaw, 'user');
     jwtoken = createToken(newUser.id);
     invalidUserToken = createToken(2000);
   });
@@ -158,7 +158,7 @@ describe('POST /api/v1/articles/:slug/complaints', () => {
       firstName: 'sample',
       lastName: 'user',
       password: 'password'
-    });
+    }, 'user');
     token = createToken(user.id);
   });
 

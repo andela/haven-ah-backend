@@ -18,6 +18,11 @@ const complaintEnum = {
   pattern: ['Rules Violation', 'Abuse', 'Plagiarism', 'Others']
 };
 
+const roleEnum = {
+  type: 'enum',
+  pattern: ['admin', 'user', 'superadmin']
+}
+
 const reactionEnum = {
   type: 'enum',
   pattern: [LIKE, LOVE]
@@ -59,6 +64,12 @@ const validator = {
       reactionType: reactionEnum,
     },
   }),
+  validateRoleUpdate: paramValidator({
+    body: {
+      role: roleEnum,
+      username: usernamePattern
+    }
+  })
 };
 
 export default validator;

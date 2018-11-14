@@ -46,7 +46,7 @@ class User {
       email,
       username,
       password: hash(password),
-    });
+    }, 'user');
 
     const token = generateToken(newUser.id);
     const url = `${getUrl}/auth/confirm/${token}`;
@@ -479,6 +479,59 @@ class User {
       200,
       'Followers retrieved',
       Userfollowers
+    );
+  }
+
+  /**
+   * Update a user's role
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Success Response if operation is successful
+   * and error response if operation was not successful
+   */
+  static async updateUserRole(request, response) {
+    const { role, username } = request.body;
+    const actorRole = request.role;
+
+    if (role === 'superadmin' && actorRole !== 'superadmin') {
+      return badHttpResponse(
+        response,
+        403,
+        'Sorry, you do not have the rights to perform this operation.'
+      );
+    }
+    const user = await userRepo.getUserByParam('username', username);
+    if (!user) {
+      return badHttpResponse(
+        response,
+        404,
+        'The user you are trying to update does not exist'
+      );
+    }
+
+    if (user.role === role) {
+      return badHttpResponse(
+        response,
+        409,
+        `This user already has the ${role} role.`
+      );
+    }
+    const updated = await userRepo.updateUser({
+      role
+    }, username);
+    const { id, firstName, lastName } = updated;
+
+    const updatedUser = {
+      id,
+      name: `${firstName} ${lastName}`,
+      role: updated.role
+    };
+
+    return goodHttpResponse(
+      response,
+      200,
+      'Successfully updated user role',
+      { updatedUser }
     );
   }
 }

@@ -13,6 +13,7 @@ let newArticle;
 
 describe('Create an article', () => {
   it('should return article created', async () => {
+    newUser = await userRepo.createUser(sullibus, 'user');
     const article = await articleRepo.createArticle(sampleArticle);
     expect(article).to.be.an('object');
     expect(article.title).to.be.deep.equals('Looking ahead lol');
@@ -34,9 +35,6 @@ describe('Get all articles', () => {
 
 describe('delete article', () => {
   before(async () => {
-    newUser = await userRepo.createUser(sullibus);
-
-    sulliArt.userid = newUser.id;
     newArticle = await articleRepo.createArticle(sulliArt);
   });
 
