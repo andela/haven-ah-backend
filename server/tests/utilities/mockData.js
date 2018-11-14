@@ -235,6 +235,19 @@ const data = {
     bio: 'This is me. I am unique.',
     image: 'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg',
   },
+  userUpdate: {
+    firstName: 'Mike',
+    lastName: 'Mos',
+    facebook: 'www.facebook.com',
+    google: 'www.google.com',
+    twitter: 'www.google.com',
+    bio: 'This is me. I am unique.',
+    images: [
+      'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg',
+      'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg'
+
+    ],
+  },
 
   usernameUpdate: {
     username: 'i_amsull',
