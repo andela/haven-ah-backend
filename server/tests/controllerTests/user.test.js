@@ -9,7 +9,7 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 const {
-  theo, sull, dan, noPassword, noEmail, wrongPassword, wrongEmail, goodUserUpdate, badUserUpdate,
+  theo, sull, dan, noPassword, noEmail, wrongPassword, wrongEmail, goodUserUpdate, userUpdate, badUserUpdate,
   badBioUpdate, badImageUpdate1, badImageUpdate2, noImageUpdate, usernameUpdate,
 } = data;
 
@@ -291,6 +291,17 @@ describe('UPDATE api/v1/users/:username', () => {
       .put('/api/v1/users/i_amtheo')
       .set('x-access-token', token)
       .send(goodUserUpdate);
+
+    expect(response.status).to.be.equal(200);
+    expect(response.body.message).to.be.deep
+      .equals('Account updated');
+  });
+
+  it('should update user and return data', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/i_amtheo')
+      .set('x-access-token', token)
+      .send(userUpdate);
 
     expect(response.status).to.be.equal(200);
     expect(response.body.message).to.be.deep

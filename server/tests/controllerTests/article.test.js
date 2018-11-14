@@ -15,11 +15,13 @@ const {
 let jwtoken;
 let newUser;
 let jigSlug;
+let invalidUserToken;
 
 describe('Post a new article:', () => {
   before(async () => {
     newUser = await userRepo.createUser(jigsaw);
     jwtoken = createToken(newUser.id);
+    invalidUserToken = createToken(2000);
   });
 
   it('should post a new article in the database', async () => {
@@ -35,6 +37,19 @@ describe('Post a new article:', () => {
     expect(response).to.have.status(201);
     expect(response.body.message).to.be.deep
       .equals('Article Created');
+  });
+
+  it('should deny access to non existent user', async () => {
+    const response = await chai.request(app)
+      .post('/api/v1/articles')
+      .set({
+        'x-access-token': invalidUserToken,
+      })
+      .send(jigArticle);
+
+    expect(response).to.have.status(403);
+    expect(response.body.message).to.be.deep
+      .equals('ACCESS DENIED');
   });
 
   it('should post a new article, new tags and create associations', async () => {
