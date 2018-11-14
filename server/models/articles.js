@@ -30,6 +30,10 @@ export default (sequelize, DataTypes) => {
     },
     categoryId: {
       type: DataTypes.INTEGER,
+    },
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {});
 

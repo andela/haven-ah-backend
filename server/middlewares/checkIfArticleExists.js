@@ -13,7 +13,7 @@ const checkIfArticleExists = async (request, response, next) => {
   const { slug } = request.params;
   const article = await articleRepo.getArticleBySlug(slug);
 
-  if (!article) {
+  if (!article || article.dataValues.isDeleted === true) {
     return badHttpResponse(
       response,
       404,

@@ -242,4 +242,28 @@ describe('GET api/v1/articles/:slug', () => {
     expect(response.body.data.Author).to.have
       .keys('id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio');
   });
+
+  it('should delete a single article from the database', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/articles/${jigSlug}`)
+      .set({
+        'x-access-token': createToken(5000),
+      });
+
+    expect(response).to.have.status(401);
+    expect(response.body.message).to.be.deep
+      .equals('You cannot deleted this article');
+  });
+
+  it('should delete a single article from the database', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/articles/${jigSlug}`)
+      .set({
+        'x-access-token': jwtoken,
+      });
+
+    expect(response).to.have.status(202);
+    expect(response.body.message).to.be.deep
+      .equals('Article deleted');
+  });
 });
