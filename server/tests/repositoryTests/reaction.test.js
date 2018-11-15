@@ -19,20 +19,20 @@ describe('user reaction', async () => {
     newArticle = await articleRepo.createArticle(wizArt);
   });
   it('should create a new reaction', async () => {
-    const newReaction = await reactionRepo.createReaction(newArticle.id, newUser.id, 'Like');
+    const newReaction = await reactionRepo.createReaction('articleId', newArticle.id, newUser.id, 'Like');
     expect(newReaction).to.be.an('object');
   });
   it('should find reaction', async () => {
-    const newReaction = await reactionRepo.getReaction(newArticle.id, newUser.id);
+    const newReaction = await reactionRepo.getReaction('articleId', newArticle.id, newUser.id);
     expect(newReaction).to.be.be.an('object');
     expect(newReaction.reactionType).to.be.equals('Like');
   });
   it('should update reaction', async () => {
-    const updatedReaction = await reactionRepo.updateReaction(newArticle.id, newUser.id, 'Love');
+    const updatedReaction = await reactionRepo.updateReaction('articleId', newArticle.id, newUser.id, 'Love');
     expect(updatedReaction).to.be.an('array');
   });
   it('should remove reaction', async () => {
-    const deletedReaction = await reactionRepo.removeReaction(newArticle.id, newUser.id);
+    const deletedReaction = await reactionRepo.removeReaction('articleId', newArticle.id, newUser.id);
     expect(deletedReaction).to.eql(1);
   });
 });

@@ -5,17 +5,19 @@ import app from '../../../app';
 import data from '../utilities/mockData';
 import createToken from '../../utilities/jwtGenerator';
 import userRepo from '../../repository/userRepository';
+import commentRepo from '../../repository/commentRepository';
 import articleRepo from '../../repository/articleRepository';
 
 const { expect } = chai;
 chai.use(chaiHttp);
 
 const {
-  jigArticle, xProdigy, goodComment, badComment, goodReply, anotherGoodComment,
+  jigArticle, xProdigy, goodComment, badComment, goodReply, anotherGoodComment, wizcom, wizComment, articleOne, wizcom2
 } = data;
 let jwtoken;
 let newUser;
 let newArticle;
+let comment;
 
 describe('Create comment', () => {
   before(async () => {
@@ -283,5 +285,102 @@ describe('Get comment and edit comment history', () => {
     expect(response).to.have.status(404);
     expect(response.body.message).to.be.deep
       .equals('We could not find this article');
+  });
+});
+
+describe('comment Reaction:', () => {
+  before(async () => {
+    newUser = await userRepo.createUser(wizcom);
+    jwtoken = createToken(newUser.id);
+
+    articleOne.userid = newUser.id;
+    articleOne.readtime = 30;
+    articleOne.slug = slug(`${jigArticle.title} ${Date.now()}`);
+    articleOne.images = [
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+    ];
+    newArticle = await articleRepo.createArticle(articleOne);
+  });
+  it('should post a new comment in the database', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/articles/${newArticle.slug}/comments`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send(wizComment);
+    expect(response).to.have.status(201);
+    expect(response.body.message).to.be.deep
+      .equals('Comment created');
+  });
+  it('should allow a logged in user to like a comment', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/articles/${newArticle.slug}/comments/4/reactions`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send({ reactionType: 'Like' });
+    expect(response).to.have.status(201);
+    expect(response.body.message).to.be.deep.equals('You liked this comment');
+  });
+  it('should allow a logged in user to update a reaction', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/articles/${newArticle.slug}/comments/4/reactions`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send({ reactionType: 'Love' });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('You loved this comment');
+  });
+  it('should allow a logged in user to remove a reaction', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/articles/${newArticle.slug}/comments/4/reactions`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send({ reactionType: 'Like' });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('You liked this comment');
+  });
+  it('should allow a logged in user to love a comment', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/articles/${newArticle.slug}/comments/4/reactions`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send({ reactionType: 'Love' });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('You loved this comment');
+  });
+  it('should allow a logged in user to remove reaction', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/articles/${newArticle.slug}/comments/4/reactions`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send({ reactionType: 'Love' });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('You have removed your reaction');
+  });
+  it('should not allow a logged in user to like a comment that does not belong to an article', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/articles/${newArticle.slug}/comments/1/reactions`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send({ reactionType: 'Like' });
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep.equals('comment does not belong to article');
+  });
+  it('should not react to a comment that does not exist', async () => {
+    const response = await chai.request(app)
+      .post(`/api/v1/articles/${newArticle.slug}/comments/90/reactions`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send({ reactionType: 'Like' });
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep.equals('comment not found');
   });
 });

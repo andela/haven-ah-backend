@@ -1097,6 +1097,107 @@ export default {
       }
     }
   },
+  '/articles/:slug/reactions': {
+    post: {
+      tags: ['Reactions'],
+      summary: 'React to an article',
+      consumes: ['application/x-www-form-urlencoded'],
+      parameters: [
+        {
+          name: 'x-access-token',
+          in: 'header',
+          description: 'Authorization token',
+          required: true,
+          type: 'string'
+        },
+        {
+          name: 'slug',
+          in: 'path',
+          description: 'Slug of article to react to',
+          required: true,
+          type: 'string'
+        },
+        {
+          name: 'reactionType',
+          in: 'body',
+          description: 'Reaction type',
+          required: true,
+          type: 'string'
+        },
+      ],
+      responses: {
+        201: {
+          description: 'You liked an article.',
+        },
+        200: {
+          description: 'You disliked an article.',
+        },
+        400: {
+          description: 'Bad Request.'
+        },
+        404: {
+          description: 'Article not found.'
+        },
+        500: {
+          description: 'Invalid input.'
+        }
+      }
+    },
+  },
+  '/articles/:slug/comments/:id/reactions': {
+    post: {
+      tags: ['Reactions'],
+      summary: 'React to a comment',
+      consumes: ['application/x-www-form-urlencoded'],
+      parameters: [
+        {
+          name: 'x-access-token',
+          in: 'header',
+          description: 'Authorization token',
+          required: true,
+          type: 'string'
+        },
+        {
+          name: 'slug',
+          in: 'path',
+          description: 'Slug of article to react to',
+          required: true,
+          type: 'string'
+        },
+        {
+          name: 'id',
+          in: 'path',
+          description: 'Id of the comment to react to',
+          required: true,
+          type: 'integer'
+        },
+        {
+          name: 'reactionType',
+          in: 'body',
+          description: 'Reaction type',
+          required: true,
+          type: 'string'
+        },
+      ],
+      responses: {
+        201: {
+          description: 'You liked a comment.',
+        },
+        200: {
+          description: 'You loved a comment',
+        },
+        400: {
+          description: 'Bad Request.'
+        },
+        404: {
+          description: 'comment not found.'
+        },
+        500: {
+          description: 'Invalid input.'
+        }
+      }
+    },
+  },
   schemas: {
     body: {
       type: 'object',

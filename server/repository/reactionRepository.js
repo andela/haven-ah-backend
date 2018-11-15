@@ -8,16 +8,17 @@ const { Reaction } = Model;
 class ReactionRepository {
   /**
      * Function to like an article in the database
-     * @param {integer} articleId
-     * @param { integer } userId
-     * @param { integer } reactionType
-     * @returns {integer} article
+     * @param { string } column
+     * @param { integer } id
+     * @param {integer} userId
+     * @param {enum} reactionType
+     * @returns {object}
      ** otherwise it throws an error
      */
-  static async createReaction(articleId, userId, reactionType) {
+  static async createReaction(column, id, userId, reactionType) {
     const reaction = await Reaction.create({
       reactionType,
-      articleId,
+      [column]: id,
       userId
     });
     return reaction;
@@ -25,15 +26,16 @@ class ReactionRepository {
 
   /**
      * Function to remove an action
-     * @param {integer} articleId
+     * @param {string} column
+     * @param {integer} id
      * @param { integer } userId
      * @returns {integer} article
      ** otherwise it throws an error
      */
-  static async removeReaction(articleId, userId) {
+  static async removeReaction(column, id, userId) {
     const removedReaction = await Reaction.destroy({
       where: {
-        articleId,
+        [column]: id,
         userId
       }
     });
@@ -42,15 +44,16 @@ class ReactionRepository {
 
   /**
      * Function to get a action
-     * @param {integer} articleId
+     * @param {column} column
+     * @param {integer} id
      * @param { integer } userId
      * @returns {integer} article
      ** otherwise it throws an error
      */
-  static async getReaction(articleId, userId) {
+  static async getReaction(column, id, userId) {
     const findReaction = await Reaction.findOne({
       where: {
-        articleId,
+        [column]: id,
         userId
       }
     });
@@ -59,20 +62,21 @@ class ReactionRepository {
 
   /**
      * Function to update a action
-     * @param {integer} articleId
+     * @param {string} column
+     * @param {integer} id
      * @param { integer } userId
      * @param { enum } reactionType
      * @returns {integer} article
      ** otherwise it throws an error
      */
-  static async updateReaction(articleId, userId, reactionType) {
+  static async updateReaction(column, id, userId, reactionType) {
     const updatedReaction = await Reaction.update(
       {
         reactionType
       },
       {
         where: {
-          articleId,
+          [column]: id,
           userId
         }
       },
