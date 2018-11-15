@@ -5,19 +5,18 @@ import app from '../../../app';
 import data from '../utilities/mockData';
 import createToken from '../../utilities/jwtGenerator';
 import userRepo from '../../repository/userRepository';
-import commentRepo from '../../repository/commentRepository';
 import articleRepo from '../../repository/articleRepository';
 
 const { expect } = chai;
 chai.use(chaiHttp);
 
 const {
-  jigArticle, xProdigy, goodComment, badComment, goodReply, anotherGoodComment, wizcom, wizComment, articleOne, wizcom2
+  jigArticle, xProdigy, goodComment, badComment, goodReply, anotherGoodComment,
+  wizcom, wizComment, articleOne, sampleArticle1,
 } = data;
 let jwtoken;
 let newUser;
 let newArticle;
-let comment;
 
 describe('Create comment', () => {
   before(async () => {
@@ -382,5 +381,51 @@ describe('comment Reaction:', () => {
       .send({ reactionType: 'Like' });
     expect(response).to.have.status(404);
     expect(response.body.message).to.be.deep.equals('comment not found');
+  });
+});
+
+describe('Get comments', () => {
+  let newArticle1;
+  before(async () => {
+    sampleArticle1.userid = newUser.id;
+    sampleArticle1.readtime = 30;
+    sampleArticle1.slug = slug(`${sampleArticle1.title} ${Date.now()}`);
+    sampleArticle1.images = [
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+    ];
+    newArticle1 = await articleRepo.createArticle(sampleArticle1);
+  });
+  it('should return response if comments are not found', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/articles/${newArticle1.slug}/comments`)
+      .set({
+        'x-access-token': jwtoken,
+      });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('No comments on this article yet');
+  });
+  it('should return comments if they are found', async () => {
+    const response = await chai.request(app)
+      .get(`/api/v1/articles/${newArticle.slug}/comments`)
+      .set({
+        'x-access-token': jwtoken,
+      });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Comments found');
+    expect(response.body.data).to.be.an('array');
+  });
+  it('should not get comments if article does not exist', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/uche-bu-a-guy/comments')
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send(goodComment);
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('This article was not found.');
   });
 });

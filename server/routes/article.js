@@ -10,7 +10,6 @@ import tryCatchWrapper from '../utilities/tryCatchWrapper';
 import checkIfArticleExists from '../middlewares/checkIfArticleExists';
 import isAuthorized from '../middlewares/authorization';
 
-
 const router = new Router();
 
 router.post(
@@ -66,6 +65,12 @@ router.get('/articles/:slug',
   validator.validateSlug,
   isAuthenticated,
   tryCatchWrapper(Article.getArticle));
+
+router.get(
+  '/articles/:slug/comments',
+  checkIfArticleExists,
+  tryCatchWrapper(Comment.getComments),
+);
 
 router.get(
   '/articles/:slug/comments/:id',
