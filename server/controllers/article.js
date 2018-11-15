@@ -171,6 +171,25 @@ class Article {
     }
     return goodHttpResponse(response, 401, 'You cannot deleted this article');
   }
+
+  /**
+   * Search for an article
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} searched articles
+   */
+  static async searchArticle(request, response) {
+    const { author, tag, keywords } = request.query;
+    const foundArticles = await articleRepo.search(keywords, author, tag);
+    if (!foundArticles.length) {
+      return badHttpResponse(
+        response,
+        404,
+        'No article was found for this search term',
+      );
+    }
+    return goodHttpResponse(response, 200, 'Found Articles', foundArticles);
+  }
 }
 
 export default Article;

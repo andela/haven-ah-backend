@@ -6,7 +6,7 @@ export default {
     description: 'An API for AuthorsHaven'
   },
   schemes: ['https'],
-  host: 'https://haven-ah-backend.herokuapp.com',
+  host: 'haven-ah-backend.herokuapp.com',
   basePath: '/api/v1/',
   tags: [
     {
@@ -293,6 +293,7 @@ export default {
     '/users/:username': {
       put: {
         description: 'Update user profile',
+        summary: 'Update user profile',
         parameters: [{
           name: 'x-access-token',
           in: 'header',
@@ -362,6 +363,7 @@ export default {
       },
       get: {
         description: 'Gets user by their username',
+        summary: 'Gets user by their username',
         parameters: [{
           name: 'x-access-token',
           in: 'header',
@@ -399,9 +401,10 @@ export default {
         }
       }
     },
-    '/api/v1/users/opt/notifications': {
+    '/users/opt/notifications': {
       put: {
-        description: 'Auto generated using Swagger Inspector',
+        description: 'User can opt in/out of notifications',
+        summary: 'User can opt in/out of notifications',
         parameters: [{
           name: 'x-access-token',
           in: 'header',
@@ -429,7 +432,7 @@ export default {
         },
         responses: {
           200: {
-            description: 'Auto generated using Swagger Inspector',
+            description: 'You successfully opted in to email notifications',
             content: {
               'application/json; charset=utf-8': {
                 schema: {
@@ -439,6 +442,62 @@ export default {
               }
             }
           }
+        }
+      }
+    },
+    '/articles/search': {
+      get: {
+        description: 'Search for articles and filter by parameters',
+        summary: 'Search for articles and filter by parameters',
+        parameters: [{
+          name: 'keywords',
+          in: 'query',
+          required: false,
+          style: 'form',
+          explode: true,
+          schema: {
+            type: 'string'
+          },
+          example: 'benevolence'
+        }, {
+          name: 'author',
+          in: 'query',
+          required: false,
+          style: 'form',
+          explode: true,
+          schema: {
+            type: 'string'
+          },
+          example: 'ucheg6'
+        }, {
+          name: 'x-access-token',
+          in: 'header',
+          required: false,
+          style: 'simple',
+          explode: false,
+          schema: {
+            type: 'string'
+          },
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQyMjAzOTI4LCJleHAiOjE1NDI4MDg3Mjh9.dVXAzTD_caGNaa004JNlMrT2lHMA2RzRFYRMIu6PkG0'
+        }],
+        responses: {
+          200: {
+            description: 'Auto generated using Swagger Inspector',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          },
+          400: {
+            description: 'Search Term must be provided'
+          },
+          404: {
+            description: 'No article was found for this search term'
+          },
         }
       }
     },
@@ -624,9 +683,10 @@ export default {
         }
       }
     },
-    '/api/v1/auth/google': {
+    '/auth/google': {
       get: {
-        description: 'Auto generated using Swagger Inspector',
+        description: 'login with google',
+        summary: 'login with google',
         responses: {
           200: {
             description: 'Auto generated using Swagger Inspector',
@@ -768,9 +828,10 @@ export default {
         }
       }
     },
-    '/api/v1/auth/facebook': {
+    '/auth/facebook': {
       get: {
-        description: 'Auto generated using Swagger Inspector',
+        description: 'login with facebook',
+        summary: 'login with facebook',
         responses: {
           200: {
             description: 'Auto generated using Swagger Inspector',

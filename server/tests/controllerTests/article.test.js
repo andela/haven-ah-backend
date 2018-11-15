@@ -284,3 +284,70 @@ describe('GET api/v1/articles/:slug', () => {
       .equals('Article deleted');
   });
 });
+
+describe('GET api/v1/articles/search', () => {
+  it('should return articles according to keywords search parameters', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/search?keywords=vanity upon vanity');
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('Found Articles');
+    expect(response.body).to.have.keys('status', 'message', 'data');
+    expect(response.body.data[0]).to.have
+      .keys('id', 'title', 'description', 'images', 'Author', 'userid');
+  });
+
+  it('should return articles according to author search parameters', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/search?author=jigsaw');
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('Found Articles');
+    expect(response.body).to.have.keys('status', 'message', 'data');
+    expect(response.body.data[0].Author).to.have
+      .keys('firstName', 'lastName', 'username', 'imageUrl');
+  });
+
+  it('should return articles according to tag search parameters', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/search?tag=philosophy');
+
+    expect(response.body.message).to.be.deep.equals('Found Articles');
+    expect(response.body).to.have.keys('status', 'message', 'data');
+    expect(response.body.data[0].Author).to.have
+      .keys('firstName', 'lastName', 'username', 'imageUrl');
+  });
+  it('should return error when search term is not provided', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/search');
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep.equals('Search Term must be provided');
+  });
+  it('should return error when search term is not provided', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/search?author=i_amMichael');
+
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep.equals('No article was found for this search term');
+  });
+  it('should return error when author is not a string', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/search?author=3');
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep.equals('Invalid Input');
+  });
+  it('should return error when tag is not a string', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/search?tag=3');
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep.equals('Invalid Input');
+  });
+  it('should return error when keywords is not a string', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/search?keywords=3');
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep.equals('Invalid Input');
+  });
+});
