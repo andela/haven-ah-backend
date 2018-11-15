@@ -1,12 +1,14 @@
 import userRepo from '../repository/userRepository';
 import generateToken from '../utilities/jwtGenerator';
 import passwordUtil from '../utilities/passwordHasher';
-import { goodHttpResponse, badHttpResponse } from '../utilities/httpResponse';
+import { goodHttpResponse, badHttpResponse, paginatedHttpResponse } from '../utilities/httpResponse';
 import emailer from '../services/emailService';
 import confirmEmail from '../emailTemplates/confirmationEmail';
 import { getUrl } from '../utilities/currentEnv';
 import resetTemplate from '../emailTemplates/passwordResetTemplate';
 import followerRepo from '../repository/followUserRepository';
+import articleRepo from '../repository/articleRepository';
+import getPaginationMeta from '../utilities/getPaginationMeta';
 
 const { hash, compare } = passwordUtil;
 /**
@@ -415,6 +417,36 @@ class User {
       200,
       'You successfully opted out of email notifications.',
       updatedNotifications
+    );
+  }
+
+  /**
+  * Gets all the articles read by a user
+  * @param {object} request Request Object
+  * @param {object} response Response Object
+  * @returns {object} Object containing an array of all the articles a
+  */
+  static async getReadingStats(request, response) {
+    const { userId } = request;
+    const limit = parseInt(request.query.limit, 10) || 10;
+    const page = parseInt(request.query.page, 10) || 1;
+    let meta = {};
+
+    const user = await userRepo.getUserByParam('id', userId);
+    if (!user) {
+      return badHttpResponse(
+        response, 404, 'user not found'
+      );
+    }
+    const readArticles = await articleRepo.getReadArticles(user, limit, page);
+    meta = getPaginationMeta(limit, page, readArticles.length);
+    return paginatedHttpResponse(
+      response,
+      200,
+      'Read articles retrieved',
+      {
+        articles: readArticles, meta,
+      }
     );
   }
 }

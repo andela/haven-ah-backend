@@ -61,9 +61,16 @@ export default (sequelize, DataTypes) => {
       as: 'Complaints',
       foreignKey: 'articleId'
     });
+
     Articles.hasMany(models.Reaction, {
       foreignKey: 'articleId',
       as: 'Reactions',
+    });
+
+    Articles.belongsToMany(models.User, {
+      as: 'Readers',
+      foreignKey: 'articleId',
+      through: 'ReadingStat',
     });
   };
   return Articles;

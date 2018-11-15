@@ -126,6 +126,12 @@ describe('Get user by email and username function', () => {
   });
 });
 
+describe('Delete user', () => {
+  it('should return null if user soes not exist', async () => {
+    const result = await userRepo.deleteUser({ username: 'noneExistent' });
+    expect(result).to.be.deep.equals(null);
+  });
+});
 
 describe('Get all users', () => {
   it('should get all users with role as user', async () => {

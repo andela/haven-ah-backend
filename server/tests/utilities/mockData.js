@@ -113,6 +113,20 @@ const data = {
     password: 'weirdo',
     email: 'wizardry@gmail.com',
   },
+  newReader: {
+    firstName: 'Sample',
+    lastName: 'User',
+    username: 'da_reader',
+    password: 'password',
+    email: 'sample@gmail.com',
+  },
+  diablo: {
+    firstName: 'Sample',
+    lastName: 'User',
+    username: 'diablo',
+    password: 'password',
+    email: 'diablo@gmail.com',
+  },
   jigsawArticle: {
     title: 'Vanity upon vanity',
     slug: 'Vanity-upon-vanity-201811234497',
