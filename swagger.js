@@ -233,38 +233,6 @@ export default {
         }
       }
     },
-    '/users/google': {
-      get: {
-        tags: ['Auth'],
-        summary: 'Login using Google OAUTH',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'x-access-token',
-            in: 'header',
-            description: 'Authorization token',
-            required: true,
-            type: 'string'
-          }
-        ]
-      }
-    },
-    '/users/facebook': {
-      get: {
-        tags: ['Auth'],
-        summary: 'Login using Facebook OAUTH',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'x-access-token',
-            in: 'header',
-            description: 'Authorization token',
-            required: true,
-            type: 'string'
-          }
-        ]
-      }
-    },
     '/users': {
       get: {
         tags: ['Auth'],
@@ -680,6 +648,39 @@ export default {
           404: {
             description: 'User not found'
           }
+        }
+      }
+    },
+    '/profiles/user/followers': {
+      get: {
+        description: 'Get all followers for a user',
+        summary: 'Get all followers for a user',
+        parameters: [{
+          name: 'x-access-token',
+          in: 'header',
+          required: false,
+          style: 'simple',
+          explode: false,
+          schema: {
+            type: 'string'
+          },
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQyMjk3ODgwLCJleHAiOjE1NDI5MDI2ODB9.oed6dejq7G_sv53zqs56h7jVP2wzBg8jHA5cZw2sfCU'
+        }],
+        responses: {
+          200: {
+            description: 'Followers retrieved',
+            content: {
+              'application/json; charset=utf-8': {
+                schema: {
+                  type: 'string'
+                },
+                examples: { }
+              }
+            }
+          },
+          404: {
+            description: 'Followers not found'
+          },
         }
       }
     },

@@ -33,6 +33,7 @@ router.put('/users/opt/notifications/', isAuthenticated, tryCatchWrapper(User.op
 
 router.post('/profiles/:username/follow', isAuthenticated, validator.validateUsername, tryCatchWrapper(User.follow));
 router.delete('/profiles/:username/follow', isAuthenticated, validator.validateUsername, tryCatchWrapper(User.unfollow));
+router.get('/profiles/user/followers', isAuthenticated, tryCatchWrapper(User.getUserFollowers));
 
 router.get('/users/articles/read', isAuthenticated, tryCatchWrapper(User.getReadingStats));
 router.get('/auth/facebook', facebookRoutes.authenticate('facebook'));

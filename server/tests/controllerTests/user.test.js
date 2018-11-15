@@ -9,7 +9,7 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 const {
-  theo, diablo, sull, dan, noPassword, noEmail, wrongPassword,
+  theo, diablo, sull, dan, uche, noPassword, noEmail, wrongPassword,
   wrongEmail, goodUserUpdate, userUpdate,
   badUserUpdate, badBioUpdate, badImageUpdate1, badImageUpdate2, noImageUpdate, usernameUpdate,
 } = data;
@@ -19,8 +19,10 @@ const signinRoute = '/api/v1/users/signin';
 const fakeToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
   + '.eyJpZCI6NCwiaWF0IjoxNTM5MDIxMjY1LCJleHAiOjE1Mzk2MjYwNjV9'
   + '.ErGsV_EppHmfSdvAGBkmVwL_BjGdujyLh7k1wkG_vXo';
+const xToken = generateToken(1000);
 
 let newUser = '';
+let ucheUser = '';
 let token = '';
 let testUser = '';
 let danToken = '';
@@ -28,6 +30,7 @@ let theoToken = '';
 let diabloUser = '';
 let diabloToken = '';
 let deleteToken = '';
+let ucheToken = '';
 
 before(async () => {
   testUser = await userRepo.createUser(dan);
@@ -38,6 +41,9 @@ before(async () => {
   theoToken = await generateToken('theo@gmail.com');
   diabloToken = await generateToken(diabloUser.id);
   deleteToken = generateToken('theodore@gmail.com');
+  ucheUser = await userRepo.createUser(uche);
+  token = generateToken(newUser.id);
+  ucheToken = await generateToken(ucheUser.id);
 });
 
 describe('POST api/v1/users/signup', () => {
@@ -245,6 +251,16 @@ describe('UPDATE api/v1/users/:username', () => {
       .equals('You need to sign in first');
   });
 
+  it('should not update user if requester is unauthorised', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/users/i_amtheo')
+      .set('x-access-token', xToken)
+      .send(goodUserUpdate);
+    expect(response.status).to.be.equal(401);
+    expect(response.body.message).to.be.deep
+      .equals('You are not permitted to complete this action');
+  });
+
   it('should update user and return data', async () => {
     const response = await chai.request(app)
       .put('/api/v1/users/i_amtheo')
@@ -383,6 +399,18 @@ describe('POST api/v1/profiles/:username/follow', () => {
       .equals('You have followed this user.');
   });
 
+  it('should return followers for this user', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/profiles/user/followers')
+      .set({
+        'x-access-token': danToken,
+      });
+
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Followers retrieved');
+  });
+
   it('should return error if user has been previously followed', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/profiles/${dan.username}/follow`)
@@ -506,7 +534,6 @@ describe('PUT api/v1/opt/notifications', () => {
       .equals(false);
   });
 });
-
 describe('GET api/v1/users/articles/read', () => {
   it('should return user\'s reading stats', async () => {
     await chai.request(app)
@@ -534,5 +561,30 @@ describe('GET api/v1/users/articles/read', () => {
       .set({ 'x-access-token': diabloToken, });
     expect(response).to.have.status(404);
     expect(response.body.message).to.equal('user not found');
+  });
+});
+
+describe('PUT api/v1/profiles/user/followers', () => {
+  it('should return error message if user does not exist', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/profiles/user/followers')
+      .set({
+        'x-access-token': danToken,
+      });
+
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('User not found');
+  });
+  it('should return error message if followers does not exist for this user', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/profiles/user/followers')
+      .set({
+        'x-access-token': ucheToken,
+      });
+
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('Followers not found');
   });
 });
