@@ -55,6 +55,11 @@ router.put(
   isAuthorized.comment,
   tryCatchWrapper(Comment.updateComment),
 );
+router.get(
+  '/articles/search',
+  inputValidator.searchValidator,
+  tryCatchWrapper(Article.searchArticle)
+);
 
 router.get('/articles/:slug',
   validator.validateSlug,

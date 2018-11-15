@@ -235,6 +235,61 @@ class inputValidator {
     request.params.id = id;
     return next();
   }
+
+  /**
+   * @description searchValidator
+   * @param {object} request http request object
+   * @param {object} response http response object
+   * @param {object} next callback function
+   * @returns {object} http response object
+   */
+  static searchValidator(request, response, next) {
+    const {
+      author, tag, keywords
+    } = request.query;
+    const stringPattern = {
+      type: 'string',
+      pattern: /[a-zA-Z]+[0-9]*/,
+    };
+    if (
+      !author && !tag && !keywords
+    ) {
+      return badHttpResponse(
+        response,
+        400,
+        'Search Term must be provided'
+      );
+    }
+    if (
+      keywords && !stringPattern.pattern.test(keywords)
+    ) {
+      return badHttpResponse(
+        response,
+        400,
+        'Invalid Input'
+      );
+    }
+
+    if (
+      author && !stringPattern.pattern.test(author)
+    ) {
+      return badHttpResponse(
+        response,
+        400,
+        'Invalid Input'
+      );
+    }
+    if (
+      tag && !stringPattern.pattern.test(tag)
+    ) {
+      return badHttpResponse(
+        response,
+        400,
+        'Invalid Input'
+      );
+    }
+    next();
+  }
 }
 
 export default inputValidator;

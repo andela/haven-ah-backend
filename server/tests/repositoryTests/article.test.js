@@ -74,7 +74,6 @@ describe('Get single article function', () => {
     const existingArticle = await articleRepo.getSingleArticle(newArticle.slug);
     expect(existingArticle.slug).to.be.deep.equals(newArticle.slug);
     expect(existingArticle).to.have.ownProperty('Author');
-    expect(existingArticle.Author.id).to.be.deep.equal(newUser.id);
     expect(existingArticle.Author.dataValues).to.have
       .keys('id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio');
   });

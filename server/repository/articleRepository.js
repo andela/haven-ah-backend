@@ -3,6 +3,7 @@ import getPaginationMeta from '../utilities/getPaginationMeta';
 
 const {
   Articles, Complaint, ReadingStat,
+  User, sequelize
 } = Model;
 
 /**
@@ -166,6 +167,86 @@ class ArticleRepository {
       };
     }).sort((a1, a2) => a1.timeRead < a2.timeRead);
     return articles;
+  }
+
+  /**
+   * Find an article by the slug and include user information
+   * @param {string} keywords Article keywords to search by
+   * @param {string} author Article author  to search by
+   * @param {string} tag Article tag to search by
+   * @returns {object} Article or null if article is not found
+   */
+  static async search(keywords, author, tag) {
+    if (keywords) keywords = keywords.split(' ').join();
+    let mainQuery = `
+      SELECT DISTINCT "Articles".id, "Articles".title, "Articles".description, "Articles".images, "Articles".userid
+      FROM "Articles"
+      {tagQuery}{authorQuery}
+      {authorCon}
+      {tagCon}
+      {search}
+      ORDER BY id DESC LIMIT 10;
+    `;
+
+    const authorQuery = {
+      query: `
+        INNER JOIN "Users" ON "Users"."id" = "Articles"."userid"
+      `,
+      condition: `
+        AND "Users"."username" = '${author}'
+      `
+    };
+
+    const tagQuery = {
+      query: `
+        INNER JOIN "ArticleTags" ON "ArticleTags"."articleId" = "Articles"."id"
+        INNER JOIN "Tags" ON "Tags"."id" = "ArticleTags"."tagId"
+      `,
+      condition: `
+        WHERE "Tags"."tagName" = '${tag}'
+      `
+    };
+
+    const searchQuery = `
+     ${tag || author ? 'AND' : 'WHERE'} "Articles"."searchVectors" @@ to_tsquery('${keywords}')
+    `;
+
+    if (author) {
+      mainQuery = mainQuery
+        .replace('{authorQuery}', `${authorQuery.query}`)
+        .replace('{authorCon}', `${authorQuery.condition}`);
+    } else {
+      mainQuery = mainQuery
+        .replace('{authorQuery}', '')
+        .replace('{authorCon}', '');
+    }
+
+    if (tag) {
+      mainQuery = mainQuery
+        .replace('{tagQuery}', `${tagQuery.query}`)
+        .replace('{tagCon}', `${tagQuery.condition}`);
+    } else {
+      mainQuery = mainQuery
+        .replace('{tagQuery}', '')
+        .replace('{tagCon}', '');
+    }
+
+    if (keywords) {
+      mainQuery = mainQuery.replace('{search}', `${searchQuery}`);
+    } else {
+      mainQuery = mainQuery.replace('{search}', '');
+    }
+
+    const keywordsResults = await sequelize.query(mainQuery, { type: sequelize.QueryTypes.SELECT });
+    await Promise.all(keywordsResults.map(async (result) => {
+      const Author = await User.findByPk(result.userid, {
+        attributes: ['firstName', 'lastName', 'username', 'imageUrl']
+      });
+      result.Author = Author;
+    }));
+
+
+    return keywordsResults;
   }
 }
 

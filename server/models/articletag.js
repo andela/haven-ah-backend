@@ -3,11 +3,5 @@ export default (sequelize, DataTypes) => {
     tagId: DataTypes.INTEGER,
     articleId: DataTypes.INTEGER
   }, {});
-  ArticleTag.associate = (models) => {
-    ArticleTag.belongsTo(models.Articles, {
-      foreignKey: 'articleid',
-      onDelete: 'CASCADE',
-    });
-  };
   return ArticleTag;
 };
