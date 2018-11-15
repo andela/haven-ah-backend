@@ -1065,6 +1065,33 @@ export default {
         }
       },
     },
+    '/users/:username/bookmarks/:slug/:id': {
+      post: {
+        tags: ['Bookmark'],
+        summary: 'Bookmark an article',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'userId',
+            in: 'path',
+            description: 'Bookmark id',
+            required: true,
+            type: 'integer'
+          },
+        ],
+        description: 'Returns success message.',
+        responses: {
+          202: {
+            description:
+              'bookmark successfully removed'
+          },
+          404: {
+            description:
+              'We could not find this bookmark',
+          }
+        }
+      },
+    },
     '/admin/users/roles': {
       put: {
         tags: ['Roles'],

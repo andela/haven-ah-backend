@@ -19,6 +19,7 @@ class Bookmark {
 
   /**
    * Get all user bookmarked articles
+   * un-bookmark an article
    * @param {object} request Request Object
    * @param {object} response Response Object
    * @returns {object} User Object
@@ -40,6 +41,19 @@ class Bookmark {
       'Bookmarked Articles retrieved',
       foundArticles
     );
+  }
+
+  /**
+   * un-bookmark an article
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} User Object
+   */
+  static async unbookmarkArticle(request, response) {
+    const { id } = request.params;
+
+    const unbookmarked = await bookmarkRepo.deleteBookmark(id);
+    return goodHttpResponse(response, 202, 'bookmark successfully removed', { unbookmarked });
   }
 }
 

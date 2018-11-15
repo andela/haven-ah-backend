@@ -51,6 +51,36 @@ class BookmarkRepository {
       bookmarks: bookmarkedArticles.rows,
     };
   }
+
+  /**
+   * Function to find a bookmark to article with the id
+   * @param { integer } id
+   * @returns {object} bookmark object
+   ** otherwise it throws an error
+   */
+  static async findBookmark(id) {
+    const bookmark = await Bookmark.findOne({
+      where: {
+        id,
+      }
+    });
+    return bookmark;
+  }
+
+  /**
+   * Function to find a bookmark to article with the id
+   * @param { integer } id
+   * @returns {object} bookmark object
+   ** otherwise it throws an error
+   */
+  static async deleteBookmark(id) {
+    const unbookmark = await Bookmark.destroy({
+      where: {
+        id,
+      }
+    });
+    return unbookmark;
+  }
 }
 
 export default BookmarkRepository;
