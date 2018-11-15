@@ -190,6 +190,35 @@ class Article {
     }
     return goodHttpResponse(response, 200, 'Found Articles', foundArticles);
   }
+
+  /**
+   * Update an article
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} User Object
+   */
+  static async updateArticle(request, response) {
+    const { id } = request.article;
+    const {
+      title,
+      body,
+      description,
+      images,
+    } = request.body;
+    const readtime = Math.floor(body.split(' ').length / 3);
+
+    const updatedArticle = await articleRepo.updateArticle(
+      {
+        title,
+        body,
+        description,
+        readtime,
+        images: images ? images.split(',') : [],
+      },
+      id,
+    );
+    return goodHttpResponse(response, 200, 'Article Updated', updatedArticle);
+  }
 }
 
 export default Article;

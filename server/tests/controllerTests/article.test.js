@@ -9,7 +9,7 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 const {
-  jigArticle, jigsaw, complaint, invalidComplaint, sampleComplaint,
+  jigArticle, jigsaw, complaint, invalidComplaint, sampleComplaint, badJigArticle,
 } = data;
 
 let jwtoken;
@@ -46,6 +46,19 @@ describe('Post a new article:', () => {
     expect(response).to.have.status(201);
     expect(response.body.message).to.be.deep
       .equals('Article Created');
+  });
+
+  it('should not post a new article if a field is missing', async () => {
+    const response = await chai.request(app)
+      .post('/api/v1/articles')
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send(badJigArticle);
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('Incomplete fields');
   });
 
   it('should deny access to non existent user', async () => {
@@ -236,6 +249,31 @@ describe('POST /api/v1/articles/:slug/complaints', () => {
     expect(response).to.have.status(201);
     expect(response.body.message).to.be.deep
       .equals('You have logged a complaint on this article.');
+  });
+});
+
+describe('PATCH api/v1/articles/:slug', () => {
+  it('should update an article in the database', async () => {
+    const response = await chai.request(app)
+      .patch(`/api/v1/articles/${jigSlug}`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send(jigArticle);
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Article Updated');
+  });
+  it('should deny access if user is not authorised', async () => {
+    const response = await chai.request(app)
+      .patch(`/api/v1/articles/${jigSlug}`)
+      .set({
+        'x-access-token': invalidUserToken,
+      })
+      .send(jigArticle);
+    expect(response).to.have.status(401);
+    expect(response.body.message).to.be.deep
+      .equals('You are not permitted to complete this action');
   });
 });
 
