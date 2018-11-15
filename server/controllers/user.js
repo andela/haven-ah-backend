@@ -401,17 +401,16 @@ class User {
       updatedNotifications = await foundUser.update({
         allowNotifications: true,
       });
-      goodHttpResponse(
+      return goodHttpResponse(
         response,
         200,
         'You successfully opted in to email notifications.',
         updatedNotifications
       );
-    } else {
-      updatedNotifications = await foundUser.update({
-        allowNotifications: false,
-      });
     }
+    updatedNotifications = await foundUser.update({
+      allowNotifications: false,
+    });
     return goodHttpResponse(
       response,
       200,
@@ -447,6 +446,39 @@ class User {
       {
         articles: readArticles, meta,
       }
+    );
+  }
+
+  /**
+   * Get all user followers
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Error if operation was unsuccessful or success response
+   * if operation was successful
+   */
+  static async getUserFollowers(request, response) {
+    const { userId } = request;
+    const user = await userRepo.getUserByParam('id', userId);
+    if (!user) {
+      return badHttpResponse(
+        response,
+        404,
+        'User not found'
+      );
+    }
+    const Userfollowers = await followerRepo.followers(user);
+    if (!Userfollowers.length) {
+      return badHttpResponse(
+        response,
+        404,
+        'Followers not found'
+      );
+    }
+    return goodHttpResponse(
+      response,
+      200,
+      'Followers retrieved',
+      Userfollowers
     );
   }
 }

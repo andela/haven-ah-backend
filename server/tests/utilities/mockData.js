@@ -13,6 +13,13 @@ const data = {
     password: 'password',
     email: 'joe@gmail.com',
   },
+  uche: {
+    firstName: 'uche',
+    lastName: 'akogwu',
+    username: 'uchmoney',
+    password: 'password',
+    email: 'uche@gmail.com',
+  },
   dan: {
     firstName: 'Daniel',
     lastName: 'Doe',
