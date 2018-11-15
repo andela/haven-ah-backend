@@ -1,7 +1,10 @@
 import paramValidator from './paramsValidator';
-import { LIKE, DISLIKE, LOVE } from '../utilities/reactionConstant';
+import { LIKE, LOVE } from '../utilities/reactionConstant';
 
-const numberPattern = /^[0-9]+$/;
+const numberPattern = {
+  type: 'number',
+  pattern: /^[0-9]+$/
+};
 
 const stringPattern = {
   type: 'string',
@@ -21,7 +24,7 @@ const complaintEnum = {
 const roleEnum = {
   type: 'enum',
   pattern: ['admin', 'user', 'superadmin']
-}
+};
 
 const reactionEnum = {
   type: 'enum',
@@ -69,7 +72,13 @@ const validator = {
       role: roleEnum,
       username: usernamePattern
     }
-  })
+  }),
+  validateCommentParams: paramValidator({
+    params: {
+      slug: slugPattern,
+      id: numberPattern
+    },
+  }),
 };
 
 export default validator;

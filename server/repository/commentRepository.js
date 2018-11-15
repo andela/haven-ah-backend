@@ -22,7 +22,7 @@ class CommentRepository {
    * Function to get a comment from the database
    * @param {object} id number
    * @returns {object} comment object
-   * otherwise it throws an error
+   * otherwise it returns null
    */
   static async getComment(id) {
     const commentRecord = await Comment.findOne({
@@ -121,6 +121,43 @@ class CommentRepository {
     const comments = commentRecords.map(comment => comment.dataValues);
     comments.meta = getPaginationMeta(limit, page, count);
     return comments;
+  }
+
+  /**
+    * Function to get a comment from the database
+   * @param {object} id number
+   * @returns {object} comment object
+   * otherwise it returns null
+   */
+  static async getOnlyComment(id) {
+    const comment = await Comment.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!comment) {
+      return null;
+    }
+    return comment;
+  }
+
+  /**
+   * Marks a comment as deleted
+   * @param {number} comment Comment object
+   * @returns {object} something
+   */
+  static async deleteComment(comment) {
+    const deletedComment = await comment.update(
+      {
+        isDeleted: true,
+      },
+      {
+        returning: true
+      }
+    );
+
+    return deletedComment;
   }
 }
 

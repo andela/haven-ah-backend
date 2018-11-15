@@ -4,18 +4,18 @@ import inputValidator from '../middlewares/validations';
 import Comment from '../controllers/comment';
 import Reactions from '../controllers/reaction';
 import isAuthenticated from '../middlewares/checkAuth';
-import isPermitted from '../middlewares/checkPermissions';
 import validator from '../middlewares/paramChecker';
 import tryCatchWrapper from '../utilities/tryCatchWrapper';
 import checkIfArticleExists from '../middlewares/checkIfArticleExists';
 import isAuthorized from '../middlewares/authorization';
+import checkPermissions from '../middlewares/checkPermissions';
 
 const router = new Router();
 
 router.post(
   '/articles',
   isAuthenticated,
-  isPermitted,
+  checkPermissions,
   inputValidator.articleValidator,
   tryCatchWrapper(Article.createArticle)
 );
@@ -95,4 +95,12 @@ router.post(
 );
 router.get('/articles/:slug', validator.validateSlug, tryCatchWrapper(Article.getArticle));
 
+router.delete(
+  '/articles/:slug/comments/:id',
+  isAuthenticated,
+  checkPermissions,
+  validator.validateCommentParams,
+  checkIfArticleExists,
+  tryCatchWrapper(Comment.deleteComment),
+);
 export default router;
