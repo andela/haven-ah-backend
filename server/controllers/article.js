@@ -172,7 +172,7 @@ class Article {
       await articleRepo.deleteArticle(article.dataValues);
       return goodHttpResponse(response, 202, 'Article deleted');
     }
-    return goodHttpResponse(response, 401, 'You cannot deleted this article');
+    return goodHttpResponse(response, 401, 'You cannot delete this article');
   }
 
   /**
@@ -224,6 +224,7 @@ class Article {
   }
 
   /**
+<<<<<<< HEAD
    * Set an article as article of the day
    * Get trending articles on the platform
    * @param {object} request Request Object
@@ -357,6 +358,36 @@ class Article {
 
 
     return goodHttpResponse(response, 200, 'Returned successfully', articles);
+  }
+
+  /**
+   *  get deleted articles
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} deleted articles
+   */
+  static async getDeletedArticles(request, response) {
+    const deletedArticles = await articleRepo.getDeletedArticles();
+    const message = deletedArticles.length === 0 ? 'None deleted yet' : 'deleted articles found';
+    return goodHttpResponse(response, 200, message, deletedArticles);
+  }
+
+  /**
+   * get deleted articles
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} deleted articles
+   */
+  static async restoreDeletedArticle(request, response) {
+    const articleSlug = request.params.slug;
+    const findArticle = await articleRepo.getArticleBySlug(articleSlug);
+    if (findArticle.isDeleted === false) {
+      return badHttpResponse(response, 400, 'Cant restore an existing article');
+    }
+    const undeleteUpdate = await findArticle.update({
+      isDeleted: false
+    });
+    return goodHttpResponse(response, 200, 'Article restored', undeleteUpdate);
   }
 }
 

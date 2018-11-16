@@ -4,16 +4,19 @@ import app from '../../../app';
 import data from '../utilities/mockData';
 import createToken from '../../utilities/jwtGenerator';
 import userRepo from '../../repository/userRepository';
+import articleRepo from '../../repository/articleRepository';
 
 const { expect } = chai;
 chai.use(chaiHttp);
 
 const {
   jigArticle, jigsaw, complaint, invalidComplaint, sampleComplaint, badJigArticle,
+  articleTrue2, sick, adminWiz
 } = data;
-const adminToken = createToken(2);
+let adminToken = createToken(2);
 let jwtoken;
 let newUser;
+let newUser2;
 let jigSlug;
 let invalidUserToken;
 
@@ -59,6 +62,21 @@ describe('Post a new article:', () => {
     expect(response).to.have.status(400);
     expect(response.body.message).to.be.deep
       .equals('Incomplete fields');
+  });
+
+  it('should post a new article in the database', async () => {
+    const response = await chai.request(app)
+      .post('/api/v1/articles')
+      .set({
+        'x-access-token': createToken(4),
+      })
+      .send(jigArticle);
+
+    jigSlug = response.body.data.slug;
+
+    expect(response).to.have.status(201);
+    expect(response.body.message).to.be.deep
+      .equals('Article Created');
   });
 
   it('should deny access to non existent user', async () => {
@@ -369,7 +387,7 @@ describe('GET api/v1/articles/:slug', () => {
 
     expect(response).to.have.status(401);
     expect(response.body.message).to.be.deep
-      .equals('You cannot deleted this article');
+      .equals('You cannot delete this article');
   });
 
   it('should delete a single article from the database', async () => {
@@ -456,9 +474,54 @@ describe('Should return trending articles', () => {
   it('should return an array of trending articles', async () => {
     const response = await chai.request(app)
       .get('/api/v1/articles/trending');
-
     expect(response).to.have.status(200);
     expect(response.body.data).to.be.an('array');
     expect(response.body.message).to.be.deep.equals('Returned successfully');
+  });
+});
+let someone;
+let articleSlug;
+let article;
+before(async () => {
+  newUser2 = await userRepo.createUser(sick, 'user');
+  jwtoken = createToken(newUser2.id);
+  invalidUserToken = createToken(2000);
+  someone = await userRepo.createUser(adminWiz, 'admin');
+  adminToken = createToken(someone.id);
+
+  article = await articleRepo.createArticle(articleTrue2);
+  articleSlug = article.slug;
+  await articleRepo.deleteArticle(article);
+});
+describe('GET api/v1/articles/restore', () => {
+  it('should list deleted article', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/admin/articles/archived')
+      .set({
+        'x-access-token': adminToken
+      });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('deleted articles found');
+  });
+});
+
+describe('PUT api/v1/articles/restore', () => {
+  it('should restore a deleted article', async () => {
+    const response = await chai.request(app)
+      .put(`/api/v1/admin/articles/${articleSlug}/restore`)
+      .set({
+        'x-access-token': adminToken
+      });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('Article restored');
+  });
+  it('should not restore an already deleted article', async () => {
+    const response = await chai.request(app)
+      .put(`/api/v1/admin/articles/${articleSlug}/restore`)
+      .set({
+        'x-access-token': adminToken
+      });
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep.equals('Cant restore an existing article');
   });
 });
