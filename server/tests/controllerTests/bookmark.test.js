@@ -16,7 +16,7 @@ let article;
 
 describe('Create a bookmark:', () => {
   before(async () => {
-    newUser = await userRepo.createUser(sullivan);
+    newUser = await userRepo.createUser(sullivan, 'user');
     jwtoken = createToken(newUser.id);
     sulliArt.userid = newUser.id;
     article = await articleRepo.createArticle(sulliArt);

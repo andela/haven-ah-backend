@@ -14,7 +14,7 @@ after(async () => {
 let newUser;
 
 before(async () => {
-  newUser = await userRepo.createUser(priscilla);
+  newUser = await userRepo.createUser(priscilla, 'user');
 });
 
 describe('Get user by param', () => {
@@ -76,7 +76,7 @@ describe('Get user by param', () => {
 
 describe('Create user function', () => {
   it('should create a new user with a user role', async () => {
-    const registeredUser = await userRepo.createUser(joe);
+    const registeredUser = await userRepo.createUser(joe, 'user');
 
     expect(userRepo.createUser).to.be.a('function');
     expect(registeredUser).to.be.an('object');
@@ -170,7 +170,7 @@ describe('Confirm email function', () => {
 
 describe('Update user by username', () => {
   before(async () => {
-    newUser = await userRepo.createUser(michael);
+    newUser = await userRepo.createUser(michael, 'user');
   });
 
   it('should return true after update', async () => {

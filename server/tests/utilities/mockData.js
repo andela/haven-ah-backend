@@ -85,6 +85,13 @@ const data = {
     email: 'wrongemail@gg.com',
     password: '1234567890',
   },
+  superadmin: {
+    firstName: 'Admin',
+    lastName: 'Super',
+    username: 'i_amsuperadmin',
+    password: 'password',
+    email: 'admin_super@gmail.com',
+  },
   admin: {
     firstName: 'Admin',
     lastName: 'Doe',

@@ -10,7 +10,7 @@ let history, comment, comments;
 describe('Create comment', () => {
   before(async () => {
     goodComment.articleId = 1;
-    const user = await userRepo.createUser(xtremeCassey);
+    const user = await userRepo.createUser(xtremeCassey, 'user');
     goodComment.userId = user.id;
     comment = await commentRepo.createComment(goodComment);
   });

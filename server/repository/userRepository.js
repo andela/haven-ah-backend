@@ -29,10 +29,11 @@ class UserRepository {
   /**
    * Function to create a user entity in the database
    * @param {object} user User object
+   * @param {string} role User role
    * @returns {object} User object
    */
-  static async createUser(user) {
-    user.role = 'user';
+  static async createUser(user, role) {
+    user.role = role;
     const newUser = await User.create(user);
     return newUser;
   }

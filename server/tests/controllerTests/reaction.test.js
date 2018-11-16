@@ -16,7 +16,7 @@ let article;
 
 describe('Article Reaction:', () => {
   before(async () => {
-    newUser = await userRepo.createUser(wizzy);
+    newUser = await userRepo.createUser(wizzy, 'user');
     jwtoken = createToken(newUser.id);
     wisdomArt.userid = newUser.id;
     article = await articleRepo.createArticle(wisdomArt);
