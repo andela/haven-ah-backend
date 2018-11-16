@@ -6,6 +6,7 @@ import data from '../utilities/mockData';
 import generateToken from '../../utilities/jwtGenerator';
 import app from '../../../app';
 import notificationRepo from '../../repository/notificationRepository';
+import notifiers from '../../services/notifiers';
 
 const {
   theo, sull, priscilla, dummyNotifications
@@ -25,11 +26,11 @@ describe('function to follow a user', async () => {
     expect(newFollower).to.be.an('array');
   });
 
-  it('should turn on sullivans notification statuis', async () => {
+  it('should turn on sullivans notification status', async () => {
     const response = await chai.request(app)
       .put('/api/v1/users/opt/notifications')
       .set({
-        'x-access-token': generateToken(10),
+        'x-access-token': generateToken(13),
       });
     expect(response).to.have.status(200);
     expect(response.body.message).to.be.deep
@@ -63,6 +64,35 @@ describe('function to follow a user', async () => {
 
     expect(existingFollowerError.message).to.be.deep
       .equals('Sorry. You already follow this user');
+  });
+});
+
+describe('Notifiers test:', () => {
+  it('should be a function', async () => {
+    expect(notifiers.articleNotifier).to.be.a('function');
+    expect(notifiers.commentNotifier).to.be.a('function');
+    expect(notifiers.reactionNotifier).to.be.a('function');
+  });
+
+  it('should send notification and return emails of associated users', async () => {
+    const firstMailInformation = await notifiers.articleNotifier(
+      dummyNotifications.newArticle,
+      'dummy message',
+      'dummy title'
+    );
+    const secondMailInformation = await notifiers.commentNotifier(
+      dummyNotifications.newComment,
+      'dummy message',
+      'dummy title'
+    );
+    const thirdMailInformation = await notifiers.reactionNotifier(
+      dummyNotifications.newReaction,
+      'dummy message',
+      'dummy title'
+    );
+    expect(firstMailInformation.accepted.length).to.equal(1);
+    expect(secondMailInformation.accepted.length).to.equal(1);
+    expect(thirdMailInformation.accepted.length).to.equal(1);
   });
 });
 

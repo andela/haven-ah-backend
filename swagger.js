@@ -1097,6 +1097,58 @@ export default {
         }
       },
     },
+    '/admin/users/complaints': {
+      get: {
+        tags: ['Complaints Admin'],
+        summary: 'Get complaints',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: true,
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'Complaints retrieved'
+          }
+        }
+      },
+    },
+    '/admin/users/complaints/:complaintId/reply': {
+      put: {
+        tags: ['Complaints Admin'],
+        summary: 'Reply complaints',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: true,
+            type: 'string'
+          },
+          {
+            name: 'reply',
+            in: 'formData',
+            description: 'Response to complaints',
+            required: true,
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'Complaint addressed'
+          },
+          404: {
+            description: 'Complaint not found'
+          }
+        }
+      },
+    },
   },
   components: {
     schemas: {

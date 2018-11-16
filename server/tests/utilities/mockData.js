@@ -470,7 +470,7 @@ const data = {
   dummyNotifications: {
     newComment: {
       userId: 2,
-      articleId: 7,
+      articleId: 9,
       type: 'NEW_COMMENT_UPDATE',
       content: 'A new comment has been posted'
     },
@@ -482,7 +482,7 @@ const data = {
     },
     newReaction: {
       userId: 2,
-      articleId: 7,
+      articleId: 9,
       type: 'NEW_REACTION_UPDATE',
       content: 'A user reacted on an article you currently follow'
     },
