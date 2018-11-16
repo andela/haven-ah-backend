@@ -1,12 +1,14 @@
 import dotenv from 'dotenv';
 import passwordUtil from '../utilities/passwordHasher';
+import users from '../seedData/users.data';
+
 
 dotenv.config();
 
 const { hash } = passwordUtil;
 
 export default {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface) => {
     const hashedPassword = await hash(process.env.ADMIN_PASSWORD);
     return queryInterface.bulkInsert('Users', [{
       firstName: process.env.ADMIN_FIRSTNAME,
@@ -18,8 +20,8 @@ export default {
       isConfirmed: 'true',
       createdAt: new Date(),
       updatedAt: new Date(),
-    }], {});
+    }, ...users], {});
   },
 
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Users', null, {}),
+  down: queryInterface => queryInterface.bulkDelete('Users', null, {}),
 };
