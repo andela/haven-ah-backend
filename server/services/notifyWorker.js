@@ -32,7 +32,9 @@ export default async (notification) => {
   }
 
   if (mailInformation && mailInformation.accepted.length > 0) {
-    await notification.destroy();
+    await notification.update({
+      isSent: true
+    });
     return true;
   }
   return false;
