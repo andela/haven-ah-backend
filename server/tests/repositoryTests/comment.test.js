@@ -43,3 +43,17 @@ describe('Get comments for article', () => {
     expect(comments[0]).to.haveOwnProperty('parentId');
   });
 });
+
+describe('Delete Comment', () => {
+  it('should return null if comment does not exist', async () => {
+    const existingComment = await commentRepo.getOnlyComment(20);
+    expect(existingComment).to.be.deep.equal(null);
+  });
+
+  it('should mark a comment as isDeleted', async () => {
+    const existingComment = await commentRepo.getOnlyComment(1);
+    const deletedComment = await commentRepo.deleteComment(existingComment);
+
+    expect(deletedComment.isDeleted).to.be.deep.equal(true);
+  });
+});

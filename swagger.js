@@ -844,7 +844,44 @@ export default {
             description: 'There was an internal error'
           }
         }
-      }
+      },
+      delete: {
+        tags: ['Article'],
+        summary: 'Delete comment',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'slug',
+            in: 'path',
+            description: 'The slug of the article',
+            required: true,
+            type: 'string'
+          },
+          {
+            name: 'id',
+            in: 'path',
+            description: 'Id of comment to delete',
+            required: true,
+            type: 'integer',
+            format: 'int64'
+          }
+        ],
+        description: 'Returns deleted comment on success.',
+        responses: {
+          200: {
+            description: 'Comment deleted'
+          },
+          404: {
+            description: 'We could not find this comment'
+          },
+          403: {
+            description: 'Sorry, you can not perform this operation.'
+          },
+          400: {
+            description: 'Sorry, this comment is being accessed wrongly.'
+          }
+        }
+      },
     },
     '/auth/facebook': {
       get: {

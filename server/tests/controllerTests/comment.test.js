@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 
 const {
   jigArticle, xProdigy, goodComment, badComment, goodReply, anotherGoodComment,
-  wizcom, wizComment, articleOne, sampleArticle1,
+  wizcom, wizComment, articleOne, sampleArticle1, sulliArt
 } = data;
 let jwtoken;
 let newUser;
@@ -32,6 +32,7 @@ describe('Create comment', () => {
     ];
     newArticle = await articleRepo.createArticle(jigArticle);
   });
+
   it('should post a new comment in the database', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments`)
@@ -39,10 +40,12 @@ describe('Create comment', () => {
         'x-access-token': jwtoken,
       })
       .send(goodComment);
+
     expect(response).to.have.status(201);
     expect(response.body.message).to.be.deep
       .equals('Comment created');
   });
+
   it('should post a new comment in the database', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments`)
@@ -54,6 +57,7 @@ describe('Create comment', () => {
     expect(response.body.message).to.be.deep
       .equals('Comment created');
   });
+
   it('should not post a new comment if it does not have body', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments`)
@@ -65,6 +69,7 @@ describe('Create comment', () => {
     expect(response.body.message).to.be.deep
       .equals('Comment must have a body');
   });
+
   it('should not post a new comment if article does not exist', async () => {
     const response = await chai.request(app)
       .post('/api/v1/articles/uche-bu-a-guy/comments')
@@ -98,10 +103,12 @@ describe('Create reply', () => {
         'x-access-token': jwtoken,
       })
       .send(goodReply);
+
     expect(response).to.have.status(201);
     expect(response.body.message).to.be.deep
       .equals('Reply created');
   });
+
   it('should not post a new reply if article does not exist', async () => {
     const response = await chai.request(app)
       .post('/api/v1/articles/uche-bu-a-guy/comments/1')
@@ -171,6 +178,7 @@ describe('Update comment', () => {
     expect(response.body.message).to.be.deep
       .equals('Comment must have a body');
   });
+
   it('should not update if comment does not exist', async () => {
     const response = await chai.request(app)
       .put('/api/v1/articles/uche-bu-a-guy/comments/1000')
@@ -275,6 +283,7 @@ describe('Get comment and edit comment history', () => {
     expect(response.body.message).to.be.deep
       .equals('You are not permitted to complete this action');
   });
+
   it('should return error if article does not exist', async () => {
     const response = await chai.request(app)
       .get('/api/v1/articles/uche-bu-a-guy/comments/1')
@@ -289,7 +298,7 @@ describe('Get comment and edit comment history', () => {
 
 describe('comment Reaction:', () => {
   before(async () => {
-    newUser = await userRepo.createUser(wizcom);
+    newUser = await userRepo.createUser(wizcom, 'user');
     jwtoken = createToken(newUser.id);
 
     articleOne.userid = newUser.id;
@@ -301,6 +310,7 @@ describe('comment Reaction:', () => {
     ];
     newArticle = await articleRepo.createArticle(articleOne);
   });
+
   it('should post a new comment in the database', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments`)
@@ -312,6 +322,7 @@ describe('comment Reaction:', () => {
     expect(response.body.message).to.be.deep
       .equals('Comment created');
   });
+
   it('should allow a logged in user to like a comment', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments/4/reactions`)
@@ -322,6 +333,7 @@ describe('comment Reaction:', () => {
     expect(response).to.have.status(201);
     expect(response.body.message).to.be.deep.equals('You liked this comment');
   });
+
   it('should allow a logged in user to update a reaction', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments/4/reactions`)
@@ -332,6 +344,7 @@ describe('comment Reaction:', () => {
     expect(response).to.have.status(200);
     expect(response.body.message).to.be.deep.equals('You loved this comment');
   });
+
   it('should allow a logged in user to remove a reaction', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments/4/reactions`)
@@ -342,6 +355,7 @@ describe('comment Reaction:', () => {
     expect(response).to.have.status(200);
     expect(response.body.message).to.be.deep.equals('You liked this comment');
   });
+
   it('should allow a logged in user to love a comment', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments/4/reactions`)
@@ -352,6 +366,7 @@ describe('comment Reaction:', () => {
     expect(response).to.have.status(200);
     expect(response.body.message).to.be.deep.equals('You loved this comment');
   });
+
   it('should allow a logged in user to remove reaction', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments/4/reactions`)
@@ -362,6 +377,7 @@ describe('comment Reaction:', () => {
     expect(response).to.have.status(200);
     expect(response.body.message).to.be.deep.equals('You have removed your reaction');
   });
+
   it('should not allow a logged in user to like a comment that does not belong to an article', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments/1/reactions`)
@@ -372,6 +388,7 @@ describe('comment Reaction:', () => {
     expect(response).to.have.status(404);
     expect(response.body.message).to.be.deep.equals('comment does not belong to article');
   });
+
   it('should not react to a comment that does not exist', async () => {
     const response = await chai.request(app)
       .post(`/api/v1/articles/${newArticle.slug}/comments/90/reactions`)
@@ -427,5 +444,57 @@ describe('Get comments', () => {
     expect(response).to.have.status(404);
     expect(response.body.message).to.be.deep
       .equals('This article was not found.');
+  });
+});
+
+describe('Delete a single comment', () => {
+  const userToken = createToken(1);
+
+  it('should return null if the comment does not exist', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/articles/${newArticle.slug}/comments/20`)
+      .set({
+        'x-access-token': jwtoken,
+      });
+
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('This comment was not found.');
+  });
+
+  it('should return an error if comment does not belong to article', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/articles/${sulliArt.slug}/comments/1`)
+      .set({
+        'x-access-token': jwtoken,
+      });
+
+    expect(response).to.have.status(400);
+    expect(response.body.message).to.be.deep
+      .equals('Sorry, this comment is being accessed wrongly.');
+  });
+
+  it('should return an error if user is not the author of the comment', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/articles/${newArticle.slug}/comments/4`)
+      .set({
+        'x-access-token': userToken,
+      });
+
+    expect(response).to.have.status(403);
+    expect(response.body.message).to.be.deep
+      .equals('Sorry, you can not perform this operation.');
+  });
+
+  it('should delete comment if user created comment', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/articles/${newArticle.slug}/comments/4`)
+      .set({
+        'x-access-token': jwtoken,
+      });
+
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Successfully deleted comment.');
   });
 });

@@ -34,7 +34,7 @@ class Comment {
 
     const articleId = article.id;
     const comment = await commentRepo.getComment(parentId);
-    if (!comment) {
+    if (!comment || comment.isDeleted) {
       return badHttpResponse(response, 404, `We could not find the parent comment with id: ${parentId}`);
     }
 
@@ -144,6 +144,51 @@ class Comment {
       return goodHttpResponse(response, 200, 'Comments found', comments);
     }
     return badHttpResponse(response, 200, 'No comments on this article yet');
+  }
+
+  /**
+   * Delete a comment
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Deleted comment if operation was successful
+   * or error object if operation was not successful
+   */
+  static async deleteComment(request, response) {
+    const { role, userId, article } = request;
+    const id = parseInt(request.params.id, 10);
+
+    const comment = await commentRepo.getOnlyComment(id);
+
+    if (!comment || comment.isDeleted) {
+      return badHttpResponse(
+        response,
+        404,
+        'This comment was not found.'
+      );
+    }
+
+    if (comment.articleId !== article.id) {
+      return badHttpResponse(
+        response,
+        400,
+        'Sorry, this comment is being accessed wrongly.'
+      );
+    }
+
+    if (role === 'user' && userId !== comment.userId) {
+      return badHttpResponse(
+        response,
+        403,
+        'Sorry, you can not perform this operation.'
+      );
+    }
+
+    await commentRepo.deleteComment(comment);
+    return goodHttpResponse(
+      response,
+      200,
+      'Successfully deleted comment.',
+    );
   }
 }
 
