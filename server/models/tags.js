@@ -9,7 +9,7 @@ export default(sequelize, DataTypes) => {
     Tags.belongsToMany(models.Articles, {
       as: 'Articles',
       through: 'ArticleTag',
-      foreignKey: 'id'
+      foreignKey: 'tagId'
     });
   };
   return Tags;

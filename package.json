@@ -17,7 +17,8 @@
     "test": "NODE_ENV=test nyc --reporter=text --reporter=lcov mocha server/tests/**/*.test.js --timeout 100000 --exit",
     "db-migrate": "sequelize db:migrate",
     "db-migrate:undo": "sequelize db:migrate:undo:all",
-    "db-seed": "sequelize db:seed:all"
+    "db-seed": "sequelize db:seed:all",
+    "db-setup": "npm run db-migrate:undo && npm run db-migrate && npm run db-seed"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
