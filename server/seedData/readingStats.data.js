@@ -1,0 +1,81 @@
+const readingStats = [
+  {
+    userId: 2,
+    articleId: 3,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    userId: 2,
+    articleId: 4,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    userId: 4,
+    articleId: 4,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    userId: 4,
+    articleId: 6,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    userId: 5,
+    articleId: 6,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    userId: 3,
+    articleId: 6,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    userId: 3,
+    articleId: 5,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    userId: 2,
+    articleId: 6,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    userId: 7,
+    articleId: 7,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    userId: 5,
+    articleId: 2,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    userId: 5,
+    articleId: 4,
+    timeRead: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
+
+export default readingStats;
