@@ -17,6 +17,10 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    adminAction: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    }
   }, {});
 
   Complaint.associate = (models) => {

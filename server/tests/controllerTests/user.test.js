@@ -663,4 +663,45 @@ describe('PUT api/v1/admin/users/roles', () => {
     expect(response).to.have.status(409);
     expect(response.body.message).to.be.deep.equals('This user already has the admin role.');
   });
+
+  describe('Complaints: ', () => {
+    it('should get complaints in the database', async () => {
+      const response = await chai.request(app)
+        .get('/api/v1/admin/users/complaints')
+        .set({
+          'x-access-token': superToken,
+        });
+
+      expect(response).to.have.status(200);
+      expect(response.body.message).to.be.deep.equals('Complaints retrieved');
+    });
+
+    it('should addressed a complaint in the database', async () => {
+      const response = await chai.request(app)
+        .put('/api/v1/admin/users/complaints/1/reply')
+        .send({
+          reply: 'The article in question has been taken down. Thank you.'
+        })
+        .set({
+          'x-access-token': superToken,
+        });
+
+      expect(response).to.have.status(200);
+      expect(response.body.message).to.be.deep.equals('Complaint addressed');
+    });
+
+    it('should throw an bad http response code for non-existent complaints', async () => {
+      const response = await chai.request(app)
+        .put('/api/v1/admin/users/complaints/100/reply')
+        .send({
+          reply: 'This complaint is being addressed'
+        })
+        .set({
+          'x-access-token': superToken,
+        });
+
+      expect(response).to.have.status(404);
+      expect(response.body.message).to.be.deep.equals('Complaint not found');
+    });
+  });
 });
