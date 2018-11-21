@@ -9,14 +9,18 @@ import articleRepo from '../../repository/articleRepository';
 const { expect } = chai;
 chai.use(chaiHttp);
 
-const { sulliArt, sullivan } = data;
+const { sulliArt, sullivan, ucheBookmark } = data;
 let jwtoken;
+let bookmarkToken;
 let newUser;
+let newUser2;
 let article;
 
 describe('Create a bookmark:', () => {
   before(async () => {
     newUser = await userRepo.createUser(sullivan, 'user');
+    newUser2 = await userRepo.createUser(ucheBookmark);
+    bookmarkToken = createToken(newUser2.id);
     jwtoken = createToken(newUser.id);
     sulliArt.userid = newUser.id;
     article = await articleRepo.createArticle(sulliArt);
@@ -57,5 +61,29 @@ describe('Create a bookmark:', () => {
     expect(response).to.have.status(404);
     expect(response.body.message).to.be.deep
       .equals('This article was not found.');
+  });
+});
+
+describe('Get all bookmarked article by a user', () => {
+  it('should not bookmark an article that is not in the database', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/users/wizsurlivan/bookmarks')
+      .set({
+        'x-access-token': jwtoken,
+      });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Bookmarked Articles retrieved');
+  });
+
+  it('should return an error message if user has no bookmarked article', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/users/bookmark/bookmarks')
+      .set({
+        'x-access-token': bookmarkToken,
+      });
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('No bookmarked Article found');
   });
 });

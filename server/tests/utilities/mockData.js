@@ -6,6 +6,13 @@ const data = {
     password: 'password',
     email: 'priscilla@gmail.com',
   },
+  ucheBookmark: {
+    firstName: 'ucheBookmark',
+    lastName: 'bookmarkUche',
+    username: 'bookmark',
+    password: 'password',
+    email: 'bookmark@gmail.com',
+  },
   joe: {
     firstName: 'Joe',
     lastName: 'Doe',

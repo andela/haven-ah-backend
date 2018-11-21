@@ -1,6 +1,6 @@
 import Model from '../models';
 
-const { Bookmark } = Model;
+const { Bookmark, Articles, User } = Model;
 /**
  * Bookmark Repository class
  */
@@ -20,6 +20,36 @@ class BookmarkRepository {
       }
     });
     return bookmark;
+  }
+
+  /**
+   * Function to get bookmarked article by a user
+   * @param { integer } userId
+   * @returns {object} bookmark object
+   ** otherwise it throws an error
+   */
+  static async getBookmarkedArticles(userId) {
+    const bookmarkedArticles = await Bookmark.findAndCountAll({
+      where: { userId },
+      attributes: ['id'],
+      include: [
+        {
+          model: User,
+          where: userId,
+          attributes: ['id', 'username', 'firstName', 'lastName', 'imageUrl'],
+        },
+        {
+          model: Articles,
+          where: Articles.Id,
+          attributes: ['id', 'title', 'images'],
+        },
+      ],
+      order: [['createdAt', 'DESC']],
+    });
+    return {
+      count: bookmarkedArticles.count,
+      bookmarks: bookmarkedArticles.rows,
+    };
   }
 }
 

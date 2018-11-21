@@ -1,5 +1,5 @@
 import bookmarkRepo from '../repository/bookmarkRepository';
-import { goodHttpResponse } from '../utilities/httpResponse';
+import { goodHttpResponse, badHttpResponse } from '../utilities/httpResponse';
 /**
  * Bookmark Controller class
  */
@@ -15,6 +15,31 @@ class Bookmark {
 
     const bookmarked = await bookmarkRepo.createBookmark(userId, article.id);
     return goodHttpResponse(response, 201, 'article successfully bookmarked', bookmarked);
+  }
+
+  /**
+   * Get all user bookmarked articles
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} User Object
+   */
+  static async getBookmarkedArticles(request, response) {
+    const { userId } = request;
+
+    const foundArticles = await bookmarkRepo.getBookmarkedArticles(userId);
+    if (!foundArticles.count) {
+      return badHttpResponse(
+        response,
+        404,
+        'No bookmarked Article found',
+      );
+    }
+    return goodHttpResponse(
+      response,
+      200,
+      'Bookmarked Articles retrieved',
+      foundArticles
+    );
   }
 }
 
