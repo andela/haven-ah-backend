@@ -103,4 +103,13 @@ router.delete(
   checkIfArticleExists,
   tryCatchWrapper(Comment.deleteComment),
 );
+
+router.patch(
+  '/articles/:slug',
+  isAuthenticated,
+  inputValidator.articleValidator,
+  checkIfArticleExists,
+  isAuthorized.checkAuthor,
+  tryCatchWrapper(Article.updateArticle),
+);
 export default router;

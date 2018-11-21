@@ -216,6 +216,23 @@ const data = {
       https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895
     `,
   },
+  badJigArticle: {
+    body: `
+      On the other hand, we denounce with righteous indignation and
+      dislike men who are so beguiled and demoralized by the charms
+      of pleasure of the moment, so blinded by desire, that they cannot
+      foresee the pain and trouble that are bound to ensue; and equal
+      blame belongs to those who fail in their duty through weakness
+      of will, which is the same as saying through shrinking from toil
+      and pain.`,
+    description: 'On the hedonism of men',
+    images: `
+      https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895,
+      https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895,
+      https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895,
+      https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895
+    `,
+  },
   sulliArt: {
     title: 'Vanity upon vanity',
     slug: 'Vanity-upon-vanity-201811234497',

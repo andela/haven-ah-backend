@@ -262,7 +262,7 @@ describe('UPDATE api/v1/users/:username', () => {
       .equals('You are not permitted to complete this action');
   });
 
-  it('should update user and return data', async () => {
+  it('should return error for attempted email change', async () => {
     const response = await chai.request(app)
       .put('/api/v1/users/i_amtheo')
       .set('x-access-token', token)

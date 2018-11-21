@@ -238,702 +238,783 @@ export default {
         tags: ['Auth'],
         summary: 'A logged in user can get all users',
         description: 'Retrieve all users',
-      },
-      consumes: ['application/x-www-form-urlencoded'],
-      parameters: [
-        {
-          name: 'x-access-token',
-          in: 'header',
-          description: 'Authorization token',
-          required: true,
-          type: 'string'
-        }
-      ],
-      responses: {
-        200: {
-          description: 'Success'
-        },
-        401: {
-          description: 'Failed to verify token! please provide a valid token'
-        }
-      }
-    },
-    '/users/:username': {
-      put: {
-        description: 'Update user profile',
-        summary: 'Update user profile',
-        parameters: [{
-          name: 'x-access-token',
-          in: 'header',
-          required: false,
-          style: 'simple',
-          explode: false,
-          schema: {
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: true,
             type: 'string'
           },
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNDM5MTY0LCJleHAiOjE1NDIwNDM5NjR9.Sf7SOMjpeR7jNEmiOd1Opmsj7k62nUUYMXmJQAuh118'
-        }],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/body'
-              }
-            }
-          }
-        },
+        ],
         responses: {
           200: {
-            description: 'updates the users',
-            content: {
-              'application/json; charset=utf-8': {
-                schema: {
-                  type: 'string'
-                },
-                examples: {}
-              }
-            }
+            description: 'Success'
           },
           401: {
-            description: 'Not permitted to complete action',
-            content: {
-              'application/json; charset=utf-8': {
-                schema: {
-                  type: 'string'
-                },
-                examples: {}
-              }
-            }
-          },
-          409: {
-            description: 'When the usernames supplied are conflicting',
-            content: {
-              'application/json; charset=utf-8': {
-                schema: {
-                  type: 'string'
-                },
-                examples: {}
-              }
-            }
-          },
-          501: {
-            description: 'Unsupported request',
-            content: {
-              'application/json; charset=utf-8': {
-                schema: {
-                  type: 'string'
-                },
-                examples: {}
-              }
-            }
+            description: 'Failed to verify token! please provide a valid token'
           }
         }
       },
-      get: {
-        description: 'Gets user by their username',
-        summary: 'Gets user by their username',
-        parameters: [{
-          name: 'x-access-token',
-          in: 'header',
-          required: false,
-          style: 'simple',
-          explode: false,
-          schema: {
-            type: 'string'
-          },
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNDM5MTY0LCJleHAiOjE1NDIwNDM5NjR9.Sf7SOMjpeR7jNEmiOd1Opmsj7k62nUUYMXmJQAuh118'
-        }],
-        responses: {
-          200: {
-            description: 'Gets user successfully',
+      '/users/:username': {
+        put: {
+          description: 'Update user profile',
+          summary: 'Update user profile',
+          parameters: [{
+            name: 'x-access-token',
+            in: 'header',
+            required: false,
+            style: 'simple',
+            explode: false,
+            schema: {
+              type: 'string'
+            },
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNDM5MTY0LCJleHAiOjE1NDIwNDM5NjR9.Sf7SOMjpeR7jNEmiOd1Opmsj7k62nUUYMXmJQAuh118'
+          }],
+          requestBody: {
             content: {
-              'application/json; charset=utf-8': {
+              'application/json': {
                 schema: {
-                  type: 'string'
-                },
-                examples: {}
+                  $ref: '#/components/schemas/body'
+                }
               }
             }
           },
-          403: {
-            description: 'Unauthorised request',
-            content: {
-              'application/json; charset=utf-8': {
-                schema: {
-                  type: 'string'
-                },
-                examples: {}
+          responses: {
+            200: {
+              description: 'updates the users',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
               }
-            }
-          }
-        }
-      }
-    },
-    '/users/opt/notifications': {
-      put: {
-        description: 'User can opt in/out of notifications',
-        summary: 'User can opt in/out of notifications',
-        parameters: [{
-          name: 'x-access-token',
-          in: 'header',
-          required: false,
-          style: 'simple',
-          explode: false,
-          schema: {
-            type: 'string'
-          },
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNzU2ODMxLCJleHAiOjE1NDIzNjE2MzF9.AmaQksHtt_MNimNhEe7BUFYlritbG10fCV9fb38bomM'
-        }],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/body'
-              },
-              examples: {
-                0: {
-                  value: '{\n    \n    "email": "akogwuuche@ymail.com",\n    "password": "presley0080"\n}'
+            },
+            401: {
+              description: 'Not permitted to complete action',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
+              }
+            },
+            409: {
+              description: 'When the usernames supplied are conflicting',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
+              }
+            },
+            501: {
+              description: 'Unsupported request',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
                 }
               }
             }
           }
         },
-        responses: {
-          200: {
-            description: 'You successfully opted in to email notifications',
-            content: {
-              'application/json; charset=utf-8': {
-                schema: {
-                  type: 'string'
-                },
-                examples: { }
+        get: {
+          description: 'Gets user by their username',
+          summary: 'Gets user by their username',
+          parameters: [{
+            name: 'x-access-token',
+            in: 'header',
+            required: false,
+            style: 'simple',
+            explode: false,
+            schema: {
+              type: 'string'
+            },
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNDM5MTY0LCJleHAiOjE1NDIwNDM5NjR9.Sf7SOMjpeR7jNEmiOd1Opmsj7k62nUUYMXmJQAuh118'
+          }],
+          responses: {
+            200: {
+              description: 'Gets user successfully',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
+              }
+            },
+            403: {
+              description: 'Unauthorised request',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
               }
             }
           }
         }
-      }
-    },
-    '/articles/search': {
-      get: {
-        description: 'Search for articles and filter by parameters',
-        summary: 'Search for articles and filter by parameters',
-        parameters: [{
-          name: 'keywords',
-          in: 'query',
-          required: false,
-          style: 'form',
-          explode: true,
-          schema: {
-            type: 'string'
-          },
-          example: 'benevolence'
-        }, {
-          name: 'author',
-          in: 'query',
-          required: false,
-          style: 'form',
-          explode: true,
-          schema: {
-            type: 'string'
-          },
-          example: 'ucheg6'
-        }, {
-          name: 'x-access-token',
-          in: 'header',
-          required: false,
-          style: 'simple',
-          explode: false,
-          schema: {
-            type: 'string'
-          },
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQyMjAzOTI4LCJleHAiOjE1NDI4MDg3Mjh9.dVXAzTD_caGNaa004JNlMrT2lHMA2RzRFYRMIu6PkG0'
-        }],
-        responses: {
-          200: {
-            description: 'Auto generated using Swagger Inspector',
+      },
+      '/users/opt/notifications': {
+        put: {
+          description: 'User can opt in/out of notifications',
+          summary: 'User can opt in/out of notifications',
+          parameters: [{
+            name: 'x-access-token',
+            in: 'header',
+            required: false,
+            style: 'simple',
+            explode: false,
+            schema: {
+              type: 'string'
+            },
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQxNzU2ODMxLCJleHAiOjE1NDIzNjE2MzF9.AmaQksHtt_MNimNhEe7BUFYlritbG10fCV9fb38bomM'
+          }],
+          requestBody: {
             content: {
-              'application/json; charset=utf-8': {
+              'application/json': {
                 schema: {
-                  type: 'string'
+                  $ref: '#/components/schemas/body'
                 },
-                examples: { }
+                examples: {
+                  0: {
+                    value: '{\n    \n    "email": "akogwuuche@ymail.com",\n    "password": "presley0080"\n}'
+                  }
+                }
               }
             }
           },
-          400: {
-            description: 'Search Term must be provided'
-          },
-          404: {
-            description: 'No article was found for this search term'
-          },
-        }
-      }
-    },
-    '/articles': {
-      post: {
-        tags: ['Article'],
-        summary: 'Create article and associate tags',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'title',
-            in: 'formData',
-            description: 'The title of the article to be created',
-            required: true,
-            type: 'string'
-          },
-          {
-            name: 'body',
-            in: 'formData',
-            description: 'The content of the article',
-            required: true,
-            type: 'string'
-          },
-          {
-            name: 'description',
-            in: 'formData',
-            description: 'describes the article to be created',
-            required: false,
-            type: 'string'
-          },
-          {
-            name: 'images',
-            in: 'formData',
-            description: 'image added to article',
-            required: false,
-            type: 'string'
-          },
-          {
-            name: 'tags',
-            in: 'formData',
-            description: 'tags for the article',
-            required: false,
-            type: 'string'
+          responses: {
+            200: {
+              description: 'You successfully opted in to email notifications',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: { }
+                }
+              }
+            }
           }
-        ],
-        description: 'Returns an article.',
-        responses: {
-          201: {
-            description:
+        }
+      },
+      '/articles/search': {
+        get: {
+          description: 'Search for articles and filter by parameters',
+          summary: 'Search for articles and filter by parameters',
+          parameters: [{
+            name: 'keywords',
+            in: 'query',
+            required: false,
+            style: 'form',
+            explode: true,
+            schema: {
+              type: 'string'
+            },
+            example: 'benevolence'
+          }, {
+            name: 'author',
+            in: 'query',
+            required: false,
+            style: 'form',
+            explode: true,
+            schema: {
+              type: 'string'
+            },
+            example: 'ucheg6'
+          }, {
+            name: 'x-access-token',
+            in: 'header',
+            required: false,
+            style: 'simple',
+            explode: false,
+            schema: {
+              type: 'string'
+            },
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQyMjAzOTI4LCJleHAiOjE1NDI4MDg3Mjh9.dVXAzTD_caGNaa004JNlMrT2lHMA2RzRFYRMIu6PkG0'
+          }],
+          responses: {
+            200: {
+              description: 'Auto generated using Swagger Inspector',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: { }
+                }
+              }
+            },
+            400: {
+              description: 'Search Term must be provided'
+            },
+            404: {
+              description: 'No article was found for this search term'
+            },
+          }
+        }
+      },
+      '/articles': {
+        post: {
+          tags: ['Article'],
+          summary: 'Create article and associate tags',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'title',
+              in: 'formData',
+              description: 'The title of the article to be created',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'body',
+              in: 'formData',
+              description: 'The content of the article',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'description',
+              in: 'formData',
+              description: 'describes the article to be created',
+              required: false,
+              type: 'string'
+            },
+            {
+              name: 'images',
+              in: 'formData',
+              description: 'image added to article',
+              required: false,
+              type: 'string'
+            },
+            {
+              name: 'tags',
+              in: 'formData',
+              description: 'tags for the article',
+              required: false,
+              type: 'string'
+            }
+          ],
+          description: 'Returns an article.',
+          responses: {
+            201: {
+              description:
               'Article Created and Tags associated'
-          },
-          500: {
-            description: 'There was an internal error'
+            },
+            500: {
+              description: 'There was an internal error'
+            }
           }
         }
-      }
-    },
-    '/articles/:slug': {
-      delete: {
-        tags: ['Article'],
-        summary: 'Delete an article',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'x-access-token',
-            in: 'header',
-            description: 'Authorization token',
-            required: true,
-            type: 'string'
-          }
-        ],
-        description: 'Returns a succes message or an error.',
-        responses: {
-          201: {
-            description:
+      },
+      '/articles/:slug': {
+        delete: {
+          tags: ['Article'],
+          summary: 'Delete an article',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'x-access-token',
+              in: 'header',
+              description: 'Authorization token',
+              required: true,
+              type: 'string'
+            }
+          ],
+          description: 'Returns a succes message or an error.',
+          responses: {
+            201: {
+              description:
               'Article deleted'
-          },
-          401: {
-            description: 'You cannot deleted this article'
-          },
-          500: {
-            description: 'There was an internal error'
-          }
-        }
-      }
-    },
-    '/articles/:slug/rating': {
-      post: {
-        tags: ['Article'],
-        summary: 'Rate an article',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'x-access-token',
-            in: 'header',
-            description: 'Authorization token',
-            required: true,
-            type: 'string'
-          },
-          {
-            name: 'rating',
-            in: 'formData',
-            description: 'The rating for an article',
-            required: true,
-            type: 'integer'
-          }
-        ],
-        description: 'Returns an authentication token on success.',
-        responses: {
-          201: {
-            description:
-              'Article rated'
-          },
-          500: {
-            description: 'There was an internal error'
-          }
-        }
-      }
-    },
-    '/profiles/:username/follow': {
-      post: {
-        tags: ['Profiles'],
-        summary: 'Follow a user',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'x-access-token',
-            in: 'header',
-            description: 'Authorization token',
-            required: true,
-            type: 'string'
-          },
-          {
-            name: 'username',
-            in: 'path',
-            description: 'Username of user to follow',
-            required: true,
-            type: 'string'
-          }
-        ],
-        responses: {
-          201: {
-            description: 'Successful operation.'
-          },
-          400: {
-            description: 'Error following this user'
-          },
-          404: {
-            description: 'User not found'
-          }
-        }
-      },
-      delete: {
-        tags: ['Profiles'],
-        summary: 'Unfollow a user',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'x-access-token',
-            in: 'header',
-            description: 'Authorization token',
-            required: true,
-            type: 'string'
-          },
-          {
-            name: 'username',
-            in: 'path',
-            description: 'Username of user to follow',
-            required: true,
-            type: 'string'
-          }
-        ],
-        responses: {
-          200: {
-            description: 'Successful operation.'
-          },
-          400: {
-            description: 'Error unfollowing this user'
-          },
-          404: {
-            description: 'User not found'
-          }
-        }
-      }
-    },
-    '/profiles/user/followers': {
-      get: {
-        description: 'Get all followers for a user',
-        summary: 'Get all followers for a user',
-        parameters: [{
-          name: 'x-access-token',
-          in: 'header',
-          required: false,
-          style: 'simple',
-          explode: false,
-          schema: {
-            type: 'string'
-          },
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQyMjk3ODgwLCJleHAiOjE1NDI5MDI2ODB9.oed6dejq7G_sv53zqs56h7jVP2wzBg8jHA5cZw2sfCU'
-        }],
-        responses: {
-          200: {
-            description: 'Followers retrieved',
-            content: {
-              'application/json; charset=utf-8': {
-                schema: {
-                  type: 'string'
-                },
-                examples: { }
-              }
-            }
-          },
-          404: {
-            description: 'Followers not found'
-          },
-        }
-      }
-    },
-    '/auth/google': {
-      get: {
-        description: 'login with google',
-        summary: 'login with google',
-        responses: {
-          200: {
-            description: 'Auto generated using Swagger Inspector',
-            content: {
-              'text/html; charset=utf-8': {
-                schema: {
-                  type: 'string'
-                },
-                examples: {}
-              }
+            },
+            401: {
+              description: 'You cannot deleted this article'
+            },
+            500: {
+              description: 'There was an internal error'
             }
           }
-        }
-      }
-    },
-    '/articles/:slug/comments': {
-      post: {
-        tags: ['Article'],
-        summary: 'Create comment',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'body',
-            in: 'formData',
-            description: 'The content of the comment',
-            required: true,
-            type: 'string'
-          },
-          {
-            name: 'highlightedtext',
-            in: 'formData',
-            description: 'the highlighted text in the article',
-            required: false,
-            type: 'string'
-          },
-        ],
-        description: 'Returns created comment on success.',
-        responses: {
-          201: {
-            description: 'Comment created'
-          },
-          404: {
-            description: 'We could not find this article'
-          },
-          500: {
-            description: 'There was an internal error'
-          }
-        }
-      },
-      get: {
-        tags: ['Article'],
-        summary: 'Get all comments for an article',
-        consumes: ['application/x-www-form-urlencoded'],
-        description: 'Returns all the comments and their replies for an article',
-        responses: {
-          200: {
-            description: 'Comments found'
-          },
-          404: {
-            description: 'We could not find this article'
-          },
-          500: {
-            description: 'There was an internal error'
-          }
-        }
-      },
-    },
-    '/articles/:slug/comments/:parentId': {
-      post: {
-        tags: ['Article'],
-        summary: 'Create reply',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'body',
-            in: 'formData',
-            description: 'The content of the reply',
-            required: true,
-            type: 'string'
-          },
-        ],
-        description: 'Returns created comment on success.',
-        responses: {
-          201: {
-            description: 'Reply created'
-          },
-          404: {
-            description: 'We could not find the parent comment with id: '
-          },
-          500: {
-            description: 'There was an internal error'
-          }
-        }
-      }
-    },
-    '/articles/:slug/comments/:id': {
-      put: {
-        tags: ['Article'],
-        summary: 'Update comment',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'body',
-            in: 'formData',
-            description: 'The content of the comment',
-            required: true,
-            type: 'string'
-          },
-          {
-            name: 'id',
-            in: 'path',
-            description: 'ID of comment to update',
-            required: true,
-            type: 'integer',
-            format: 'int64'
-          }
-        ],
-        description: 'Returns updated comment on success.',
-        responses: {
-          200: {
-            description: 'Comment updated'
-          },
-          404: {
-            description: 'We could not find this comment'
-          },
-          500: {
-            description: 'There was an internal error'
-          }
-        }
-      },
-      get: {
-        tags: ['Article'],
-        summary: 'Get comment using id',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'id',
-            in: 'path',
-            description: 'ID of comment to return',
-            required: true,
-            type: 'integer',
-            format: 'int64'
-          }
-        ],
-        description: 'Returns updated comment on success.',
-        responses: {
-          200: {
-            description: 'Comment and edit history found'
-          },
-          404: {
-            description: 'We could not find this comment'
-          },
-          500: {
-            description: 'There was an internal error'
-          }
-        }
-      },
-      delete: {
-        tags: ['Article'],
-        summary: 'Delete comment',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
+        },
+        get: {
+          description: 'Gets an article by the slug',
+          parameters: [{
             name: 'slug',
             in: 'path',
-            description: 'The slug of the article',
             required: true,
-            type: 'string'
-          },
-          {
-            name: 'id',
-            in: 'path',
-            description: 'Id of comment to delete',
-            required: true,
-            type: 'integer',
-            format: 'int64'
+            schema: {
+              type: 'string'
+            },
+            example: 'just-a-sample-slug-10093849'
+          }],
+          responses: {
+            200: {
+              description: 'Gets Article successfully',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
+              }
+            },
+            404: {
+              description: 'Article not found',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
+              }
+            }
           }
-        ],
-        description: 'Returns deleted comment on success.',
-        responses: {
-          200: {
-            description: 'Comment deleted'
-          },
-          404: {
-            description: 'We could not find this comment'
-          },
-          403: {
-            description: 'Sorry, you can not perform this operation.'
-          },
-          400: {
-            description: 'Sorry, this comment is being accessed wrongly.'
+        },
+        put: {
+          tags: ['Article'],
+          summary: 'Update an article',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'title',
+              in: 'formData',
+              description: 'The title that will be updated',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'body',
+              in: 'formData',
+              description: 'The content of the article',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'description',
+              in: 'formData',
+              description: 'describes the article to be updated',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'images',
+              in: 'formData',
+              description: 'images to be added to article',
+              required: false,
+              type: 'string'
+            },
+          ],
+          description: 'Returns an article.',
+          responses: {
+            200: {
+              description:
+                'Article Updated'
+            },
+            500: {
+              description: 'There was an internal error'
+            }
+          }
+        },
+      },
+      '/articles/:slug/rating': {
+        post: {
+          tags: ['Article'],
+          summary: 'Rate an article',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'x-access-token',
+              in: 'header',
+              description: 'Authorization token',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'rating',
+              in: 'formData',
+              description: 'The rating for an article',
+              required: true,
+              type: 'integer'
+            }
+          ],
+          description: 'Returns an authentication token on success.',
+          responses: {
+            201: {
+              description:
+              'Article rated'
+            },
+            500: {
+              description: 'There was an internal error'
+            }
           }
         }
       },
-    },
-    '/auth/facebook': {
-      get: {
-        description: 'login with facebook',
-        summary: 'login with facebook',
-        responses: {
-          200: {
-            description: 'Auto generated using Swagger Inspector',
-            content: {
-              'application/json; charset=utf-8': {
-                schema: {
-                  type: 'string'
-                },
-                examples: {}
+      '/profiles/:username/follow': {
+        post: {
+          tags: ['Profiles'],
+          summary: 'Follow a user',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'x-access-token',
+              in: 'header',
+              description: 'Authorization token',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'username',
+              in: 'path',
+              description: 'Username of user to follow',
+              required: true,
+              type: 'string'
+            }
+          ],
+          responses: {
+            201: {
+              description: 'Successful operation.'
+            },
+            400: {
+              description: 'Error following this user'
+            },
+            404: {
+              description: 'User not found'
+            }
+          }
+        },
+        delete: {
+          tags: ['Profiles'],
+          summary: 'Unfollow a user',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'x-access-token',
+              in: 'header',
+              description: 'Authorization token',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'username',
+              in: 'path',
+              description: 'Username of user to follow',
+              required: true,
+              type: 'string'
+            }
+          ],
+          responses: {
+            200: {
+              description: 'Successful operation.'
+            },
+            400: {
+              description: 'Error unfollowing this user'
+            },
+            404: {
+              description: 'User not found'
+            }
+          }
+        }
+      },
+      '/profiles/user/followers': {
+        get: {
+          description: 'Get all followers for a user',
+          summary: 'Get all followers for a user',
+          parameters: [{
+            name: 'x-access-token',
+            in: 'header',
+            required: false,
+            style: 'simple',
+            explode: false,
+            schema: {
+              type: 'string'
+            },
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQyMjk3ODgwLCJleHAiOjE1NDI5MDI2ODB9.oed6dejq7G_sv53zqs56h7jVP2wzBg8jHA5cZw2sfCU'
+          }],
+          responses: {
+            200: {
+              description: 'Followers retrieved',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: { }
+                }
+              }
+            },
+            404: {
+              description: 'Followers not found'
+            },
+          }
+        }
+      },
+      '/auth/google': {
+        get: {
+          description: 'login with google',
+          summary: 'login with google',
+          responses: {
+            200: {
+              description: 'Auto generated using Swagger Inspector',
+              content: {
+                'text/html; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
               }
             }
           }
         }
-      }
-    },
-    '/articles/:slug/bookmarks': {
-      post: {
-        tags: ['Bookmark'],
-        summary: 'Bookmark an article',
-        consumes: ['application/x-www-form-urlencoded'],
-        parameters: [
-          {
-            name: 'userId',
-            in: 'formData',
-            description: 'The user id',
-            required: true,
-            type: 'integer'
-          },
-          {
-            name: 'articleId',
-            in: 'formData',
-            description: 'The article id',
-            required: true,
-            type: 'integer'
-          },
-        ],
-        description: 'Returns success message.',
-        responses: {
-          201: {
-            description:
-              'article successfully bookmarked'
-          },
-          404: {
-            description:
-              'article not found',
+      },
+      '/articles/:slug/comments': {
+        post: {
+          tags: ['Article'],
+          summary: 'Create comment',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'body',
+              in: 'formData',
+              description: 'The content of the comment',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'highlightedtext',
+              in: 'formData',
+              description: 'the highlighted text in the article',
+              required: false,
+              type: 'string'
+            },
+          ],
+          description: 'Returns created comment on success.',
+          responses: {
+            201: {
+              description: 'Comment created'
+            },
+            404: {
+              description: 'We could not find this article'
+            },
+            500: {
+              description: 'There was an internal error'
+            }
+          }
+        },
+        get: {
+          tags: ['Article'],
+          summary: 'Get all comments for an article',
+          consumes: ['application/x-www-form-urlencoded'],
+          description: 'Returns all the comments and their replies for an article',
+          responses: {
+            200: {
+              description: 'Comments found'
+            },
+            404: {
+              description: 'We could not find this article'
+            },
+            500: {
+              description: 'There was an internal error'
+            }
+          }
+        },
+      },
+      '/articles/:slug/comments/:parentId': {
+        post: {
+          tags: ['Article'],
+          summary: 'Create reply',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'body',
+              in: 'formData',
+              description: 'The content of the reply',
+              required: true,
+              type: 'string'
+            },
+          ],
+          description: 'Returns created comment on success.',
+          responses: {
+            201: {
+              description: 'Reply created'
+            },
+            404: {
+              description: 'We could not find the parent comment with id: '
+            },
+            500: {
+              description: 'There was an internal error'
+            }
           }
         }
+      },
+      '/articles/:slug/comments/:id': {
+        put: {
+          tags: ['Article'],
+          summary: 'Update comment',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'body',
+              in: 'formData',
+              description: 'The content of the comment',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'id',
+              in: 'path',
+              description: 'ID of comment to update',
+              required: true,
+              type: 'integer',
+              format: 'int64'
+            }
+          ],
+          description: 'Returns updated comment on success.',
+          responses: {
+            200: {
+              description: 'Comment updated'
+            },
+            404: {
+              description: 'We could not find this comment'
+            },
+            500: {
+              description: 'There was an internal error'
+            }
+          }
+        },
+        get: {
+          tags: ['Article'],
+          summary: 'Get comment using id',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'id',
+              in: 'path',
+              description: 'ID of comment to return',
+              required: true,
+              type: 'integer',
+              format: 'int64'
+            }
+          ],
+          description: 'Returns updated comment on success.',
+          responses: {
+            200: {
+              description: 'Comment and edit history found'
+            },
+            404: {
+              description: 'We could not find this comment'
+            },
+            500: {
+              description: 'There was an internal error'
+            }
+          }
+        },
+        delete: {
+          tags: ['Article'],
+          summary: 'Delete comment',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'slug',
+              in: 'path',
+              description: 'The slug of the article',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'id',
+              in: 'path',
+              description: 'Id of comment to delete',
+              required: true,
+              type: 'integer',
+              format: 'int64'
+            }
+          ],
+          description: 'Returns deleted comment on success.',
+          responses: {
+            200: {
+              description: 'Comment deleted'
+            },
+            404: {
+              description: 'We could not find this comment'
+            },
+            403: {
+              description: 'Sorry, you can not perform this operation.'
+            },
+            400: {
+              description: 'Sorry, this comment is being accessed wrongly.'
+            }
+          }
+        },
+      },
+      '/auth/facebook': {
+        get: {
+          description: 'login with facebook',
+          summary: 'login with facebook',
+          responses: {
+            200: {
+              description: 'Auto generated using Swagger Inspector',
+              content: {
+                'application/json; charset=utf-8': {
+                  schema: {
+                    type: 'string'
+                  },
+                  examples: {}
+                }
+              }
+            }
+          }
+        },
+      },
+      '/articles/:slug/bookmarks': {
+        post: {
+          tags: ['Bookmark'],
+          summary: 'Bookmark an article',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'userId',
+              in: 'formData',
+              description: 'The user id',
+              required: true,
+              type: 'integer'
+            },
+            {
+              name: 'articleId',
+              in: 'formData',
+              description: 'The article id',
+              required: true,
+              type: 'integer'
+            },
+          ],
+          description: 'Returns success message.',
+          responses: {
+            201: {
+              description:
+                'article successfully bookmarked'
+            },
+            404: {
+              description:
+                'article not found',
+            }
+          }
+        },
       },
       '/articles/:slug/complaints': {
         post: {
@@ -983,44 +1064,6 @@ export default {
           }
         },
       },
-      '/articles/:slug': {
-        get: {
-          description: 'Gets an article by the slug',
-          parameters: [{
-            name: 'slug',
-            in: 'path',
-            required: true,
-            schema: {
-              type: 'string'
-            },
-            example: 'just-a-sample-slug-10093849'
-          }],
-          responses: {
-            200: {
-              description: 'Gets Article successfully',
-              content: {
-                'application/json; charset=utf-8': {
-                  schema: {
-                    type: 'string'
-                  },
-                  examples: {}
-                }
-              }
-            },
-            404: {
-              description: 'Article not found',
-              content: {
-                'application/json; charset=utf-8': {
-                  schema: {
-                    type: 'string'
-                  },
-                  examples: {}
-                }
-              }
-            }
-          }
-        }
-      },
       '/admin/users/roles': {
         put: {
           tags: ['Roles'],
@@ -1059,6 +1102,78 @@ export default {
             409: {
               description: 'User already has the role.'
             }
+          }
+        },
+      },
+      '/articles/:slug/reactions': {
+
+        post: {
+          tags: ['Reactions'],
+          summary: 'React to an article',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'x-access-token',
+              in: 'header',
+              description: 'Authorization token',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'slug',
+              in: 'path',
+              description: 'Slug of article to react to',
+              required: true,
+              type: 'string'
+            },
+            {
+              name: 'reactionType',
+              in: 'body',
+              description: 'Reaction type',
+              required: true,
+              type: 'string'
+            },
+          ],
+          responses: {
+            201: {
+              description: 'You liked an article.',
+            },
+            200: {
+              description: 'You disliked an article.',
+            },
+            400: {
+              description: 'Bad Request.'
+            },
+            404: {
+              description: 'Article not found.'
+            },
+            500: {
+              description: 'Invalid input.'
+            }
+          }
+        },
+      },
+      '/users/articles/read': {
+        get: {
+          tags: ['Reading Stats'],
+          summary: 'user reading statistics',
+          consumes: ['application/x-www-form-urlencoded'],
+          parameters: [
+            {
+              name: 'x-access-token',
+              in: 'header',
+              description: 'Authorization token',
+              required: true,
+              type: 'string'
+            },
+          ],
+          responses: {
+            200: {
+              description: 'Read articles retrieved',
+            },
+            404: {
+              description: 'user not found'
+            },
           }
         },
       },
@@ -1110,10 +1225,10 @@ export default {
         }
       },
     },
-    '/users/articles/read': {
-      get: {
-        tags: ['Reading Stats'],
-        summary: 'user reading statistics',
+    '/articles/:slug/comments/:id/reactions': {
+      post: {
+        tags: ['Reactions'],
+        summary: 'React to a comment',
         consumes: ['application/x-www-form-urlencoded'],
         parameters: [
           {
@@ -1123,14 +1238,44 @@ export default {
             required: true,
             type: 'string'
           },
+          {
+            name: 'slug',
+            in: 'path',
+            description: 'Slug of article to react to',
+            required: true,
+            type: 'string'
+          },
+          {
+            name: 'id',
+            in: 'path',
+            description: 'Id of the comment to react to',
+            required: true,
+            type: 'integer'
+          },
+          {
+            name: 'reactionType',
+            in: 'body',
+            description: 'Reaction type',
+            required: true,
+            type: 'string'
+          },
         ],
         responses: {
+          201: {
+            description: 'You liked a comment.',
+          },
           200: {
-            description: 'Read articles retrieved',
+            description: 'You loved a comment',
+          },
+          400: {
+            description: 'Bad Request.'
           },
           404: {
-            description: 'user not found'
+            description: 'comment not found.'
           },
+          500: {
+            description: 'Invalid input.'
+          }
         }
       },
     },
@@ -1193,118 +1338,4 @@ export default {
       }
     }
   },
-  '/articles/:slug/reactions': {
-    post: {
-      tags: ['Reactions'],
-      summary: 'React to an article',
-      consumes: ['application/x-www-form-urlencoded'],
-      parameters: [
-        {
-          name: 'x-access-token',
-          in: 'header',
-          description: 'Authorization token',
-          required: true,
-          type: 'string'
-        },
-        {
-          name: 'slug',
-          in: 'path',
-          description: 'Slug of article to react to',
-          required: true,
-          type: 'string'
-        },
-        {
-          name: 'reactionType',
-          in: 'body',
-          description: 'Reaction type',
-          required: true,
-          type: 'string'
-        },
-      ],
-      responses: {
-        201: {
-          description: 'You liked an article.',
-        },
-        200: {
-          description: 'You disliked an article.',
-        },
-        400: {
-          description: 'Bad Request.'
-        },
-        404: {
-          description: 'Article not found.'
-        },
-        500: {
-          description: 'Invalid input.'
-        }
-      }
-    },
-  },
-  '/articles/:slug/comments/:id/reactions': {
-    post: {
-      tags: ['Reactions'],
-      summary: 'React to a comment',
-      consumes: ['application/x-www-form-urlencoded'],
-      parameters: [
-        {
-          name: 'x-access-token',
-          in: 'header',
-          description: 'Authorization token',
-          required: true,
-          type: 'string'
-        },
-        {
-          name: 'slug',
-          in: 'path',
-          description: 'Slug of article to react to',
-          required: true,
-          type: 'string'
-        },
-        {
-          name: 'id',
-          in: 'path',
-          description: 'Id of the comment to react to',
-          required: true,
-          type: 'integer'
-        },
-        {
-          name: 'reactionType',
-          in: 'body',
-          description: 'Reaction type',
-          required: true,
-          type: 'string'
-        },
-      ],
-      responses: {
-        201: {
-          description: 'You liked a comment.',
-        },
-        200: {
-          description: 'You loved a comment',
-        },
-        400: {
-          description: 'Bad Request.'
-        },
-        404: {
-          description: 'comment not found.'
-        },
-        500: {
-          description: 'Invalid input.'
-        }
-      }
-    },
-  },
-  schemas: {
-    body: {
-      type: 'object',
-      properties: {
-        password: {
-          type: 'string'
-        },
-        email: {
-          type: 'string'
-        }
-      }
-    }
-  }
 };

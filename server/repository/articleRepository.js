@@ -248,6 +248,22 @@ class ArticleRepository {
 
     return keywordsResults;
   }
+
+  /**
+   * Function to update an article in the database
+   * @param {object} newData object
+   * @param {object} id number
+   * @returns {object} article object
+   */
+  static async updateArticle(newData, id) {
+    const updatedArticle = await Articles.update(newData, {
+      returning: true,
+      where: {
+        id,
+      },
+    });
+    return updatedArticle[1][0];
+  }
 }
 
 export default ArticleRepository;

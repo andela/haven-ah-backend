@@ -42,6 +42,24 @@ class authorization {
     request.isAuthorized = userId === request.userId; // BOOLEAN
     return next();
   }
+
+  /**
+   * This checks whether the requester (user) is authorized
+   * to complete the request on an article.
+   * @param {object} request
+   * @param {object} response
+   * @param {function} next
+   * @returns {function} callback function
+   */
+  static async checkAuthor(request, response, next) {
+    const { article } = request;
+
+    request.isAuthorized = article.userid === request.userId; // BOOLEAN
+    if (!request.isAuthorized) {
+      return badHttpResponse(response, 401, 'You are not permitted to complete this action');
+    }
+    return next();
+  }
 }
 
 export default authorization;
