@@ -1331,6 +1331,34 @@ export default {
         }
       },
     },
+    '/admin/articles/select-hero-article': {
+      put: {
+        tags: ['Articles Admin'],
+        summary: 'Admins article of the day route',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: true,
+            type: 'string'
+          },
+          {
+            name: 'slug',
+            in: 'formData',
+            description: 'The slug of the article to be selected (If not supplied, an article will be auto-selected)',
+            required: false,
+            type: 'string'
+          }
+        ],
+        responses: {
+          200: {
+            description: 'The article :slug has been auto-selected as article of the day'
+          },
+        }
+      },
+    },
   },
   components: {
     schemas: {

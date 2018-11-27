@@ -34,6 +34,9 @@ export default (sequelize, DataTypes) => {
     isDeleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    isHeroArticle: {
+      type: DataTypes.BOOLEAN,
     }
   }, {});
 
@@ -71,6 +74,11 @@ export default (sequelize, DataTypes) => {
       as: 'Readers',
       foreignKey: 'articleId',
       through: 'ReadingStat',
+    });
+
+    Articles.hasMany(models.Comment, {
+      foreignKey: 'articleId',
+      as: 'Comments',
     });
   };
   return Articles;

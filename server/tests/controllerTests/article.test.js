@@ -11,7 +11,8 @@ chai.use(chaiHttp);
 const {
   jigArticle, jigsaw, complaint, invalidComplaint, sampleComplaint, badJigArticle,
 } = data;
-
+const adminToken = createToken(2);
+const heroSlug = '';
 let jwtoken;
 let newUser;
 let jigSlug;
@@ -276,6 +277,50 @@ describe('PATCH api/v1/articles/:slug', () => {
       .equals('You are not permitted to complete this action');
   });
 });
+
+describe('Make an article the article of the day', () => {
+  it('should select an article as the article of the day', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/admin/articles/select-hero-article')
+      .set({
+        'x-access-token': adminToken,
+      })
+      .send({
+        slug: jigSlug,
+      });
+
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals(`You have selected article ${jigSlug} as article of the day`);
+  });
+
+  it('should deny user access', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/admin/articles/select-hero-article')
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send({
+        slug: jigSlug,
+      });
+
+    expect(response).to.have.status(403);
+    expect(response.body.message).to.be.deep
+      .equals('ACCESS DENIED');
+  });
+
+  it('should auto-select an article as the article of the day', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/admin/articles/select-hero-article')
+      .set({
+        'x-access-token': adminToken,
+      });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals(`The article ${response.body.data.slug} has been auto-selected as article of the day`);
+  });
+});
+
 
 describe('GET api/v1/articles/:slug', () => {
   it('should return null if article does not exist', async () => {

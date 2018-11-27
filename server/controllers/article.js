@@ -4,6 +4,7 @@ import { goodHttpResponse, badHttpResponse, paginatedHttpResponse } from '../uti
 import tagRepo from '../repository/tagRepository';
 import ratingRepo from '../repository/ratingRepository';
 import notificationRepo from '../repository/notificationRepository';
+import rankArticles from '../utilities/articlesRanker';
 
 /**
  * Article Controller class
@@ -218,6 +219,70 @@ class Article {
       id,
     );
     return goodHttpResponse(response, 200, 'Article Updated', updatedArticle);
+  }
+
+  /**
+   * Set an article as article of the day
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} User Object
+   */
+  static async selectHeroArticle(request, response) {
+    let newHeroArticle;
+    let prevHeroArticle = await articleRepo.removeHeroArticle();
+    prevHeroArticle = prevHeroArticle ? prevHeroArticle.slug : null;
+
+    if (request.body.slug) {
+      newHeroArticle = await articleRepo.makeHeroArticle(request.body.slug);
+
+      const {
+        id, title, slug, userid, description, readtime, images, isDeleted,
+      } = newHeroArticle.dataValues;
+      const data = {
+        ...{
+          id, title, slug, userid, description, readtime, images, isDeleted,
+        },
+        prevHeroArticle,
+      };
+      return goodHttpResponse(
+        response,
+        200,
+        `You have selected article ${newHeroArticle.slug} as article of the day`,
+        data,
+      );
+    }
+
+    let allArticles = await articleRepo.getAllArticles();
+    allArticles = rankArticles(allArticles);
+
+    const benchmark = Math.ceil(allArticles.length * 0.05);
+
+    const topArticles = [];
+    for (let i = 0; i <= benchmark; i += 1) {
+      if (allArticles[i].dataValues.rank !== Infinity
+        || allArticles[i].dataValues.isDeleted !== true) {
+        topArticles.push(allArticles[i].dataValues);
+      }
+    }
+    const randomIndex = Math.floor(Math.random() * topArticles.length);
+
+    newHeroArticle = topArticles[randomIndex];
+    const {
+      id, title, slug, userid, description, readtime, images, isDeleted, rank,
+    } = newHeroArticle;
+
+    const data = {
+      ...{
+        id, title, slug, userid, description, readtime, images, isDeleted, rank,
+      },
+      prevHeroArticle,
+    };
+    return goodHttpResponse(
+      response,
+      200,
+      `The article ${slug} has been auto-selected as article of the day`,
+      data,
+    );
   }
 }
 

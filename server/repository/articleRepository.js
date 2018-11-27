@@ -3,7 +3,7 @@ import getPaginationMeta from '../utilities/getPaginationMeta';
 
 const {
   Articles, Complaint, ReadingStat,
-  User, sequelize
+  User, sequelize,
 } = Model;
 
 /**
@@ -71,7 +71,7 @@ class ArticleRepository {
   }
 
   /**
- * Function to get all article in the database
+ * Function to create an article complaint in the database
  * @param { integer } complaint Complaint object to create
  * @returns { object } New complaint
  */
@@ -263,6 +263,67 @@ class ArticleRepository {
       },
     });
     return updatedArticle[1][0];
+  }
+
+  /**
+   * method to remove a hero article status in the database
+   * @returns {object} article object
+   */
+  static async removeHeroArticle() {
+    const article = await Articles.update(
+      { isHeroArticle: false },
+      {
+        returning: true,
+        where: {
+          isHeroArticle: true,
+        }
+      }
+    );
+    return article[1][0];
+  }
+
+  /**
+   * method to make a hero article in the database
+   * @param {string} slug
+   * @returns {object} article object
+   */
+  static async makeHeroArticle(slug) {
+    const article = await Articles.update(
+      { isHeroArticle: true },
+      {
+        returning: true,
+        where: {
+          slug,
+        },
+      }
+    );
+    return article[1][0];
+  }
+
+  /**
+   * Method that gets all articles in the database
+   * @param { number } id
+   * @returns { object | null }
+   ** otherwise it throws an error
+   */
+  static async getAllArticles() {
+    const articleRecords = await Articles.findAll({
+      include: [
+        {
+          association: 'Comments',
+          attributes: ['id'],
+        },
+        {
+          association: 'Reactions',
+          attributes: ['id'],
+        },
+        {
+          association: 'Readers',
+          attributes: ['id'],
+        },
+      ]
+    });
+    return articleRecords;
   }
 }
 
