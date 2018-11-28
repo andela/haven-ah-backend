@@ -35,6 +35,8 @@ router.post('/profiles/:username/follow', isAuthenticated, validator.validateUse
 router.delete('/profiles/:username/follow', isAuthenticated, validator.validateUsername, tryCatchWrapper(User.unfollow));
 router.get('/profiles/user/followers', isAuthenticated, tryCatchWrapper(User.getUserFollowers));
 
+router.get('/authors/featured', tryCatchWrapper(User.featuredAuthor));
+
 router.get('/users/articles/read', isAuthenticated, tryCatchWrapper(User.getReadingStats));
 router.get('/auth/facebook', facebookRoutes.authenticate('facebook'));
 
@@ -51,4 +53,5 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   googleCallback);
+
 export default router;
