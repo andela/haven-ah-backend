@@ -3,8 +3,10 @@ import articleRepo from '../repository/articleRepository';
 import { goodHttpResponse, badHttpResponse, paginatedHttpResponse } from '../utilities/httpResponse';
 import tagRepo from '../repository/tagRepository';
 import ratingRepo from '../repository/ratingRepository';
+import reactionRepo from '../repository/reactionRepository';
 import notificationRepo from '../repository/notificationRepository';
 import rankArticles from '../utilities/articlesRanker';
+import removeArrayDuplicates from '../utilities/removeArrayDuplicates';
 
 /**
  * Article Controller class
@@ -223,6 +225,7 @@ class Article {
 
   /**
    * Set an article as article of the day
+   * Get trending articles on the platform
    * @param {object} request Request Object
    * @param {object} response Response Object
    * @returns {object} User Object
@@ -320,6 +323,40 @@ class Article {
       'Featured article retrieved',
       article,
     );
+  }
+
+  /**
+   * Get the article of the day (Trending articles)
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Article object or error object if article is not found
+   */
+  static async getTrendingArticles(request, response) {
+    const latestReactions = await reactionRepo.getRecentReactions();
+    const articleReactions = latestReactions.filter(
+      reaction => reaction.dataValues.articleId !== null
+    );
+    const articleIds = articleReactions.map(reaction => reaction.dataValues.articleId);
+
+    const counts = {};
+
+    for (let i = 0; i < articleIds.length; i += 1) {
+      const num = articleIds[i];
+      counts[num] = counts[num] ? counts[num] + 1 : 1;
+    }
+    const trimmedArticleIds = removeArrayDuplicates(articleIds)
+      .sort((a, b) => counts[a] - counts[b]);
+
+    let articles = await articleRepo.getTrendingArticles(trimmedArticleIds);
+
+    if (trimmedArticleIds.length <= 6) {
+      return goodHttpResponse(response, 200, 'Returned successfully', articles);
+    }
+
+    articles = articles.filter((article, i) => i < 6);
+
+
+    return goodHttpResponse(response, 200, 'Returned successfully', articles);
   }
 }
 
