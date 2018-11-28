@@ -266,16 +266,16 @@ class ArticleRepository {
   }
 
   /**
-   * method to remove a hero article status in the database
+   * method to remove a featured article status in the database
    * @returns {object} article object
    */
-  static async removeHeroArticle() {
+  static async removeFeaturedArticle() {
     const article = await Articles.update(
-      { isHeroArticle: false },
+      { isFeatured: false },
       {
         returning: true,
         where: {
-          isHeroArticle: true,
+          isFeatured: true,
         }
       }
     );
@@ -283,13 +283,13 @@ class ArticleRepository {
   }
 
   /**
-   * method to make a hero article in the database
+   * method to make a featured article in the database
    * @param {string} slug
    * @returns {object} article object
    */
-  static async makeHeroArticle(slug) {
+  static async makeFeaturedArticle(slug) {
     const article = await Articles.update(
-      { isHeroArticle: true },
+      { isFeatured: true },
       {
         returning: true,
         where: {
@@ -324,6 +324,19 @@ class ArticleRepository {
       ]
     });
     return articleRecords;
+  }
+
+  /**
+   * method get a featured article from the database
+   * @returns {object} article object
+   */
+  static async getFeaturedArticle() {
+    const article = await Articles.findOne({
+      where: {
+        isFeatured: true,
+      }
+    });
+    return article;
   }
 }
 

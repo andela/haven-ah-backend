@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import logger from 'morgan';
 import dotenv from 'dotenv';
 import swagger from 'swagger-ui-express';
+import cors from 'cors';
 import swaggerDocument from './swagger';
 import config from './server/config/config';
 import {
@@ -20,6 +21,9 @@ const app = express();
 
 // Log incoming requests
 app.use(logger('dev'));
+
+// CORS configuration
+app.use(cors());
 
 // Parse the body of incoming requests
 app.use(bodyParser.json());

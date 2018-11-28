@@ -25,9 +25,9 @@ router.put('/admin/users/complaints/:complaintId/reply',
   checkPermissions,
   tryCatchWrapper(Complaint.replyComplaints));
 
-router.put('/admin/articles/tops',
+router.put('/admin/articles/featured',
   isAuthenticated,
   checkPermissions,
-  tryCatchWrapper(Article.selectHeroArticle));
+  tryCatchWrapper(Article.selectFeaturedArticle));
 
 export default router;

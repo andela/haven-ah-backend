@@ -111,23 +111,6 @@ describe('Get user\'s reading stats', () => {
   });
 });
 
-
-describe('Make an article the hero article', () => {
-  it('should return the hero article', async () => {
-    const article = await articleRepo.makeHeroArticle('Looking-ahead-lol-201811234490');
-    expect(article.title).to.be.deep.equal('Looking ahead lol');
-    expect(article.isHeroArticle).to.be.deep.equals(true);
-  });
-});
-
-describe('Remove an article as a hero article', () => {
-  it('should return article after it has been removed', async () => {
-    const article = await articleRepo.removeHeroArticle();
-    expect(article.title).to.be.deep.equal('Looking ahead lol');
-    expect(article.isHeroArticle).to.be.deep.equals(false);
-  });
-});
-
 describe('Get all articles', () => {
   it('should return article if found', async () => {
     const articles = await articleRepo.getAllArticles();

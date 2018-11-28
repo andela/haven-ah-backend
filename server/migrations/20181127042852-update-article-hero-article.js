@@ -2,7 +2,7 @@ export default {
   up: (queryInterface, Sequelize) => {
     queryInterface.addColumn(
       'Articles',
-      'isHeroArticle',
+      'isFeatured',
       {
         type: Sequelize.BOOLEAN,
         allowNull: true,
@@ -11,6 +11,6 @@ export default {
   },
 
   down: (queryInterface) => {
-    queryInterface.removeColumn('Articles', 'isHeroArticle');
+    queryInterface.removeColumn('Articles', 'isFeatured');
   },
 };

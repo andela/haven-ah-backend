@@ -35,7 +35,7 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-    isHeroArticle: {
+    isFeatured: {
       type: DataTypes.BOOLEAN,
     }
   }, {});

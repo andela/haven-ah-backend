@@ -12,7 +12,6 @@ const {
   jigArticle, jigsaw, complaint, invalidComplaint, sampleComplaint, badJigArticle,
 } = data;
 const adminToken = createToken(2);
-const heroSlug = '';
 let jwtoken;
 let newUser;
 let jigSlug;
@@ -278,10 +277,21 @@ describe('PATCH api/v1/articles/:slug', () => {
   });
 });
 
+describe('Fetch the article of the day', () => {
+  it('should not select an article as the article of the day', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/featured');
+
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('There is no featured article yet');
+  });
+});
+
 describe('Make an article the article of the day', () => {
   it('should select an article as the article of the day', async () => {
     const response = await chai.request(app)
-      .put('/api/v1/admin/articles/select-hero-article')
+      .put('/api/v1/admin/articles/featured')
       .set({
         'x-access-token': adminToken,
       })
@@ -294,9 +304,18 @@ describe('Make an article the article of the day', () => {
       .equals(`You have selected article ${jigSlug} as article of the day`);
   });
 
+  it('should select an article as the article of the day', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/featured');
+
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Featured article retrieved');
+  });
+
   it('should deny user access', async () => {
     const response = await chai.request(app)
-      .put('/api/v1/admin/articles/select-hero-article')
+      .put('/api/v1/admin/articles/featured')
       .set({
         'x-access-token': jwtoken,
       })
@@ -311,7 +330,7 @@ describe('Make an article the article of the day', () => {
 
   it('should auto-select an article as the article of the day', async () => {
     const response = await chai.request(app)
-      .put('/api/v1/admin/articles/select-hero-article')
+      .put('/api/v1/admin/articles/featured')
       .set({
         'x-access-token': adminToken,
       });
@@ -321,9 +340,8 @@ describe('Make an article the article of the day', () => {
   });
 });
 
-
 describe('GET api/v1/articles/:slug', () => {
-  it('should return null if article does not exist', async () => {
+  it('should fetch the article of the day', async () => {
     const response = await chai.request(app)
       .get('/api/v1/articles/some-random-slug-1093848');
 

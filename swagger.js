@@ -1331,7 +1331,7 @@ export default {
         }
       },
     },
-    '/admin/articles/select-hero-article': {
+    '/admin/articles/featured': {
       put: {
         tags: ['Articles Admin'],
         summary: 'Admins article of the day route',
@@ -1355,6 +1355,28 @@ export default {
         responses: {
           200: {
             description: 'The article :slug has been auto-selected as article of the day'
+          },
+        }
+      },
+      get: {
+        tags: ['Articles'],
+        summary: 'Fetch article of the day route',
+        consumes: ['application/x-www-form-urlencoded'],
+        parameters: [
+          {
+            name: 'x-access-token',
+            in: 'header',
+            description: 'Authorization token',
+            required: false,
+            type: 'string'
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Featured article retrieved',
+          },
+          404: {
+            description: 'There is no featured article yet',
           },
         }
       },

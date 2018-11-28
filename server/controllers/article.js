@@ -227,27 +227,32 @@ class Article {
    * @param {object} response Response Object
    * @returns {object} User Object
    */
-  static async selectHeroArticle(request, response) {
-    let newHeroArticle;
-    let prevHeroArticle = await articleRepo.removeHeroArticle();
-    prevHeroArticle = prevHeroArticle ? prevHeroArticle.slug : null;
+  static async selectFeaturedArticle(request, response) {
+    let newFeaturedArticle;
+    let prevFeaturedArticle = await articleRepo.removeFeaturedArticle();
+    prevFeaturedArticle = prevFeaturedArticle ? prevFeaturedArticle.slug : null;
 
     if (request.body.slug) {
-      newHeroArticle = await articleRepo.makeHeroArticle(request.body.slug);
+      newFeaturedArticle = await articleRepo.makeFeaturedArticle(request.body.slug);
 
       const {
         id, title, slug, userid, description, readtime, images, isDeleted,
-      } = newHeroArticle.dataValues;
+      } = newFeaturedArticle.dataValues;
       const data = {
-        ...{
-          id, title, slug, userid, description, readtime, images, isDeleted,
-        },
-        prevHeroArticle,
+        id,
+        title,
+        slug,
+        userid,
+        description,
+        readtime,
+        images,
+        isDeleted,
+        prevFeaturedArticle,
       };
       return goodHttpResponse(
         response,
         200,
-        `You have selected article ${newHeroArticle.slug} as article of the day`,
+        `You have selected article ${newFeaturedArticle.slug} as article of the day`,
         data,
       );
     }
@@ -266,22 +271,54 @@ class Article {
     }
     const randomIndex = Math.floor(Math.random() * topArticles.length);
 
-    newHeroArticle = topArticles[randomIndex];
+    newFeaturedArticle = topArticles[randomIndex];
     const {
       id, title, slug, userid, description, readtime, images, isDeleted, rank,
-    } = newHeroArticle;
+    } = newFeaturedArticle;
+
+    await articleRepo.makeFeaturedArticle(slug);
 
     const data = {
-      ...{
-        id, title, slug, userid, description, readtime, images, isDeleted, rank,
-      },
-      prevHeroArticle,
+      id,
+      title,
+      slug,
+      userid,
+      description,
+      readtime,
+      images,
+      isDeleted,
+      rank,
+      prevFeaturedArticle,
     };
     return goodHttpResponse(
       response,
       200,
       `The article ${slug} has been auto-selected as article of the day`,
       data,
+    );
+  }
+
+  /**
+   * Get the article of the day (featured article)
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Article object or error object if article is not found
+   */
+  static async getFeaturedArticle(request, response) {
+    const article = await articleRepo.getFeaturedArticle();
+    if (!article) {
+      return badHttpResponse(
+        response,
+        404,
+        'There is no featured article yet',
+      );
+    }
+
+    return goodHttpResponse(
+      response,
+      200,
+      'Featured article retrieved',
+      article,
     );
   }
 }
