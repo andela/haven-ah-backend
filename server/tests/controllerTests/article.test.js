@@ -451,3 +451,14 @@ describe('GET api/v1/articles/search', () => {
     expect(response.body.message).to.be.deep.equals('Invalid Input');
   });
 });
+
+describe('Should return trending articles', () => {
+  it('should return an array of trending articles', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/trending');
+
+    expect(response).to.have.status(200);
+    expect(response.body.data).to.be.an('array');
+    expect(response.body.message).to.be.deep.equals('Returned successfully');
+  });
+});
