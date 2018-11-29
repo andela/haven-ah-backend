@@ -14,4 +14,8 @@ router.post('/articles/:slug/bookmarks',
   checkIfArticleExists,
   tryCatchWrapper(Bookmark.bookmarkArticle));
 
+router.get('/users/:username/bookmarks',
+  isAuthenticated,
+  tryCatchWrapper(Bookmark.getBookmarkedArticles));
+
 export default router;

@@ -1332,6 +1332,93 @@ export default {
       },
     },
   },
+  '/api/v1/users/articles/bookmarks': {
+    get: {
+      description: 'Get all bookmarked articles by a user',
+      summary: 'Get all bookmarked articles by a user',
+      parameters: [{
+        name: 'x-access-token',
+        in: 'header',
+        required: false,
+        style: 'simple',
+        explode: false,
+        schema: {
+          type: 'string'
+        },
+        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNTQyMzY3MTgwLCJleHAiOjE1NDI5NzE5ODB9.NHEXR0hzefs8K513P30bRr1AVA7Ag6_bVMHma16RJMQ'
+      }],
+      responses: {
+        200: {
+          description: 'Bookmarked Article retrieved',
+          content: {
+            'application/json; charset=utf-8': {
+              schema: {
+                type: 'string'
+              },
+              examples: { }
+            }
+          }
+        },
+        404: {
+          description: 'No bookmarked Article found'
+        },
+      }
+    }
+  },
+  '/users/articles/read': {
+    get: {
+      tags: ['Reading Stats'],
+      summary: 'user reading statistics',
+      consumes: ['application/x-www-form-urlencoded'],
+      parameters: [
+        {
+          name: 'x-access-token',
+          in: 'header',
+          description: 'Authorization token',
+          required: true,
+          type: 'string'
+        },
+        {
+          name: 'slug',
+          in: 'path',
+          description: 'Slug of article to react to',
+          required: true,
+          type: 'string'
+        },
+        {
+          name: 'id',
+          in: 'path',
+          description: 'Id of the comment to react to',
+          required: true,
+          type: 'integer'
+        },
+        {
+          name: 'reactionType',
+          in: 'body',
+          description: 'Reaction type',
+          required: true,
+          type: 'string'
+        },
+      ],
+      responses: {
+        201: {
+          description: 'You liked a comment.',
+        },
+        200: {
+          description: 'You loved a comment',
+        },
+        400: {
+          description: 'Bad Request.'
+        },
+        404: {
+          description: 'comment not found.'
+        },
+        500: {
+          description: 'Invalid input.'
+        }
+      }
+    },
+  },
   components: {
     schemas: {
       body_1: {
