@@ -101,18 +101,26 @@ class ArticleRepository {
   static async getSingleArticle(slug) {
     const article = await Articles.findOne({
       where: { slug },
+      attributes: {
+        exclude: ['userid']
+      },
       include: [{
         association: 'Author',
         attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio']
-      }],
-      attributes: {
-        exclude: ['userid']
-      }
+      },
+      ],
     });
 
     if (!article) {
       return null;
     }
+
+    const tags = await article.getTags({
+      attributes: ['tagName'],
+      joinTableAttributes: [],
+    }).map(tag => tag.tagName);
+
+    article.dataValues.tags = tags;
     return article;
   }
 

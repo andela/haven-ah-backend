@@ -54,7 +54,7 @@ export default (sequelize, DataTypes) => {
     Articles.belongsToMany(models.Tags, {
       as: 'Tags',
       through: 'ArticleTag',
-      foreignKey: 'id'
+      foreignKey: 'articleId'
     });
 
     Articles.hasMany(models.Complaint, {
