@@ -19,6 +19,12 @@ router.post(
   inputValidator.articleValidator,
   tryCatchWrapper(Article.createArticle)
 );
+
+router.get(
+  '/articles/featured',
+  tryCatchWrapper(Article.getFeaturedArticle)
+);
+
 router.post(
   '/articles/:slug/rating',
   isAuthenticated,

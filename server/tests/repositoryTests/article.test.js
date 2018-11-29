@@ -110,3 +110,11 @@ describe('Get user\'s reading stats', () => {
     expect(stats.length).to.be.deep.equals(1);
   });
 });
+
+describe('Get all articles', () => {
+  it('should return article if found', async () => {
+    const articles = await articleRepo.getAllArticles();
+    expect(articles).to.be.an('array');
+    expect(articles[0].dataValues.Comments).to.be.an('array');
+  });
+});
