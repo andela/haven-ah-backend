@@ -48,8 +48,10 @@ class ArticleRepository {
     const offset = limit * (page - 1);
     const articleRecords = await Articles.findAndCountAll({
       limit,
-      offset
+      offset,
+      order: [['createdAt', 'DESC']],
     });
+
     articleRecords.meta = getPaginationMeta(limit, page, articleRecords.count);
     return articleRecords;
   }

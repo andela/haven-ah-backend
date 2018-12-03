@@ -30,7 +30,7 @@ describe('function to follow a user', async () => {
     const response = await chai.request(app)
       .put('/api/v1/users/opt/notifications')
       .set({
-        'x-access-token': generateToken(14),
+        'x-access-token': generateToken(sullUser.id),
       });
     expect(response).to.have.status(200);
     expect(response.body.message).to.be.deep

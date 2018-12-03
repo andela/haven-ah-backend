@@ -534,6 +534,62 @@ class User {
       { updatedUser }
     );
   }
+
+  /**
+   * Get author of the week
+   * @param {object} request Request Object
+   * @param {object} response Response Object
+   * @returns {object} Object showing the featured author and followers
+   */
+  static async featuredAuthor(request, response) {
+    const author = await userRepo.getUserByParam('isFeaturedAuthor', true);
+
+    if (!author) {
+      return goodHttpResponse(
+        response,
+        200,
+        'There\'s currently no author of the week. Please select an author.',
+      );
+    }
+    const followers = await followerRepo.followers(author);
+
+    const {
+      id, role, createdAt, updatedAt, ...rest
+    } = author.dataValues;
+
+    return goodHttpResponse(
+      response,
+      200,
+      'Successfully fetched author of the week.',
+      { featuredAuthor: rest, followers: followers.length },
+    );
+  }
+
+  /**
+ * Set author of the week
+ * @param {object} request Request Object
+ * @param {object} response Response Object
+ * @returns {object} Object
+ */
+  static async setFeaturedAuthor(request, response) {
+    const { username } = request.params;
+
+    const user = await userRepo.getUserByParam('username', username);
+    if (!user) {
+      return badHttpResponse(
+        response,
+        404,
+        `User with username '${username}' does not exist`,
+      );
+    }
+
+    await userRepo.setFeaturedAuthor(username);
+    return goodHttpResponse(
+      response,
+      200,
+      `Author with username '${username}' has been set as the author of the week.`
+    );
+  }
 }
 
 export default User;

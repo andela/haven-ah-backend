@@ -590,15 +590,15 @@ describe('PUT api/v1/profiles/user/followers', () => {
   });
 });
 
+let superAdmin;
+let superToken;
+
+before(async () => {
+  superAdmin = await userRepo.createUser(superadmin, 'superadmin');
+  superToken = generateToken(superAdmin.id);
+});
+
 describe('PUT api/v1/admin/users/roles', () => {
-  let superAdmin;
-  let superToken;
-
-  before(async () => {
-    superAdmin = await userRepo.createUser(superadmin, 'superadmin');
-    superToken = generateToken(superAdmin.id);
-  });
-
   it('should return an error if actor does not have the rights', async () => {
     const response = await chai.request(app)
       .put('/api/v1/admin/users/roles')
@@ -663,45 +663,91 @@ describe('PUT api/v1/admin/users/roles', () => {
     expect(response).to.have.status(409);
     expect(response.body.message).to.be.deep.equals('This user already has the admin role.');
   });
+});
 
-  describe('Complaints: ', () => {
-    it('should get complaints in the database', async () => {
-      const response = await chai.request(app)
-        .get('/api/v1/admin/users/complaints')
-        .set({
-          'x-access-token': superToken,
-        });
+describe('Complaints: ', () => {
+  it('should get complaints in the database', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/admin/users/complaints')
+      .set({
+        'x-access-token': superToken,
+      });
 
-      expect(response).to.have.status(200);
-      expect(response.body.message).to.be.deep.equals('Complaints retrieved');
-    });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('Complaints retrieved');
+  });
 
-    it('should addressed a complaint in the database', async () => {
-      const response = await chai.request(app)
-        .put('/api/v1/admin/users/complaints/1/reply')
-        .send({
-          reply: 'The article in question has been taken down. Thank you.'
-        })
-        .set({
-          'x-access-token': superToken,
-        });
+  it('should addressed a complaint in the database', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/admin/users/complaints/1/reply')
+      .send({
+        reply: 'The article in question has been taken down. Thank you.'
+      })
+      .set({
+        'x-access-token': superToken,
+      });
 
-      expect(response).to.have.status(200);
-      expect(response.body.message).to.be.deep.equals('Complaint addressed');
-    });
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep.equals('Complaint addressed');
+  });
 
-    it('should throw an bad http response code for non-existent complaints', async () => {
-      const response = await chai.request(app)
-        .put('/api/v1/admin/users/complaints/100/reply')
-        .send({
-          reply: 'This complaint is being addressed'
-        })
-        .set({
-          'x-access-token': superToken,
-        });
+  it('should throw an bad http response code for non-existent complaints', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/admin/users/complaints/100/reply')
+      .send({
+        reply: 'This complaint is being addressed'
+      })
+      .set({
+        'x-access-token': superToken,
+      });
 
-      expect(response).to.have.status(404);
-      expect(response.body.message).to.be.deep.equals('Complaint not found');
-    });
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep.equals('Complaint not found');
+  });
+});
+
+describe('PUT api/v1/authors/:username', () => {
+  it('should return an error if user does not exist', async () => {
+    const response = await chai.request(app)
+      .put('/api/v1/admin/authors/nonexistent')
+      .set({
+        'x-access-token': superToken,
+      });
+
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep.equals('User with username \'nonexistent\' does not exist');
+  });
+
+  it('GET api/v1/authors/featured. It should return message if there\'s no author of the week', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/authors/featured');
+
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('There\'s currently no author of the week. Please select an author.');
+  });
+
+  it('should set featured author', async () => {
+    const response = await chai.request(app)
+      .put(`/api/v1/admin/authors/${theo.username}`)
+      .set({
+        'x-access-token': superToken,
+      });
+
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals(`Author with username '${theo.username}' has been set as the author of the week.`);
+  });
+});
+
+describe('GET api/v1/authors/featured', () => {
+  it('should set featured author', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/authors/featured');
+
+    expect(response).to.have.status(200);
+    expect(response.body.message).to.be.deep
+      .equals('Successfully fetched author of the week.');
+    expect(response.body.data).to.have.keys('featuredAuthor', 'followers');
   });
 });

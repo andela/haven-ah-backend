@@ -19,7 +19,8 @@ const attributes = [
   'imageUrl',
   'createdAt',
   'updatedAt',
-  'role'
+  'role',
+  'isFeaturedAuthor'
 ];
 
 /**
@@ -202,6 +203,21 @@ class UserRepository {
       { where: { id: user.id } }
     );
     return user;
+  }
+
+  /**
+   * Sets an author as featured
+   * @param {string} username Author's username
+   * @returns {object} Featured Author
+   */
+  static async setFeaturedAuthor(username) {
+    const featuredAuthor = await this.getUserByParam('isFeaturedAuthor', true);
+    if (featuredAuthor) {
+      await this.updateUser({ isFeaturedAuthor: false }, featuredAuthor.username);
+    }
+
+    const newFeaturedAuthor = await this.updateUser({ isFeaturedAuthor: true }, username);
+    return newFeaturedAuthor;
   }
 }
 

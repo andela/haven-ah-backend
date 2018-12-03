@@ -62,6 +62,11 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
+    isFeaturedAuthor: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
     createdAt: {
       type: DataTypes.DATE,
     },

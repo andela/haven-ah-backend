@@ -25,9 +25,16 @@ router.put('/admin/users/complaints/:complaintId/reply',
   checkPermissions,
   tryCatchWrapper(Complaint.replyComplaints));
 
+
 router.put('/admin/articles/featured',
   isAuthenticated,
   checkPermissions,
   tryCatchWrapper(Article.selectFeaturedArticle));
+
+  router.put('/admin/authors/:username',
+  validator.validateUsername,
+  isAuthenticated,
+  checkPermissions,
+  tryCatchWrapper(User.setFeaturedAuthor));
 
 export default router;

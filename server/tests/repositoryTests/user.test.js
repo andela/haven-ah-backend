@@ -193,3 +193,20 @@ describe('find or create', () => {
     expect(user.role).to.be.deep.equals('user');
   });
 });
+
+describe('Set featured author function', () => {
+  it('should set user as featured author', async () => {
+    const featuredAuthor = await userRepo.setFeaturedAuthor(priscilla.username);
+    expect(featuredAuthor.isFeaturedAuthor).to.be.equal(true);
+  });
+
+  it('should update user if previously featured', async () => {
+    const featuredAuthor = await userRepo.setFeaturedAuthor(joe.username);
+    const previouslyFeatured = await userRepo.getUserByParam('username', priscilla.username);
+
+    expect(previouslyFeatured.isFeaturedAuthor).to.be.equal(false);
+    expect(featuredAuthor.isFeaturedAuthor).to.be.equal(true);
+  });
+
+
+});
