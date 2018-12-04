@@ -83,6 +83,21 @@ class ReactionRepository {
     );
     return updatedReaction;
   }
+
+  /**
+    * Function to get recent reaction
+    * @returns {object} reactions
+    */
+  static async getRecentReactions() {
+    const today = new Date();
+    const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+    const recentReaction = await Reaction.findAll({
+      where: {
+        updatedAt: { $and: [{ $gte: lastWeek }, { $lt: today }] }
+      }
+    });
+    return recentReaction;
+  }
 }
 
 export default ReactionRepository;

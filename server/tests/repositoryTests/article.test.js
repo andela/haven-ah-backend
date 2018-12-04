@@ -1,4 +1,5 @@
 import chai from 'chai';
+import app from '../../../app';
 import articleRepo from '../../repository/articleRepository';
 import data from '../utilities/mockData';
 import userRepo from '../../repository/userRepository';
@@ -110,11 +111,21 @@ describe('Get user\'s reading stats', () => {
     expect(stats.length).to.be.deep.equals(1);
   });
 });
+describe('Should return trending articles', () => {
+  it('should return an array of trending articles', async () => {
+    const response = await chai.request(app)
+      .get('/api/v1/articles/trending');
 
-describe('Get all articles', () => {
-  it('should return article if found', async () => {
-    const articles = await articleRepo.getAllArticles();
+    expect(response).to.have.status(200);
+    expect(response.body.data).to.be.an('array');
+    expect(response.body.message).to.be.deep.equals('Returned successfully');
+  });
+});
+
+describe('Get articles: ', () => {
+  it('should return articles given supplied array of ids', async () => {
+    const articles = await articleRepo.getTrendingArticles([1, 2, 3, 1000]);
     expect(articles).to.be.an('array');
-    expect(articles[0].dataValues.Comments).to.be.an('array');
+    expect(articles.length).to.be.deep.equals(3);
   });
 });

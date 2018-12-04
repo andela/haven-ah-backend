@@ -348,6 +348,24 @@ class ArticleRepository {
     });
     return article;
   }
+
+  /**
+* Function to find trending articles
+* given an array of article ids
+* @param {array} ids object
+* @returns {object} article object
+*/
+  static async getTrendingArticles(ids) {
+    const articles = await Articles.findAll({
+      where: {
+        id: {
+          $in: ids
+        }
+      },
+    });
+    return articles;
+  }
 }
+
 
 export default ArticleRepository;
