@@ -181,19 +181,6 @@ describe('Update user by username', () => {
   });
 });
 
-describe('find or create', () => {
-  it('should find a user by email or create one', async () => {
-    const user = await userRepo.findOrCreate(priscilla.email, priscilla.firstName,
-      priscilla.lastName, priscilla.username);
-    expect(user).to.be.an('object');
-    expect(user.email).to.be.deep.equals(priscilla.email);
-    expect(user.firstName).to.be.deep.equals(priscilla.firstName);
-    expect(user.lastName).to.be.deep.equals(priscilla.lastName);
-    expect(user.username).to.be.deep.equals(priscilla.username);
-    expect(user.role).to.be.deep.equals('user');
-  });
-});
-
 describe('Set featured author function', () => {
   it('should set user as featured author', async () => {
     const featuredAuthor = await userRepo.setFeaturedAuthor(priscilla.username);
@@ -207,6 +194,4 @@ describe('Set featured author function', () => {
     expect(previouslyFeatured.isFeaturedAuthor).to.be.equal(false);
     expect(featuredAuthor.isFeaturedAuthor).to.be.equal(true);
   });
-
-
 });

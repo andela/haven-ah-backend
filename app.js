@@ -4,8 +4,10 @@ import logger from 'morgan';
 import dotenv from 'dotenv';
 import swagger from 'swagger-ui-express';
 import cors from 'cors';
+import passport from 'passport';
 import swaggerDocument from './swagger';
 import config from './server/config/config';
+
 import {
   goodHttpResponse,
   badHttpResponse
@@ -29,6 +31,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cleanStrings);
+app.use(passport.initialize());
 app.use('/docs', swagger.serve, swagger.setup(swaggerDocument));
 app.use('/api/v1', router);
 

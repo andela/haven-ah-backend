@@ -1,14 +1,11 @@
 import { Router } from 'express';
 import passport from 'passport';
-import googleCallback from '../utilities/passportAuthentication';
 import facebookRoutes from '../services/facebookStrategy';
 import googleRoutes from '../services/googleStrategy';
-
 import inputValidator from '../middlewares/validations';
 import validator from '../middlewares/paramChecker';
 import isAuthenticated from '../middlewares/checkAuth';
 import isAuthorized from '../middlewares/authorization';
-
 import uploadImage from '../middlewares/uploadImage';
 import tryCatchWrapper from '../utilities/tryCatchWrapper';
 import User from '../controllers/user';
@@ -41,17 +38,15 @@ router.get('/users/articles/read', isAuthenticated, tryCatchWrapper(User.getRead
 router.get('/auth/facebook', facebookRoutes.authenticate('facebook'));
 
 router.get('/auth/facebook/callback',
-  passport.authenticate('facebook',
-    {
-      successRedirect: '/',
-      failureRedirect: '/'
-    }));
+  passport.authenticate('facebook', {
+    failureRedirect: '/', session: false
+  }), User.socialLogin);
 
 router.get('/auth/google',
   googleRoutes.authenticate('google', { scope: 'https://www.google.com/m8/feeds' }));
 
 router.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
-  googleCallback);
+  passport.authenticate('google', { failureRedirect: '/', session: false }),
+  User.socialLogin);
 
 export default router;

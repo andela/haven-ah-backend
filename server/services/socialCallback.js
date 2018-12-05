@@ -1,5 +1,4 @@
 import userRepo from '../repository/userRepository';
-
 /**
    * callback function for social login
    * @param {object} accessToken token from social login
@@ -13,8 +12,7 @@ const socialCallback = (accessToken, refreshToken, profile, done) => {
   const { familyName, givenName } = profile.name;
   const imageUrl = profile.photos[0].value;
 
-  userRepo.findOrCreate(email, familyName, givenName, imageUrl).then(user => user);
-  done();
+  return userRepo.findOrCreate(email, familyName, givenName, imageUrl, done);
 };
 
 export default socialCallback;

@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import userRepo from '../repository/userRepository';
 import generateToken from '../utilities/jwtGenerator';
 import passwordUtil from '../utilities/passwordHasher';
@@ -9,6 +10,8 @@ import resetTemplate from '../emailTemplates/passwordResetTemplate';
 import followerRepo from '../repository/followUserRepository';
 import articleRepo from '../repository/articleRepository';
 import getPaginationMeta from '../utilities/getPaginationMeta';
+
+dotenv.config();
 
 const { hash, compare } = passwordUtil;
 /**
@@ -589,6 +592,19 @@ class User {
       200,
       `Author with username '${username}' has been set as the author of the week.`
     );
+  }
+
+  /**
+    * finds user object containing user data from the social call back api and returns signed token
+    * @param {object} request Request Object
+    * @param {object} response Response Object
+    * @returns {object} Object
+    */
+  static async socialLogin(request, response) {
+    const { user } = request;
+    const token = generateToken(user.id);
+    return response.status(302).header('token', token)
+      .redirect(`${process.env.FRONTEND_URL}?username=${user.username}&token=${token}`);
   }
 }
 

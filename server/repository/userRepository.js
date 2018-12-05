@@ -162,11 +162,12 @@ class UserRepository {
  * @param {string} lastName user lastName to insert in database
  * @param {string} firstName user firstName to insert in database
  * @param {string} imageUrl imageUrl to insert in database
- * @param {string} token  jwt token for user access
+ * @param {string} done  callback function
  * @returns {object} The JSON response to the user.
  */
-  static async findOrCreate(email, lastName, firstName, imageUrl) {
-    const user = await User.findOrCreate({
+  static findOrCreate(email, lastName, firstName, imageUrl, done) {
+    const username = `${firstName}${lastName}`;
+    User.findOrCreate({
       where: {
         email
       },
@@ -174,13 +175,11 @@ class UserRepository {
         firstName,
         lastName,
         email,
-        imageUrl
+        imageUrl,
+        username
       }
     })
-      .spread(foundUser => foundUser.get({
-        plain: true
-      }));
-    return user;
+      .spread(foundUser => done(null, foundUser));
   }
 
   /**
