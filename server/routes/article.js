@@ -36,6 +36,11 @@ router.post(
 router.get('/articles',
   tryCatchWrapper(Article.getArticles));
 
+router.get(
+  '/articles/trending',
+  tryCatchWrapper(Article.getTrendingArticles),
+);
+
 router.post('/articles/:slug/comments',
   isAuthenticated,
   inputValidator.validateComment,
