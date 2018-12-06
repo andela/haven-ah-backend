@@ -6,11 +6,12 @@ import userRepo from '../../repository/userRepository';
 
 const { expect } = chai;
 const {
-  sampleArticle, complaint, sulliArt, sullibus
+  sampleArticle, complaint, sulliArt, sullibus, wiztrue, articleTrue,
 } = data;
 
 let newUser;
 let newArticle;
+let newArticle2;
 
 describe('Create an article', () => {
   it('should return article created', async () => {
@@ -111,6 +112,7 @@ describe('Get user\'s reading stats', () => {
     expect(stats.length).to.be.deep.equals(1);
   });
 });
+
 describe('Should return trending articles', () => {
   it('should return an array of trending articles', async () => {
     const response = await chai.request(app)
@@ -127,5 +129,21 @@ describe('Get articles: ', () => {
     const articles = await articleRepo.getTrendingArticles([1, 2, 3, 1000]);
     expect(articles).to.be.an('array');
     expect(articles.length).to.be.deep.equals(3);
+  })
+})
+
+describe('delete article', () => {
+  before(async () => {
+    newArticle2 = await articleRepo.createArticle(articleTrue);
+  });
+
+  it('should delete article', async () => {
+    const articles = await articleRepo.deleteArticle(newArticle2);
+    expect(articles).to.eql(undefined);
+  });
+
+  it('should get deleted article', async () => {
+    const article = await articleRepo.getDeletedArticles();
+    expect(article[0].isDeleted).to.equal(true);
   });
 });

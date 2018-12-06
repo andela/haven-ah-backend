@@ -76,6 +76,13 @@ const data = {
     password: 'password',
     email: 'wizzzy@gmail.com',
   },
+  sick: {
+    firstName: 'Sick',
+    lastName: 'Doe',
+    username: 'sick',
+    password: 'password',
+    email: 'sick@gmail.com',
+  },
   noPassword: {
     email: 'uche@andela.com',
     password: '',
@@ -105,6 +112,13 @@ const data = {
     username: 'i_amadmin',
     password: 'password',
     email: 'admin@gmail.com',
+  },
+  adminWiz: {
+    firstName: 'Admin',
+    lastName: 'Doe',
+    username: 'admiral',
+    password: 'password',
+    email: 'admiral@gmail.com',
   },
   jigsaw: {
     firstName: 'Victor',
@@ -163,10 +177,59 @@ const data = {
     password: 'password',
     email: 'diablo@gmail.com',
   },
+  wiztrue: {
+    firstName: 'Sample',
+    lastName: 'User',
+    username: 'wiztrue',
+    password: 'password',
+    email: 'wiztrue@gmail.com',
+  },
   jigsawArticle: {
     title: 'Vanity upon vanity',
     slug: 'Vanity-upon-vanity-201811234497',
     userid: 1,
+    readtime: 500,
+    body: `
+      On the other hand, we denounce with righteous indignation and
+      dislike men who are so beguiled and demoralized by the charms
+      of pleasure of the moment, so blinded by desire, that they cannot
+      foresee the pain and trouble that are bound to ensue; and equal
+      blame belongs to those who fail in their duty through weakness
+      of will, which is the same as saying through shrinking from toil
+      and pain.`,
+    description: 'On the hedonism of men',
+    images: [
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+    ],
+  },
+  articleTrue: {
+    title: 'Vanity upon vanity',
+    slug: 'Vanity-upon-vanity-201811234497',
+    userid: 2,
+    readtime: 500,
+    body: `
+      On the other hand, we denounce with righteous indignation and
+      dislike men who are so beguiled and demoralized by the charms
+      of pleasure of the moment, so blinded by desire, that they cannot
+      foresee the pain and trouble that are bound to ensue; and equal
+      blame belongs to those who fail in their duty through weakness
+      of will, which is the same as saying through shrinking from toil
+      and pain.`,
+    description: 'On the hedonism of men',
+    images: [
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+      'https%3A%2F%2Fapidocs.imgur.com%2F&psig=AOvVaw0fHxKaTEzONQX8t25O4q-8&ust=1540666595380895',
+    ],
+  },
+  articleTrue2: {
+    title: 'Vanity upon vanity',
+    slug: 'Vanity-upon-vanity-20181122333',
+    userid: 2,
     readtime: 500,
     body: `
       On the other hand, we denounce with righteous indignation and
@@ -493,25 +556,25 @@ const data = {
   },
   dummyNotifications: {
     newComment: {
-      userId: 2,
-      articleId: 9,
+      userId: 4,
+      articleId: 3,
       type: 'NEW_COMMENT_UPDATE',
       content: 'A new comment has been posted'
     },
     newArticle: {
-      userId: 2,
-      articleId: 7,
+      userId: 4,
+      articleId: 12,
       type: 'NEW_ARTICLE_UPDATE',
       content: 'A new article has been posted'
     },
     newReaction: {
-      userId: 2,
-      articleId: 9,
+      userId: 4,
+      articleId: 3,
       type: 'NEW_REACTION_UPDATE',
       content: 'A user reacted on an article you currently follow'
     },
     newInvalidPost: {
-      userId: 2,
+      userId: 4,
       articleId: 9,
       type: 'INVALID_POST',
       content: 'A user reacted on an article you currently follow'

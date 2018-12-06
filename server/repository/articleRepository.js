@@ -50,10 +50,26 @@ class ArticleRepository {
       limit,
       offset,
       order: [['createdAt', 'DESC']],
+      where: {
+        isDeleted: false
+      }
     });
 
     articleRecords.meta = getPaginationMeta(limit, page, articleRecords.count);
     return articleRecords;
+  }
+
+  /**
+  *  Function to get all deleted articles in the database
+  * @returns {object} article object
+  */
+  static async getDeletedArticles() {
+    const deletedArticles = await Articles.findAll({
+      where: {
+        isDeleted: true
+      }
+    });
+    return deletedArticles;
   }
 
   /**

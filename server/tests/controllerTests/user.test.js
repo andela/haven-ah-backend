@@ -590,6 +590,7 @@ describe('PUT api/v1/profiles/user/followers', () => {
   });
 });
 
+
 let superAdmin;
 let superToken;
 
@@ -597,6 +598,7 @@ before(async () => {
   superAdmin = await userRepo.createUser(superadmin, 'superadmin');
   superToken = generateToken(superAdmin.id);
 });
+
 
 describe('PUT api/v1/admin/users/roles', () => {
   it('should return an error if actor does not have the rights', async () => {
