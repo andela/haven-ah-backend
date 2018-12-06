@@ -13,18 +13,8 @@ export default (socialMediaName) => {
  */
   const callback = () => passport.authenticate(socialMediaName, { failureRedirect: '/' });
 
-  /**
-   * Regdirects the url to the home page
-   * @param {object} request Request Object
-   * @param {object} response Response Object
-   * @returns {url} redirects to home page
-   */
-  const googleCallback = (request, response) => {
-    response.redirect('/');
-  };
   return {
     authenticate,
     callback,
-    googleCallback
   };
 };

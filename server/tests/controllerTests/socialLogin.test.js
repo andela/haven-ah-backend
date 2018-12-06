@@ -1,6 +1,7 @@
 import chai from 'chai';
 import nock from 'nock';
 import socialCallback from '../../services/socialCallback';
+import User from '../../controllers/user';
 import app from '../../../app';
 
 const { expect } = chai;
@@ -14,6 +15,15 @@ const profile = {
     givenName: 'some name'
   },
   photos: [{ value: 'url' }]
+};
+const request = {
+  user: {
+    id: 4,
+    username: {
+      lastName: 'some name',
+      firstName: 'some name'
+    },
+  }
 };
 
 nock('https://www.facebook.com/')
@@ -45,5 +55,11 @@ describe('facebook callback function', () => {
   it('should return undefined', (done) => {
     const callBackResult = socialCallback(accessToken, refreshToken, profile, done);
     expect(callBackResult).to.be.equal(undefined);
+  });
+});
+describe('social login function', () => {
+  it('should return user details and token', () => {
+    const result = User.socialLogin(request);
+    expect(result.status).to.be.equal(undefined);
   });
 });
