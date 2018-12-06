@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const resetTemplate = (token) => {
   const template = `
     <html lang="en">
@@ -13,7 +17,7 @@ const resetTemplate = (token) => {
             <div style="margin-bottom: 30px;">
                 <p style="line-height:1.5">Please click the button below to reset your password on the Authors Haven platform.</p>
             </div>
-            <div style="width:100%"><a href="https://haven-ah-backend.herokuapp.com/api/v1/users/resetpassword/${token}" style="background-color: orange; padding: 10px 20px; border-radius: 30px; color: white; text-decoration-line: none; display: block; text-align: center;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.10); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">Click here to reset your password</a></div>
+            <div style="width:100%"><a href="${process.env.FRONT_END_URL}/resetpassword/?token=${token}" style="background-color: orange; padding: 10px 20px; border-radius: 30px; color: white; text-decoration-line: none; display: block; text-align: center;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.10); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">Click here to reset your password</a></div>
         </div>
 
     </body>

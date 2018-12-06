@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const email = `
 <html lang="en">
 <head>
@@ -12,7 +16,7 @@ const email = `
         <div style="margin-bottom: 30px;">
             <p style="line-height:1.5">Please verify your email account with the link below to start writing on Author's Haven.</p>
         </div>
-        <div style="width:100%"><a href="{url}" style="background-color: orange; padding: 10px 20px; border-radius: 30px; color: white; text-decoration-line: none; display: block; text-align: center;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.10); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">Verify Account</a></div>       
+        <div style="width:100%"><a href="${process.env.FRONT_END_URL}{path}" style="background-color: orange; padding: 10px 20px; border-radius: 30px; color: white; text-decoration-line: none; display: block; text-align: center;box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.10); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">Verify Account</a></div>       
     </div>
   
 </body>

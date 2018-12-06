@@ -4,7 +4,6 @@ import passwordUtil from '../utilities/passwordHasher';
 import { goodHttpResponse, badHttpResponse, paginatedHttpResponse } from '../utilities/httpResponse';
 import emailer from '../services/emailService';
 import confirmEmail from '../emailTemplates/confirmationEmail';
-import { getUrl } from '../utilities/currentEnv';
 import resetTemplate from '../emailTemplates/passwordResetTemplate';
 import followerRepo from '../repository/followUserRepository';
 import articleRepo from '../repository/articleRepository';
@@ -49,8 +48,7 @@ class User {
     }, 'user');
 
     const token = generateToken(newUser.id);
-    const url = `${getUrl}/auth/confirm/${token}`;
-    const emailBody = confirmEmail.replace('{url}', url);
+    const emailBody = confirmEmail.replace('{path}', `/confirm/?token=${token}`);
 
     const emailOptions = emailer.setMailOptions(newUser.email, 'Email Confirmation', emailBody);
     emailer.sendEmail(emailOptions);
@@ -478,7 +476,7 @@ class User {
       response,
       200,
       'Followers retrieved',
-      Userfollowers
+      Userfollowers,
     );
   }
 
