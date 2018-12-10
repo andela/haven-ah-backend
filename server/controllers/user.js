@@ -460,8 +460,8 @@ class User {
    * if operation was successful
    */
   static async getUserFollowers(request, response) {
-    const { userId } = request;
-    const user = await userRepo.getUserByParam('id', userId);
+    const { username } = request.params;
+    const user = await userRepo.getUserByParam('username', username);
     if (!user) {
       return badHttpResponse(
         response,
