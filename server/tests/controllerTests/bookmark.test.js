@@ -10,6 +10,7 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 const { sulliArt, sullivan, ucheBookmark } = data;
+const xToken = createToken(1000);
 let jwtoken;
 let bookmarkToken;
 let newUser;
@@ -28,7 +29,7 @@ describe('Create a bookmark:', () => {
 
   it('should return a bad request error if slug is not a string', async () => {
     const response = await chai.request(app)
-      .post(`/api/v1/articles/${article.id}/bookmarks`)
+      .post(`/api/v1/users/wizsurlivan/bookmarks/${article.id}`)
       .set({
         'x-access-token': jwtoken,
       })
@@ -41,7 +42,7 @@ describe('Create a bookmark:', () => {
 
   it('should bookmark a new article in the database', async () => {
     const response = await chai.request(app)
-      .post(`/api/v1/articles/${article.slug}/bookmarks`)
+      .post(`/api/v1/users/wizsurlivan/bookmarks/${article.slug}`)
       .set({
         'x-access-token': jwtoken,
       })
@@ -53,7 +54,7 @@ describe('Create a bookmark:', () => {
 
   it('should not bookmark an article that is not in the database', async () => {
     const response = await chai.request(app)
-      .post('/api/v1/articles/how-to-cook-1227478895/bookmarks')
+      .post('/api/v1/users/wizsurlivan/bookmarks/how-to-cook-1227478895')
       .set({
         'x-access-token': jwtoken,
       })
@@ -85,5 +86,54 @@ describe('Get all bookmarked article by a user', () => {
     expect(response).to.have.status(404);
     expect(response.body.message).to.be.deep
       .equals('No bookmarked Article found');
+  });
+});
+
+describe('Delete a bookmark:', () => {
+  it('should not delete a bookmark if requester is not authorised', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/users/wizsurlivan/bookmarks/${article.slug}/1`)
+      .set({
+        'x-access-token': xToken,
+      })
+      .send();
+    expect(response).to.have.status(401);
+    expect(response.body.message).to.be.deep
+      .equals('You are not permitted to complete this action');
+  });
+
+  it('should delete a bookmark from the database', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/users/wizsurlivan/bookmarks/${article.slug}/1`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send();
+    expect(response).to.have.status(202);
+    expect(response.body.message).to.be.deep
+      .equals('bookmark successfully removed');
+  });
+  it('should not delete a bookmark if bookmark does not exist', async () => {
+    const response = await chai.request(app)
+      .delete(`/api/v1/users/wizsurlivan/bookmarks/${article.slug}/1000`)
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send();
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('We could not find this bookmark');
+  });
+
+  it('should not bookmark an article that is not in the database', async () => {
+    const response = await chai.request(app)
+      .delete('/api/v1/users/wizsurlivan/bookmarks/how-to-cook-1227478895/1')
+      .set({
+        'x-access-token': jwtoken,
+      })
+      .send();
+    expect(response).to.have.status(404);
+    expect(response.body.message).to.be.deep
+      .equals('This article was not found.');
   });
 });

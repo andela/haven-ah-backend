@@ -1,6 +1,7 @@
 import userRepo from '../repository/userRepository';
 import commentRepo from '../repository/commentRepository';
 import { badHttpResponse } from '../utilities/httpResponse';
+import BookmarkRepo from '../repository/bookmarkRepository';
 
 /**
  * The authorization class
@@ -55,6 +56,29 @@ class authorization {
     const { article } = request;
 
     request.isAuthorized = article.userid === request.userId; // BOOLEAN
+    if (!request.isAuthorized) {
+      return badHttpResponse(response, 401, 'You are not permitted to complete this action');
+    }
+    return next();
+  }
+
+  /**
+   * This checks whether the requester (user) is authorized
+   * to complete the request on a bookmark.
+   * @param {object} request
+   * @param {object} response
+   * @param {function} next
+   * @returns {function} callback function
+   */
+  static async unbookmark(request, response, next) {
+    const bookmark = await BookmarkRepo.findBookmark(request.params.id);
+    if (!bookmark) {
+      return badHttpResponse(response, 404, 'We could not find this bookmark');
+    }
+    const {
+      userId,
+    } = bookmark;
+    request.isAuthorized = userId === request.userId; // BOOLEAN
     if (!request.isAuthorized) {
       return badHttpResponse(response, 401, 'You are not permitted to complete this action');
     }
