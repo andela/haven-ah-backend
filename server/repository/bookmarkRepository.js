@@ -31,7 +31,7 @@ class BookmarkRepository {
   static async getBookmarkedArticles(userId) {
     const bookmarkedArticles = await Bookmark.findAndCountAll({
       where: { userId },
-      attributes: ['id'],
+      attributes: ['id', 'articleId'],
       include: [
         {
           model: User,
