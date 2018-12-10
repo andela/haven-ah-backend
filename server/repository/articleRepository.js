@@ -111,13 +111,15 @@ class ArticleRepository {
   static async getSingleArticle(slug) {
     const article = await Articles.findOne({
       where: { slug },
-      attributes: {
-        exclude: ['userid']
-      },
-      include: [{
-        association: 'Author',
-        attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio']
-      },
+      include: [
+        {
+          association: 'Author',
+          attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio']
+        },
+        {
+          association: 'Reactions',
+          attributes: ['id', 'reactionType', 'userId'],
+        },
       ],
     });
 
@@ -168,10 +170,12 @@ class ArticleRepository {
     const offset = limit * (page - 1);
     const retrieved = await user.getReadArticles({
       attributes: ['id', 'title', 'description'],
-      include: [{
-        association: 'Author',
-        attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl'],
-      }],
+      include: [
+        {
+          association: 'Author',
+          attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl'],
+        },
+      ],
       offset,
       limit,
     });
