@@ -11,7 +11,7 @@ import { getCurrentEnv } from '../utilities/currentEnv';
  */
 const checkGetArticleUrl = (request) => {
   const { slug } = request.params;
-  return request.originalUrl === `/api/v1/articles/${slug}` && request.method === 'GET';
+  return (request.originalUrl === `/api/v1/articles/${slug}` || request.originalUrl === `/api/v1/articles/${slug}/comments`) && request.method === 'GET';
 };
 
 /**

@@ -34,13 +34,15 @@ describe('Update comment', () => {
 
 describe('Get comments for article', () => {
   before(async () => {
-    comments = await commentRepo.getCommentsOnArticle(1);
+    comments = await commentRepo.getCommentsOnArticle(null, 1);
   });
 
   it('should post an old comment to the database', async () => {
-    expect(comments).to.be.an('array');
-    expect(comments[0]).to.be.an('object');
-    expect(comments[0]).to.haveOwnProperty('parentId');
+    expect(comments).to.be.an('object');
+    expect(comments).to.have.keys('comments', 'meta');
+
+    expect(comments.comments).to.be.an('array');
+    expect(comments.comments[0]).to.be.an('object');
   });
 });
 
