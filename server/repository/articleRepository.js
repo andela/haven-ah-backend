@@ -120,6 +120,10 @@ class ArticleRepository {
           association: 'Reactions',
           attributes: ['id', 'reactionType', 'userId'],
         },
+        {
+          model: Bookmark,
+          as: 'Bookmark'
+        },
       ],
     });
 
@@ -132,7 +136,10 @@ class ArticleRepository {
       joinTableAttributes: [],
     }).map(tag => tag.tagName);
 
+    const comments = await article.getComments();
+
     article.dataValues.tags = tags;
+    article.dataValues.hasComments = comments.length > 0;
     return article;
   }
 

@@ -79,6 +79,7 @@ router.get('/articles/:slug',
 
 router.get(
   '/articles/:slug/comments',
+  isAuthenticated,
   checkIfArticleExists,
   tryCatchWrapper(Comment.getComments),
 );

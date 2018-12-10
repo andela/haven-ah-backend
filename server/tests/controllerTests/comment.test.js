@@ -432,7 +432,8 @@ describe('Get comments', () => {
     expect(response).to.have.status(200);
     expect(response.body.message).to.be.deep
       .equals('Comments found');
-    expect(response.body.data).to.be.an('array');
+    expect(response.body.data).to.be.an('object');
+    expect(response.body.data).to.have.keys('comments', 'meta');
   });
   it('should not get comments if article does not exist', async () => {
     const response = await chai.request(app)

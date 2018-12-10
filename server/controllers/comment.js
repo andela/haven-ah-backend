@@ -128,20 +128,25 @@ class Comment {
    * @returns {object} Comment Object
    */
   static async getComments(request, response) {
+    const { userId } = request;
     const limit = parseInt(request.query.limit, 10) || 30;
     const page = parseInt(request.query.page, 10) || 1;
 
-    const rawComments = await commentRepo.getCommentsOnArticle(request.article.id, limit, page);
-    const maxParentId = Math.max(...rawComments.map(element => element.parentId));
+    const {
+      comments,
+      meta,
+    } = await commentRepo.getCommentsOnArticle(userId, request.article.id, limit, page);
+
+    const maxParentId = Math.max(...comments.map(element => element.parentId));
     const data = [];
     for (let i = maxParentId; i >= 0; i -= 1) {
-      const comment = addReplies(rawComments, i);
+      const comment = addReplies(comments, i);
       data.push(comment);
     }
-    const comments = data[data.length - 1];
-    if (comments) {
-      comments.push(rawComments.meta);
-      return goodHttpResponse(response, 200, 'Comments found', comments);
+
+    const allComments = data[data.length - 1];
+    if (allComments) {
+      return goodHttpResponse(response, 200, 'Comments found', { comments: allComments, meta });
     }
     return badHttpResponse(response, 200, 'No comments on this article yet');
   }
