@@ -232,8 +232,9 @@ class User {
    * @returns {object} the user data
    */
   static async profile(request, response) {
-    const data = await userRepo.getUserByParam('username', request.params.username);
-    if (data === null) {
+    const user = await userRepo.getUserByParam('username', request.params.username);
+
+    if (user === null) {
       return badHttpResponse(
         response,
         404,
@@ -241,12 +242,28 @@ class User {
         'No data to show'
       );
     }
+    const userFollowers = await followerRepo.followers(user);
+    const userFollowings = await followerRepo.followings(user);
+    user.followers = userFollowers;
+    user.followings = userFollowings;
     const {
       id, firstName, lastName, facebook, google, twitter, bio, imageUrl, createdAt, updatedAt,
-    } = data;
+      followers, followings,
+    } = user;
 
-    const responseData = request.isAuthorized ? data : {
-      id, firstName, lastName, facebook, google, twitter, bio, imageUrl, createdAt, updatedAt,
+    const responseData = request.isAuthorized ? user : {
+      id,
+      firstName,
+      lastName,
+      facebook,
+      google,
+      twitter,
+      bio,
+      imageUrl,
+      createdAt,
+      updatedAt,
+      followers,
+      followings,
     };
     return goodHttpResponse(
       response,
@@ -481,7 +498,7 @@ class User {
       response,
       200,
       'Followers retrieved',
-      Userfollowers
+      Userfollowers,
     );
   }
 
