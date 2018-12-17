@@ -80,6 +80,11 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'articleId',
       as: 'Comments',
     });
+
+    Articles.hasMany(models.Bookmark, {
+      foreignKey: 'articleId',
+      as: 'Bookmark',
+    });
   };
   return Articles;
 };

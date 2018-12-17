@@ -3,7 +3,7 @@ import getPaginationMeta from '../utilities/getPaginationMeta';
 
 const {
   Articles, Complaint, ReadingStat,
-  User, sequelize,
+  User, sequelize, Bookmark
 } = Model;
 
 /**
@@ -50,6 +50,14 @@ class ArticleRepository {
       limit,
       offset,
       order: [['createdAt', 'DESC']],
+      include: [{
+        association: 'Author',
+        attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio']
+      }, {
+        model: Bookmark,
+        as: 'Bookmark'
+      }
+      ],
     });
 
     articleRecords.meta = getPaginationMeta(limit, page, articleRecords.count);
@@ -362,6 +370,15 @@ class ArticleRepository {
           $in: ids
         }
       },
+      include: [{
+        association: 'Author',
+        attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio']
+      },
+      {
+        model: Bookmark,
+        as: 'Bookmark'
+      }
+      ],
     });
     return articles;
   }

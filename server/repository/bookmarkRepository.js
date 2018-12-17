@@ -54,14 +54,14 @@ class BookmarkRepository {
 
   /**
    * Function to find a bookmark to article with the id
-   * @param { integer } id
+   * @param { integer } articleId
    * @returns {object} bookmark object
    ** otherwise it throws an error
    */
-  static async findBookmark(id) {
+  static async findBookmark(articleId) {
     const bookmark = await Bookmark.findOne({
       where: {
-        id,
+        articleId
       }
     });
     return bookmark;
@@ -69,14 +69,16 @@ class BookmarkRepository {
 
   /**
    * Function to find a bookmark to article with the id
-   * @param { integer } id
+  * @param { integer } articleId
+   * @param { integer } userId
    * @returns {object} bookmark object
    ** otherwise it throws an error
    */
-  static async deleteBookmark(id) {
+  static async deleteBookmark(articleId, userId) {
     const unbookmark = await Bookmark.destroy({
       where: {
-        id,
+        articleId,
+        userId,
       }
     });
     return unbookmark;
