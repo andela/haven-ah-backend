@@ -53,6 +53,8 @@ class CommentRepository {
    * otherwise it throws an error
    */
   static async updateComment(newData, id) {
+    newData.hasBeenEdited = true;
+    console.log(newData);
     const updated = await Comment.update(newData, {
       returning: true,
       where: {

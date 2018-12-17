@@ -21,6 +21,11 @@ export default (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false
     },
+    hasBeenEdited: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
     isDeleted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
