@@ -10,6 +10,7 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 const { sulliArt, sullivan, ucheBookmark } = data;
+const xToken = createToken(1000);
 let jwtoken;
 let bookmarkToken;
 let newUser;

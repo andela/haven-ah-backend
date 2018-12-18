@@ -9,6 +9,7 @@ import { badHttpResponse } from '../utilities/httpResponse';
  */
 const uploadImage = async (request, response, next) => {
   const { image, images } = request.body;
+  console.log(images, ' space ' , image);
   const store = [];
 
   try {
