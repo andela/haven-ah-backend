@@ -163,7 +163,7 @@ class User {
    * @returns {Object} new password
    */
   static async updatePassword(request, response) {
-    const mailId = request.userid;
+    const mailId = request.userId;
     const password = hash(request.body.password);
     const user = await userRepo.updatePassword(mailId, password);
     if (user) {
