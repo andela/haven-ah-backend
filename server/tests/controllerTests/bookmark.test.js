@@ -10,7 +10,6 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 const { sulliArt, sullivan, ucheBookmark } = data;
-const xToken = createToken(1000);
 let jwtoken;
 let bookmarkToken;
 let newUser;
@@ -94,12 +93,12 @@ describe('Delete a bookmark:', () => {
     const response = await chai.request(app)
       .delete(`/api/v1/users/wizsurlivan/bookmarks/${article.slug}/1`)
       .set({
-        'x-access-token': xToken,
+        'x-access-token': 'cvvdhahdvshsavd-xdsuzxbvchx7e36wre63whvzvchsavzx',
       })
       .send();
     expect(response).to.have.status(401);
     expect(response.body.message).to.be.deep
-      .equals('You are not permitted to complete this action');
+      .equals('Sorry, try signing in again');
   });
 
   it('should delete a bookmark from the database', async () => {

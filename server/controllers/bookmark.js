@@ -50,9 +50,9 @@ class Bookmark {
    * @returns {object} User Object
    */
   static async unbookmarkArticle(request, response) {
-    const { id } = request.params;
+    const { articleId, userId } = request;
 
-    const unbookmarked = await bookmarkRepo.deleteBookmark(id);
+    const unbookmarked = await bookmarkRepo.deleteBookmark(articleId, userId);
     return goodHttpResponse(response, 202, 'bookmark successfully removed', { unbookmarked });
   }
 }

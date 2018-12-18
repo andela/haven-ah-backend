@@ -71,17 +71,15 @@ class authorization {
    * @returns {function} callback function
    */
   static async unbookmark(request, response, next) {
-    const bookmark = await BookmarkRepo.findBookmark(request.params.id);
+    const articleBookmarkId = request.article.dataValues.id;
+    const bookmark = await BookmarkRepo.findBookmark(articleBookmarkId);
     if (!bookmark) {
       return badHttpResponse(response, 404, 'We could not find this bookmark');
     }
     const {
-      userId,
+      dataValues: { articleId }
     } = bookmark;
-    request.isAuthorized = userId === request.userId; // BOOLEAN
-    if (!request.isAuthorized) {
-      return badHttpResponse(response, 401, 'You are not permitted to complete this action');
-    }
+    request.articleId = articleId;
     return next();
   }
 }
