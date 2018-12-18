@@ -11,7 +11,7 @@ export default (sequelize, DataTypes) => {
     complaintType: {
       type: DataTypes.ENUM,
       allowNull: false,
-      values: ['Rules Violation', 'Abuse', 'Plagiarism']
+      values: ['Rules Violation', 'Abuse', 'Plagiarism', 'Others']
     },
     complaintBody: {
       type: DataTypes.STRING,
