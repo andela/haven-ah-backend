@@ -120,6 +120,10 @@ class ArticleRepository {
           association: 'Reactions',
           attributes: ['id', 'reactionType', 'userId'],
         },
+        {
+          model: Bookmark,
+          as: 'Bookmark'
+        },
       ],
     });
 
