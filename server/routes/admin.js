@@ -31,7 +31,7 @@ router.put('/admin/articles/featured',
   checkPermissions,
   tryCatchWrapper(Article.selectFeaturedArticle));
 
-  router.put('/admin/authors/:username',
+router.put('/admin/authors/:username',
   validator.validateUsername,
   isAuthenticated,
   checkPermissions,

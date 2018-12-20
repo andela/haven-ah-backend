@@ -360,7 +360,7 @@ class ArticleRepository {
    * @returns {object} article object
    */
   static async getFeaturedArticle() {
-    const article = await Articles.findOne({
+    const article = await Articles.findAll({
       where: {
         isFeatured: true,
       }

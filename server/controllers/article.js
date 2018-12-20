@@ -315,7 +315,11 @@ class Article {
       id, title, slug, userid, description, readtime, images, isDeleted, rank,
     } = newFeaturedArticle;
 
-    await articleRepo.makeFeaturedArticle(slug);
+    // for (const article of topArticles) {
+    //   await articleRepo.makeFeaturedArticle(article.slug);
+    // }
+    const promises = topArticles.map(article => articleRepo.makeFeaturedArticle(article.slug));
+    await Promise.all(promises);
 
     const data = {
       id,
@@ -344,8 +348,8 @@ class Article {
    * @returns {object} Article object or error object if article is not found
    */
   static async getFeaturedArticle(request, response) {
-    const article = await articleRepo.getFeaturedArticle();
-    if (!article) {
+    const articles = await articleRepo.getFeaturedArticle();
+    if (!articles) {
       return badHttpResponse(
         response,
         404,
@@ -357,7 +361,7 @@ class Article {
       response,
       200,
       'Featured article retrieved',
-      article,
+      articles,
     );
   }
 
