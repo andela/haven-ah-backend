@@ -41,7 +41,7 @@ class BookmarkRepository {
         {
           model: Articles,
           where: Articles.Id,
-          attributes: ['id', 'title', 'images'],
+          attributes: ['id', 'title', 'images', 'description', 'readtime', 'slug', 'createdAt', 'updatedAt']
         },
       ],
       order: [['createdAt', 'DESC']],
