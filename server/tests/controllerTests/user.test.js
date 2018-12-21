@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 const {
   theo, sull, diablo, dan, uche, noPassword, noEmail, wrongPassword, superadmin,
-  wrongEmail, goodUserUpdate, userUpdate, badUserUpdate,
+  wrongEmail, goodUserUpdate, userUpdate, badUserUpdate, theoBad,
   badBioUpdate, badImageUpdate1, badImageUpdate2, noImageUpdate, usernameUpdate,
 } = data;
 
@@ -56,6 +56,16 @@ describe('POST api/v1/users/signup', () => {
     expect(response.status).to.be.equal(409);
     expect(response.body.message).to.be.deep
       .equals('This account already exists. Consider sign in.');
+  });
+
+  it('should return an error if user input is invalid', async () => {
+    const response = await chai.request(app)
+      .post(route)
+      .send(theoBad);
+
+    expect(response.status).to.be.equal(400);
+    expect(response.body.message).to.be.deep
+      .equals('Invalid input');
   });
 
   it('should return a welcome message if signup is successful', async () => {
@@ -402,7 +412,7 @@ describe('POST api/v1/profiles/:username/follow', () => {
 
   it('should return followers for this user', async () => {
     const response = await chai.request(app)
-      .get('/api/v1/profiles/user/followers')
+      .get(`/api/v1/profiles/${dan.username}/followers`)
       .set({
         'x-access-token': danToken,
       });
@@ -544,7 +554,6 @@ describe('GET api/v1/users/articles/read', () => {
     const response = await chai.request(app)
       .get('/api/v1/users/articles/read')
       .set({ 'x-access-token': token, });
-
     const { articles } = response.body.data;
 
     expect(response).to.have.status(200);
@@ -579,7 +588,7 @@ describe('PUT api/v1/profiles/user/followers', () => {
   });
   it('should return error message if followers does not exist for this user', async () => {
     const response = await chai.request(app)
-      .get('/api/v1/profiles/user/followers')
+      .get(`/api/v1/profiles/${theo.username}/followers`)
       .set({
         'x-access-token': ucheToken,
       });

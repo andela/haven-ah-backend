@@ -2,6 +2,7 @@ import chai from 'chai';
 import commentRepo from '../../repository/commentRepository';
 import data from '../utilities/mockData';
 import userRepo from '../../repository/userRepository';
+import reactionRepo from '../../repository/reactionRepository';
 
 const { expect } = chai;
 const { goodComment, commentHistData, xtremeCassey } = data;
@@ -33,14 +34,21 @@ describe('Update comment', () => {
 });
 
 describe('Get comments for article', () => {
+  let coment;
+
   before(async () => {
-    comments = await commentRepo.getCommentsOnArticle(1);
+    await reactionRepo.createReaction('commentId', 1, 11, 'Like');
+    comments = await commentRepo.getCommentsOnArticle(11, 4);
+    coment = await commentRepo.getCommentsOnArticle(null, 2);
   });
 
   it('should post an old comment to the database', async () => {
-    expect(comments).to.be.an('array');
-    expect(comments[0]).to.be.an('object');
-    expect(comments[0]).to.haveOwnProperty('parentId');
+    expect(comments).to.be.an('object');
+    expect(comments).to.have.keys('comments', 'meta');
+
+    expect(comments.comments).to.be.an('array');
+    expect(comments.comments[0]).to.be.an('object');
+    expect(coment.comments).to.be.an('array');
   });
 });
 

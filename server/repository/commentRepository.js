@@ -53,6 +53,7 @@ class CommentRepository {
    * otherwise it throws an error
    */
   static async updateComment(newData, id) {
+    newData.hasBeenEdited = true;
     const updated = await Comment.update(newData, {
       returning: true,
       where: {
@@ -90,13 +91,14 @@ class CommentRepository {
 
   /**
    * Function to get comments on an article
-   * @param {object} articleId number
+   * @param {number} userId user id
+   * @param {number} articleId  article id
    * @param { integer } limit
    * @param { integer } page
    * @returns {object} comments object
    * otherwise it throws an error
    */
-  static async getCommentsOnArticle(articleId, limit = 30, page = 1) {
+  static async getCommentsOnArticle(userId, articleId, limit = 30, page = 1) {
     const offset = limit * (page - 1);
     const data = await Comment.findAndCountAll({
       where: {
@@ -110,17 +112,37 @@ class CommentRepository {
       },
       limit,
       offset,
-      include: [{
-        association: 'User',
-        attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl']
-      }],
-      attributes: {
-        exclude: ['userId']
-      }
+      include: [
+        {
+          association: 'User',
+          attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl']
+        },
+        {
+          association: 'Reactions',
+          attributes: ['id', 'reactionType', 'userId']
+        }
+      ],
     });
-    const comments = commentRecords.map(comment => comment.dataValues);
-    comments.meta = getPaginationMeta(limit, page, count);
-    return comments;
+
+    const comments = commentRecords.map((comment) => {
+      const reactions = {};
+      const { Reactions } = comment.dataValues;
+      if (userId) {
+        let currentUserReaction = false;
+        const reaction = Reactions.find(r => r.userId === userId);
+        if (reaction) {
+          currentUserReaction = reaction.reactionType;
+        }
+        reactions.currentUserReaction = currentUserReaction;
+      }
+      reactions.likes = Reactions.filter(r => r.reactionType === 'Like').length;
+      reactions.loves = Reactions.filter(r => r.reactionType === 'Love').length;
+
+      comment.dataValues.Reactions = reactions;
+      return comment.dataValues;
+    });
+    const meta = getPaginationMeta(limit, page, count);
+    return { comments, meta };
   }
 
   /**
