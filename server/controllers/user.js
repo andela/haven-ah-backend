@@ -71,13 +71,7 @@ class User {
    */
   static async listAll(request, response) {
     const allUsers = await userRepo.getAllUsers();
-    if (allUsers.length <= 0) {
-      return goodHttpResponse(
-        response,
-        200,
-        'Users not found'
-      );
-    }
+
     return goodHttpResponse(
       response,
       200,
@@ -458,8 +452,8 @@ class User {
    * if operation was successful
    */
   static async getUserFollowers(request, response) {
-    const { userId } = request;
-    const user = await userRepo.getUserByParam('id', userId);
+    const { username } = request.params;
+    const user = await userRepo.getUserByParam('username', username);
     if (!user) {
       return badHttpResponse(
         response,
