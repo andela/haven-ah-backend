@@ -277,17 +277,6 @@ describe('PATCH api/v1/articles/:slug', () => {
   });
 });
 
-describe('Fetch the article of the day', () => {
-  it('should not select an article as the article of the day', async () => {
-    const response = await chai.request(app)
-      .get('/api/v1/articles/featured');
-
-    expect(response).to.have.status(404);
-    expect(response.body.message).to.be.deep
-      .equals('There is no featured article yet');
-  });
-});
-
 describe('Make an article the article of the day', () => {
   it('should select an article as the article of the day', async () => {
     const response = await chai.request(app)

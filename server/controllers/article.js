@@ -5,6 +5,8 @@ import tagRepo from '../repository/tagRepository';
 import ratingRepo from '../repository/ratingRepository';
 import reactionRepo from '../repository/reactionRepository';
 import notificationRepo from '../repository/notificationRepository';
+import followUserRepo from '../repository/followUserRepository';
+import bookmarkRepo from '../repository/bookmarkRepository';
 import rankArticles from '../utilities/articlesRanker';
 import removeArrayDuplicates from '../utilities/removeArrayDuplicates';
 
@@ -80,9 +82,43 @@ class Article {
       );
     }
 
+    let bookmarks;
     if (userId && userId !== article.userid) {
       await articleRepo.addReadingStat(userId, article.id);
+      const usersBookmarks = await bookmarkRepo.getBookmarkedArticles(userId);
+      bookmarks = usersBookmarks.bookmarks.map(element => element.dataValues);
     }
+
+    const love = article.Reactions.filter(reaction => reaction.reactionType === 'Love');
+    const likes = article.Reactions.filter(reaction => reaction.reactionType === 'Like');
+
+    const hasInteraction = (arr, user) => {
+      const interactions = arr.filter(element => element.userId === user);
+      return interactions.length > 0 ? interactions.length > 0 : false;
+    };
+
+    const hasLiked = hasInteraction(likes, userId);
+    const hasLoved = hasInteraction(love, userId);
+    let hasBookmarked;
+    if (bookmarks) {
+      hasBookmarked = bookmarks.filter(bookmark => article.id === bookmark.articleId);
+      hasBookmarked = hasBookmarked.length > 0;
+    }
+
+    const hasFollowedAuthor = await followUserRepo.checkIfFollowing(article.Author, userId);
+
+    const likesCount = likes.length;
+    const loveCount = love.length;
+    article.dataValues.Reactions = {
+      likes,
+      love,
+      likesCount,
+      loveCount,
+      hasLiked,
+      hasLoved,
+      hasBookmarked,
+      hasFollowedAuthor,
+    };
 
     return goodHttpResponse(
       response,
@@ -279,7 +315,11 @@ class Article {
       id, title, slug, userid, description, readtime, images, isDeleted, rank,
     } = newFeaturedArticle;
 
-    await articleRepo.makeFeaturedArticle(slug);
+    // for (const article of topArticles) {
+    //   await articleRepo.makeFeaturedArticle(article.slug);
+    // }
+    const promises = topArticles.map(article => articleRepo.makeFeaturedArticle(article.slug));
+    await Promise.all(promises);
 
     const data = {
       id,
@@ -308,8 +348,8 @@ class Article {
    * @returns {object} Article object or error object if article is not found
    */
   static async getFeaturedArticle(request, response) {
-    const article = await articleRepo.getFeaturedArticle();
-    if (!article) {
+    const articles = await articleRepo.getFeaturedArticle();
+    if (!articles) {
       return badHttpResponse(
         response,
         404,
@@ -321,7 +361,7 @@ class Article {
       response,
       200,
       'Featured article retrieved',
-      article,
+      articles,
     );
   }
 

@@ -111,13 +111,19 @@ class ArticleRepository {
   static async getSingleArticle(slug) {
     const article = await Articles.findOne({
       where: { slug },
-      attributes: {
-        exclude: ['userid']
-      },
-      include: [{
-        association: 'Author',
-        attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio']
-      },
+      include: [
+        {
+          association: 'Author',
+          attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl', 'bio']
+        },
+        {
+          association: 'Reactions',
+          attributes: ['id', 'reactionType', 'userId'],
+        },
+        {
+          model: Bookmark,
+          as: 'Bookmark'
+        },
       ],
     });
 
@@ -130,7 +136,10 @@ class ArticleRepository {
       joinTableAttributes: [],
     }).map(tag => tag.tagName);
 
+    const comments = await article.getComments();
+
     article.dataValues.tags = tags;
+    article.dataValues.hasComments = comments.length > 0;
     return article;
   }
 
@@ -168,10 +177,12 @@ class ArticleRepository {
     const offset = limit * (page - 1);
     const retrieved = await user.getReadArticles({
       attributes: ['id', 'title', 'description'],
-      include: [{
-        association: 'Author',
-        attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl'],
-      }],
+      include: [
+        {
+          association: 'Author',
+          attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl'],
+        },
+      ],
       offset,
       limit,
     });
@@ -349,7 +360,7 @@ class ArticleRepository {
    * @returns {object} article object
    */
   static async getFeaturedArticle() {
-    const article = await Articles.findOne({
+    const article = await Articles.findAll({
       where: {
         isFeatured: true,
       }

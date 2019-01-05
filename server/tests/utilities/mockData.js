@@ -55,6 +55,12 @@ const data = {
     password: 'password',
     email: 'theo@gmail.com',
   },
+  theoBad: {
+    firstName: 'Theo',
+    lastName: 'IO',
+    username: 'i_amtheo2',
+    password: 'password',
+  },
   sull: {
     firstName: 'Sullivan',
     lastName: 'Doe',
