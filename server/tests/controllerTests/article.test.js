@@ -393,7 +393,7 @@ describe('GET api/v1/articles/search', () => {
     expect(response.body.message).to.be.deep.equals('Found Articles');
     expect(response.body).to.have.keys('status', 'message', 'data');
     expect(response.body.data[0]).to.have
-      .keys('id', 'title', 'description', 'images', 'Author', 'userid');
+      .keys('id', 'title', 'description', 'images', 'Author', 'userid', 'readtime', 'slug', 'Bookmark');
   });
 
   it('should return articles according to author search parameters', async () => {

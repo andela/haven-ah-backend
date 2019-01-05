@@ -197,13 +197,14 @@ class ArticleRepository {
   static async search(keywords, author, tag) {
     if (keywords) keywords = keywords.split(' ').join();
     let mainQuery = `
-      SELECT DISTINCT "Articles".id, "Articles".title, "Articles".description, "Articles".images, "Articles".userid
+      SELECT DISTINCT "Articles".id, "Articles".title, "Articles".description, "Articles".images, "Articles".userid,
+      "Articles".slug, "Articles".readtime
       FROM "Articles"
       {tagQuery}{authorQuery}
       {authorCon}
       {tagCon}
       {search}
-      ORDER BY id DESC LIMIT 10;
+      ORDER BY id DESC;
     `;
 
     const authorQuery = {
@@ -261,6 +262,10 @@ class ArticleRepository {
         attributes: ['firstName', 'lastName', 'username', 'imageUrl']
       });
       result.Author = Author;
+      const Bookmarks = await Bookmark.findAll({
+        where: { articleId: result.id }
+      });
+      result.Bookmark = Bookmarks;
     }));
 
 

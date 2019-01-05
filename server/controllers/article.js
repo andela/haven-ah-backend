@@ -182,7 +182,7 @@ class Article {
    * @returns {object} searched articles
    */
   static async searchArticle(request, response) {
-    const { author, tag, keywords } = request.query;
+    const { author, tag, keywords, } = request.query;
     const foundArticles = await articleRepo.search(keywords, author, tag);
     if (!foundArticles.length) {
       return badHttpResponse(
