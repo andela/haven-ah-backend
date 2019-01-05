@@ -61,6 +61,21 @@ class FollowerRepository {
 
     return followers;
   }
+
+  /**
+   * Gets all followings
+   * @param {object} user User following other users
+   * @returns {object} returns response objects for followers
+   */
+  static async followings(user) {
+    const followers = await user.getFollowings({
+      attributes: ['id', 'firstName', 'lastName', 'username', 'imageUrl'],
+      joinTableAttributes: [],
+      order: [['createdAt', 'DESC']],
+    });
+
+    return followers;
+  }
 }
 
 export default FollowerRepository;
